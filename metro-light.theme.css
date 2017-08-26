@@ -1,0 +1,214 @@
+body
+{
+	background: #ffffff;
+}
+
+/*button*/
+button[is=core-button],
+button[is=core-iconbutton],
+button[is=core-closebutton],
+button[is=core-incrementbutton],
+button[is=core-decrementbutton],
+input[is="core-radio"],
+input[is="core-checkbox"]
+{
+	line-height: 23px;
+	height: 23px;
+
+	border: solid 1px #dddddd;
+	background: #f9f9f9;
+	border-radius: 0px;
+	
+	box-shadow: none!important;
+}
+button[is=core-button]:focus,
+button[is=core-iconbutton]:focus,
+button[is=core-incrementbutton]:focus,
+button[is=core-decrementbutton]:focus,
+input[is="core-radio"]:focus,
+input[is="core-checkbox"]:focus
+{
+	border-color: #1f95b8;
+}
+button[is=core-button]:enabled:hover, button[is=core-button]:enabled:active,
+button[is=core-iconbutton]:enabled:hover, button[is=core-iconbutton]:enabled:active,
+button[is=core-closebutton]:enabled:hover, button[is=core-closebutton]:enabled:active,
+button[is=core-incrementbutton]:enabled:hover, button[is=core-incrementbutton]:enabled:active,
+button[is=core-decrementbutton]:enabled:hover, button[is=core-decrementbutton]:enabled:active,
+input[is="core-radio"]:enabled:hover, input[is="core-radio"]:enabled:active,
+input[is="core-checkbox"]:enabled:hover, input[is="core-checkbox"]:enabled:active
+{
+	background: #dddddd;
+}
+button[is=core-button]:enabled:active,
+button[is=core-iconbutton]:enabled:active,
+button[is=core-incrementbutton]:enabled:active,
+button[is=core-decrementbutton]:enabled:active,
+input[is="core-radio"]:enabled:active,
+input[is="core-checkbox"]:enabled:active
+{
+	background: #ffffff;
+}
+button[is=core-button][type=submit]
+{
+	color: #fff;
+	border-color: #00aadd;
+    background: #4fc2e3;
+}
+button[is=core-button][type=submit]:enabled:hover
+{
+	background: #00aadd;
+}
+button[is=core-button][type=submit]:enabled:active
+{
+	color: #84a9af;
+	background: #ffffff;
+}
+
+/*checkbox, radiobutton*/
+input[is="core-radio"]:checked::after
+{
+	width: 7px;
+	height: 7px;
+
+	margin: -4px 0 0 -4px;
+
+	background: #11a4d1;
+	
+	-webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+input[is="core-checkbox"]:checked::after
+{
+	background: transparent;
+	
+	border: 2px #11a4d1;
+	border-style: hidden hidden solid solid;
+	
+	width: 6px;
+	height: 2px;
+	
+	margin: -3px 0 0 -4px;
+	
+	transform: rotate(-45deg);
+}
+
+/*close button*/
+button[is=core-closebutton]
+{
+	border: none!important;
+	box-shadow: none!important;
+}
+
+/*number*/
+core-number
+{
+	height: 23px;
+}
+button[is=core-incrementbutton],
+button[is=core-decrementbutton]
+{
+	border-left: none;
+	height: 12px!important;
+}
+
+/*input*/
+input, input:invalid
+{
+	background: #ffffff;
+	border: solid 1px #e1e1e1;
+	box-shadow: none!important;
+	line-height: 23px;
+	height: 23px;
+}
+input:valid:focus
+{
+	border-color: #1f95b8;
+}
+input:invalid
+{
+	border: 1px solid #ff3f3f;
+}
+input:invalid:active
+{
+	border: 1px solid #cb0000;
+}
+
+/*dialog*/
+dialog[is=core-dialog]
+{
+	background: #ffffff;
+	border: 0;
+}
+dialog[is=core-dialog][open]
+{
+	visibility: visible;
+}
+
+core-dialogtitlebar
+{
+    background: #e7e7e7;
+	border: 0;
+}
+core-dialogtitle
+{
+	color: black;
+}
+
+core-dialogcontent
+{
+	color: black;
+}
+
+/*title tooltip*/
+core-titletooltip
+{
+	background: #e7e7e7;
+
+	border: 0;
+	
+	font-size: 12px;
+	color: #6e706f;
+	
+	border-radius: 0;
+	
+	box-shadow: none !important;
+}
+
+/*progress bar*/
+core-progressbar
+{
+	height: 8px;
+	
+	border: 0;
+
+	background: #d7d7d7;
+	
+	box-shadow: none!important;
+}
+
+/*pogress bar fill*/
+core-progressbarfill
+{
+	border: 0;
+
+	background: #00a9e1;
+	background-clip: border-box;
+	
+	box-shadow: none !important;
+}
+
+core-progressbar.core-progressbar-indeterminate>core-progressbarfill
+{
+	margin: -1px 0 0 -1px;
+		
+	background-image:  -webkit-repeating-linear-gradient(-45deg, transparent, transparent 3.54%, #018eb5 3.54%, #018eb5 7.09%, transparent 7.09%);
+	background-image:  -moz-repeating-linear-gradient(-45deg, transparent, transparent 3.54%, #018eb5 3.54%, #018eb5 7.09%, transparent 7.09%);
+	background-image:  repeating-linear-gradient(-45deg, transparent, transparent 3.54%, #018eb5 3.54%, #018eb5 7.09%, transparent 7.09%);
+}
+
+core-progressbar>core-label
+{
+}
