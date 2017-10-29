@@ -187,20 +187,20 @@
 			</core-galleryitem>
 		</core-gallery>
 		
-		<!--
 		<core-circularmenu>
 			<svg is="core-circularmenuclipsvg">
-				<mask id="masking" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
-					<circle cx=".5" cy=".5" r=".5" fill="white"/>
-					<circle cx=".5" cy=".5" r=".25" fill="black"/>
-				</clipPath>
+				<defs>
+					<clipPath id="menu-clip" clipPathUnits="objectBoundingBox">
+						<path fill-rule="evenodd" d="M .5 0 A .5 .5 0 0 0 0 .5 A .5 .5 0 0 0 .5 1 A .5 .5 0 0 0 1 .5 A .5 .5 0 0 0 .5 0 z M .5 .25 A .25 .25 0 0 1 .75 .5 A .25 .25 0 0 1 .5 .75 A .25 .25 0 0 1 .25 .5 A .25 .25 0 0 1 .5 .25 z "/>
+					</clipPath>
+				</defs>
 			</svg>
 			<style>
 				core-circularmenu
 				{
 					position: absolute;
-					left: 100px;
-					top: 100px;
+					left: 500px;
+					top: 500px;
 					
 					width: 130px;
 					height: 130px;
@@ -252,7 +252,9 @@
 				core-circularmenuinner
 				{
 					display: inline-block;
+					
 					overflow: hidden;
+					
 					position: relative;
 					margin: 0;
 					padding: 0;
@@ -261,35 +263,102 @@
 				
 					background-color: #4a4a4a;
 					
-					border-radius: 50%;
-					
-					mask: url(#masking);
+					clip-path: url(#menu-clip);
 				}
 
 				core-circularmenuitem
 				{
-					display: inline-block;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					
 					overflow: hidden;
 					position: absolute;
-					left: 50%;
-					top: 50%;
+					
+					top: auto;
+					left: auto;
+					bottom: 51%;
+					right: 51%;
+					
+					width: 50%;
+					height: 50%;
+					
+					transform-origin: 102% 102%;
 					
 					color: #777777;
 					
 					background-color: transparent;
 					
-					border: 1px solid #585858;
-					
-					margin: 0 0 2px 2px;
+					transition: .218s background-color;
 				}
 				core-circularmenuitem:hover
 				{
-					background-color: rgba(255, 255, 255, .3);
+					background-color: rgba(255, 255, 255, .4);
 					color: #000000;
 				}
 				core-circularmenuitem:active
 				{
-					box-shadow: inset 0 0 4px rgba(0, 0, 0, .5);
+					background-color: rgba(255, 255, 255, .2);
+				}
+
+				core-circularmenuitem:nth-child(1)
+				{
+					transform: rotate(45deg);
+				}
+				core-circularmenuitem:nth-child(2)
+				{
+					transform: rotate(105deg);
+				}
+				core-circularmenuitem:nth-child(3)
+				{
+					transform: rotate(165deg);
+				}
+				core-circularmenuitem:nth-child(4)
+				{
+					transform: rotate(225deg);
+				}
+				core-circularmenuitem:nth-child(5)
+				{
+					transform: rotate(285deg);
+				}
+				core-circularmenuitem:nth-child(6)
+				{
+					transform: rotate(345deg);
+				}
+				
+				core-circularmenuitem>core-circularmenuitemcontent
+				{
+					display: inline-block;
+					width: auto;
+					height: auto;
+					
+					position: absolute;
+					
+					margin: 0;
+				}
+				core-circularmenuitem:nth-child(1)>core-circularmenuitemcontent
+				{
+					transform: rotate(-45deg);
+				}
+				core-circularmenuinner>core-circularmenuitem:nth-child(2)>core-circularmenuitemcontent
+				{
+					transform: rotate(-105deg);
+				}
+				core-circularmenuinner>core-circularmenuitem:nth-child(3)>core-circularmenuitemcontent
+				{
+					transform: rotate(-165deg);
+				}
+				core-circularmenuinner>core-circularmenuitem:nth-child(4)>core-circularmenuitemcontent
+				{
+					transform: rotate(-225deg);
+				}
+				core-circularmenuinner>core-circularmenuitem:nth-child(5)>core-circularmenuitemcontent
+				{
+					transform: rotate(-285deg);
+				}
+				core-circularmenuinner>core-circularmenuitem:nth-child(6)>core-circularmenuitemcontent
+				{
+					transform: rotate(-345deg);
 				}
 
 				core-circularmenucenter
@@ -311,116 +380,45 @@
 					text-align: center;
 					font-weight: bold;
 				}
-
-				core-circularmenuinner>core-circularmenuitem
-				{
-					left: 0;
-					top: 0;
-					bottom: 0;
-					width: 50%;
-					height: 50%;
-					line-height: normal;
-					
-					margin: 0;
-					
-					transform-origin: 100% 100%;
-					
-					border-radius: 0;
-					border-style: hidden solid hidden hidden;
-					
-					box-shadow: none;
-				}
-
-				core-circularmenuinner>core-circularmenuitem:nth-child(1)
-				{
-					border-bottom-style: solid; 
-					transform: rotate(0deg) skewX(30deg);
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(2)
-				{
-					transform: rotate(60deg) skewX(30deg);
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(3)
-				{
-					transform: rotate(120deg) skewX(30deg);
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(4)
-				{
-					transform: rotate(180deg) skewX(30deg);
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(5)
-				{
-					transform: rotate(240deg) skewX(30deg);
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(6)
-				{
-					border-right-style: solid; 
-					transform: rotate(300deg) skewX(30deg);
-				}
-				
-				core-circularmenuinner>core-circularmenuitem>span
-				{
-					position: absolute;
-					top: 42px;
-					left: 36px;
-					height: 21px;
-					width: 21px;
-					
-					margin-top: -10px;
-					margin-left: -10px;
-					
-					background-image: url(ui-sprite.svg);
-					background-position: -62px -2px;
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(1)>span
-				{
-					transform: skewX(-30deg) rotate(0deg);
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(2)>span
-				{
-					transform: skewX(-30deg) rotate(-60deg);
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(3)>span
-				{
-					transform: skewX(-30deg) rotate(-120deg);
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(4)>span
-				{
-					transform: skewX(-30deg) rotate(-180deg);
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(5)>span
-				{
-					transform: skewX(-30deg) rotate(-240deg);
-				}
-				core-circularmenuinner>core-circularmenuitem:nth-child(6)>span
-				{
-					transform: skewX(-30deg) rotate(-300deg);
-				}
 			</style>
 			<core-circularmenuinner>
 				<core-circularmenuitem>
-					<span class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-plus" title="Add item"></span>
+					<core-circularmenuitemcontent>
+						<div class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-plus" title="Add item"></div>
+					</core-circularmenuitemcontent>
 				</core-circularmenuitem>
 				<core-circularmenuitem>
-					<span class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-minus" title="Delete item"></span>
+					<core-circularmenuitemcontent>
+						<div class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-minus" title="Delete item"></div>
+					</core-circularmenuitemcontent>
 				</core-circularmenuitem>
 				<core-circularmenuitem>
-					<span class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-page" title="New document"></span>
+					<core-circularmenuitemcontent>
+						<div class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-page" title="New document"></div>
+					</core-circularmenuitemcontent>
 				</core-circularmenuitem>
 				<core-circularmenuitem>
-					<span class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-folderop" title="Open folder"></span>
+					<core-circularmenuitemcontent>
+						<div class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-folderop" title="Open folder"></div>
+					</core-circularmenuitemcontent>
 				</core-circularmenuitem>
 				<core-circularmenuitem>
-					<span class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-info" title="Information"></span>
+					<core-circularmenuitemcontent>
+						<div class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-info" title="Information"></div>
+					</core-circularmenuitemcontent>
 				</core-circularmenuitem>
 				<core-circularmenuitem>
-					<span class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-help" title="Help"></span>
+					<core-circularmenuitemcontent>
+						<div class="core-icon core-icon-21x21 core-icon-21x21-default core-icon-21x21-default-help" title="Help"></div>
+					</core-circularmenuitemcontent>
 				</core-circularmenuitem>
 			</core-circularmenuinner>
 			<core-circularmenucenter>
 				<span>Menu</span>
 			</core-circularmenucenter>
-		</core-circularmenu>-->
+		</core-circularmenu>
+				
+		<core-validation-bubble>Nome de usuário ou senha inválida.</core-validation-bubble>		
 				
 		<menu type="context" id="mymenu" style="display: none;">
 			<menuitem label="About Core.js version 1.0.0.1..."/>

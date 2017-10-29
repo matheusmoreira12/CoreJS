@@ -217,58 +217,85 @@ var Core = function()
 		}
 	}
 
+	//Enables the use of simple, fixed-duration css animations.
 	this.animation = new function () {
 		var _animation = this;
 
 		this.animationTypes = {
 			descendOpen: {
-				className: "core-animate-descend-open"
+				name: "animate-descend-open"
 			},
 			descendClose: {
-				className: "core-animate-descend-close"
+				name: "animate-descend-close"
 			},
 			ascendOpen: {
-				className: "core-animate-ascend-open"
+				name: "animate-ascend-open"
 			},
 			ascendClose: {
-				className: "core-animate-ascend-close"
+				name: "animate-ascend-close"
 			},
 			fadeIn: {
-				className: "core-animate-fadein"
+				name: "animate-fade-in"
 			},
 			fadeOut: {
-				className: "core-animate-fadeout"
+				name: "animate-fade-out"
 			},
 			grow: {
-				className: "core-animate-grow"
+				name: "animate-grow"
 			},
 			shrink: {
-				className: "core-animate-shrink"
+				name: "animate-shrink"
 			},
 			bounce: {
-				className: "core-animate-bounce"
+				name: "animate-bounce"
 			}
 		}
 
-		function removeAnimations(elem)
+		function addAnimation(elem, animationType)
 		{
-			//remove each animation-related class
-			Array.prototype.slice.apply(elem.classList).forEach(function (className) {
-					if (className.indexOf("core-animate") >= 0)
-						elem.classList.remove(className);
+			//Get animation attribute and split into space-separated items
+			var animattr = elem.getAttribute("core-animation");
+			animattr = animattr || "";
+			
+			var animarray = animattr.split(" ");
+			
+			//Add item to array
+			animarray.push(animationType.name);
 
-					//reset element visibility
-					elem.style.visibility = "";
-				});
+			//Join back all the items separated by space, and set the animation attribute
+			elem.setAttribute("core-animation", animarray.join(" "));
+		}
+		
+		function removeAnimation(elem, animationType)
+		{
+			//Get animation attribute and split into space-separated items
+			var animarray = elem.getAttribute("core-animation").split(" "),
+				//Get item index
+				index = animarray.indexOf(animationType.name);
+			
+			if (index == -1)
+				return;
+			
+			//Remove item from the array
+			animarray.splice(index);
+			
+			//Join back all the items separated by space, and set the animation attribute
+			elem.setAttribute("core-animation", animarray.join(" "));
+		}
+
+		function removeAllAnimations(elem)
+		{
+			//Remove animation attribute alltogether
+			elem.removeAttribute("core-animation");
 		}
 
 		this.animate = function (elem, obj, callback, thisArg)
 		{
-			if (core.typeCheck.isObject(obj) && !!obj.className && !!elem.classList)
+			if (core.typeCheck.isObject(obj) && !!obj.name)
 			{
 				function animationEnd()
 				{
-					removeAnimations(elem);
+					removeAllAnimations(elem);
 
 					if (core.typeCheck.isFunction(callback))
 						callback.call(thisArg);
@@ -280,10 +307,10 @@ var Core = function()
 				}
 				elem.addEventListener("animationend", animationEnd);
 
-				removeAnimations(elem);
+				removeAllAnimations(elem);
 
 				//start animating
-				elem.classList.add("core-animate", obj.className);
+				addAnimation(elem, obj);
 			}
 			else
 				core.debugging.warning("Core: Cannot animate element. <obj> is not a valid animation type decriptor, or" +
@@ -1511,7 +1538,7 @@ var Core = function()
 				if (obj.default)
 				{
 					this.defaultButton = this;
-					button.setAttribute("core-default-button", "");
+					button.setAttribute("core-default", "");
 				}
 			}
 
@@ -1738,13 +1765,13 @@ var Core = function()
 				document.body.appendChild(dialog);
 
 				//detect if dialog is to be shown modal - default false
-				if (modal === true)
+				if (modal == true)
 					dialog.showModal();
 				else
 					dialog.show();
 
 				//check if dialog is draggable - default true
-				if (flags.draggable !== false)
+				if (flags.draggable != false)
 					dialog.draggabilityInstance = new _userInterface.Draggability(dialog, dialog.titleBar);
 
 				//call <callback>, if it is a valid function

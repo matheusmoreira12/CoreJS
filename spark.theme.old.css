@@ -1,84 +1,20 @@
-:root
+/*enable hardware acceleration*/
+html
 {
-	/*Theming*/
-	/*All controls*/
-	--focus-border-color: rgb(0, 137, 183);
-	--focus-halo-color: rgba(0, 83, 235, .7);
-	--focus-halo-spread: 8px;
-	
-	/*Button style*/
-	--button-background-color: #fdfdfd;
-	--button-background-color-hover: #d0d1d1;
-	--button-background-color-active: var(--button-background-color-hover);
-	
-	--button-background-img: linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), linear-gradient(#6f6f6f, #404040);	
-	--button-background-image-hover: linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), linear-gradient(#6f6f6f, #404040);
-	--button-background-image-active: var(--button-background-image-hover);
-	
-	--default-button-background-img: linear-gradient(#d0e2f4, #c6dbf1 50%, #a9c9ea 50%, #92b5da), linear-gradient(#6f6f6f, #404040);	
-	--default-button-background-image-hover: linear-gradient(#b8cfe3, #aac3e4 50%, #91b2dd 50%, #799bd2), linear-gradient(#6f6f6f, #404040);
-	--default-button-background-image-active: var(--default-button-background-image-hover);
-
-	--button-border-width: 1px;
-	
-	--button-border-color: transparent;
-	--button-border-color-hover: transparent;
-	--button-border-color-active: transparent;
-	
-	--button-font-color: black;
-	--button-font-color-hover: black;
-	
-	--button-accent-color: rgba(255, 255, 255, .2);
-	--button-hover-shadow-color: rgba(0, 0, 0, .2);
-	
-	--button-active-shadow-color: rgba(0, 0, 0, .4);
-	
-	--button-border-radius: 2px;
-
-	/*	Default button*/
-	--default-button-background-color: #d0e2f4;
-	--default-button-background-color-hover: #b8cfe3;
-	--default-button-background-color-active: var(--default-button-background-color-hover);
-
-	--default-button-border-color: transparent;
-	--default-button-border-color-hover: transparent;
-	--default-button-border-color-active: transparent;
-	
-	/*	Close button style*/
-	--close-button-border-color: #404040;
-	
-	/*Default font style*/
-	--default-font-family: Arial, Verdana, sans-serif;
-	--default-font-size: 13px;
-	--default-font-color: black;
-	
-	/*page style*/
-	--application-background-color: gainsboro;
-	
-	/*tooltip style*/
-	--title-tooltip-background-color: rgba(254, 254, 205, .95);
-	--title-tooltip-font-color: black;
-	
-	/*vallidation bubble style*/
-	--validation-bubble-background-color: #cb0000;
-	--validation-bubble-font-color: white;
+	transform: translate3d(0, 0, 0);
+	transform-style: preserve-3d;
 }
 
 /*body theming background and font*/
 body
 {
-	background: var(--application-background-color);
-	
-	font-size: var(--default-font-size);
-	font-family: var(--default-font-family);
-	color: var(--default-font-color);
-	
+	background: #ddd;
+	font-size: 12px;
+	font-family: arial, verdana;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
-	
 	cursor: default;
-	
 	scroll-behavior: smooth;
 }
 
@@ -131,7 +67,9 @@ input+label[is=core-label]
 }
 input:focus+label[is=core-label]
 {
-	text-shadow: 0 0 var(--focus-halo-spread) var(--focus-halo-color);
+	-webkit-text-shadow: 0 0 8px rgba(0, 83, 235, .7);
+	-moz-text-shadow: 0 0 8px rgba(0, 83, 235, .7);
+	text-shadow: 0 0 8px rgba(0, 83, 235, .7);
 }
 
 /*cursor support*/
@@ -246,28 +184,15 @@ input:focus+label[is=core-label]
 }
 
 /*button*/
-button,
+button[is=core-button],
+button[is=core-iconbutton],
+button[is=core-closebutton],
+button[is=core-incrementbutton],
+button[is=core-decrementbutton],
 core-select,
 input[is="core-radio"],
 input[is="core-checkbox"]
 {
-	--accent-shadow: inset 0 0 0 1px var(--button-accent-color);
-	--hover-shadow: 0 0 transparent;
-	--active-shadow: 0 0 transparent;
-	--focus-halo-shadow: 0 0 transparent;
-
-	--border-color: var(--button-border-color);
-	--border-color-hover: var(--button-border-color-hover);
-	--border-color-active: var(--button-border-color-active);
-
-	--background-color: var(--button-background-color);
-	--background-color-hover: var(--button-background-color-hover);
-	--background-color-active: var(--button-background-color-active);
-	
-	--background-image: var(--button-background-img);
-	--background-image-hover: var(--button-background-image-hover);
-	--background-image-active: var(--button-background-image-active);
-		
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
@@ -282,17 +207,23 @@ input[is="core-checkbox"]
 
 	display: inline-block;
 
-	border: var(--button-border-width) solid var(--border-color);
+	border: 1px solid transparent;
 
-	background-color: var(--background-color);
-	background-image: var(--background-image);
+	background-color: #fdfdfd;
+	background-image: -webkit-linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -webkit-linear-gradient(#6f6f6f, #404040);
+	background-image: -moz-linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -moz-linear-gradient(#6f6f6f, #404040);
+	background-image: linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), linear-gradient(#6f6f6f, #404040);
 	background-size: 110% 110%;
 	background-position: center;
 	background-clip: padding-box, border-box;
 	
-	border-radius:  var(--button-border-radius);
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
 	
-	box-shadow: var(--accent-shadow), var(--hover-shadow), var(--active-shadow), var(--focus-halo-shadow);
+	-webkit-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
+	-moz-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
 	
 	font-weight: normal;
 }
@@ -304,69 +235,84 @@ button[is=core-iconbutton]
 	width: auto!important;
 	min-width: 0!important;
 }
-button:enabled:hover,
-core-select:not([disabled]):hover,
-input[is="core-radio"]:enabled:hover,
-input[is="core-checkbox"]:enabled:hover
+button[is=core-button]:enabled:hover, button[is=core-button]:enabled:active,
+button[is=core-iconbutton]:enabled:hover, button[is=core-iconbutton]:enabled:active,
+button[is=core-closebutton]:enabled:hover, button[is=core-closebutton]:enabled:active,
+button[is=core-incrementbutton]:enabled:hover, button[is=core-incrementbutton]:enabled:active,
+button[is=core-decrementbutton]:enabled:hover, button[is=core-decrementbutton]:enabled:active,
+core-select:not([core-disabled]):hover, core-select[core-expanded],
+input[is="core-radio"]:enabled:hover, input[is="core-radio"]:enabled:active,
+input[is="core-checkbox"]:enabled:hover, input[is="core-checkbox"]:enabled:active
 {
-	border-color: var(--border-color-hover);
-
-	background-color: var(--background-color-hover);
-	background-image: var(--background-image-hover);
-
-	--hover-shadow: 0 1px 2px var(--button-hover-shadow-color);
-	--accent-shadow: 0 0 transparent;
+	background-color: #d0d1d1;
+	background-image: -webkit-linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(#6f6f6f, #404040);
+	background-image: -moz-linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -moz-linear-gradient(#6f6f6f, #404040);
+	background-image: linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), linear-gradient(#6f6f6f, #404040);
 }
-button:enabled:active,
+button[is=core-button]:enabled:active,
+button[is=core-iconbutton]:enabled:active,
+button[is=core-incrementbutton]:enabled:active,
+button[is=core-decrementbutton]:enabled:active,
 core-select[core-expanded],
 input[is="core-radio"]:enabled:active,
 input[is="core-checkbox"]:enabled:active
 {
-	border-color: var(--border-color-active);
-	
-	background-color: var(--background-color-active);
-	background-image: var(--background-image-active);
-
-	--active-shadow: inset 0 1px 2px var(--button-active-shadow-color);
-	--accent-shadow: 0 0 transparent;
+	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4);
+	-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4);
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4);
 }
-button:focus,
+button[is=core-button]:disabled,
+button[is=core-iconbutton]:disabled,
+button[is=core-closebutton]:disabled,
+button[is=core-incrementbutton]:disabled,
+button[is=core-decrementbutton]:disabled,
+core-select[core-disabled],
+input[is="core-radio"]:disabled,
+input[is="core-checkbox"]:disabled
+{
+	opacity: 0.3;
+}
+
+button[is=core-button]:focus,
+button[is=core-iconbutton]:focus,
+button[is="core-incrementbutton"]:focus,
+button[is="core-decrementbutton"]:focus,
 core-select:focus,
 input[is="core-radio"]:focus,
 input[is="core-checkbox"]:focus
 {
 	outline: none;
-
-	--focus-halo-shadow: 0 0 var(--focus-halo-spread) var(--focus-halo-color);
-
-	--border-color: var(--focus-border-color);
-	--border-color-hover: var(--focus-border-color);
-	--border-color-active: var(--focus-border-color);
-}
-button:disabled,
-core-select[disabled],
-input[is="core-radio"]:disabled,
-input[is="core-checkbox"]:disabled
-{
-	pointer-events: none;
 	
-	opacity: .3;
+	-webkit-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2), 0 0 8px rgba(0, 83, 235, .7);
+	-moz-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2), 0 0 8px rgba(0, 83, 235, .7);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2), 0 0 8px rgba(0, 83, 235, .7);
+}
+button[is=core-button]:focus:active,
+button[is=core-iconbutton]:focus:active,
+core-select[core-expanded]:focus,
+input[is="core-radio"]:focus:active,
+input[is="core-checkbox"]:focus:active
+{
+	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4), 0 0 8px rgba(0, 83, 235, .7);
+	-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4), 0 0 8px rgba(0, 83, 235, .7);
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4), 0 0 8px rgba(0, 83, 235, .7);
 }
 
-button[core-default],
-button[is=core-iconbutton][core-default]
+button[is=core-button][core-default-button],
+button[is=core-iconbutton][core-default-button]
 {
-	--background-color: var(--default-button-background-color);
-	--background-color-hover: var(--default-button-background-color-hover);
-	--background-color-active: var(--default-button-background-color-active);
-
-	--background-image: var(--default-button-background-img);
-	--background-image-hover: var(--default-button-background-image-hover);
-	--background-image-active: var(--default-button-background-image-active);
-
-	--border-color: var(--default-button-border-color);
-	--border-color-hover: var(--default-button-border-color-hover);
-	--border-color-active: var(--default-button-border-color-active);
+	background-color: #d0e2f4;
+	background-image: -webkit-linear-gradient(#d0e2f4, #c6dbf1 50%, #a9c9ea 50%, #92b5da), -webkit-linear-gradient(#6f6f6f, #404040);
+	background-image: -moz-linear-gradient(#d0e2f4, #c6dbf1 50%, #a9c9ea 50%, #92b5da), -moz-linear-gradient(#6f6f6f, #404040);
+	background-image: linear-gradient(#d0e2f4, #c6dbf1 50%, #a9c9ea 50%, #92b5da), linear-gradient(#6f6f6f, #404040);
+}
+button[is=core-button][core-default-button]:hover, button[is=core-button][core-default-button]:active,
+button[is=core-iconbutton][core-default-button]:hover, button[is=core-iconbutton][core-default-button]:active
+{
+	background-color: #b8cfe3;
+	background-image: -webkit-linear-gradient(#b8cfe3, #aac3e4 50%, #91b2dd 50%, #799bd2), -webkit-linear-gradient(#6f6f6f, #404040);
+	background-image: -moz-linear-gradient(#b8cfe3, #aac3e4 50%, #91b2dd 50%, #799bd2), -moz-linear-gradient(#6f6f6f, #404040);
+	background-image: linear-gradient(#b8cfe3, #aac3e4 50%, #91b2dd 50%, #799bd2), linear-gradient(#6f6f6f, #404040);
 }
 
 /*close button*/
@@ -387,13 +333,11 @@ button[is=core-closebutton]
 
 	background: transparent!important;
 
-	border-color: transparent;
-
 	box-shadow: none!important;
 }
 button[is=core-closebutton]:hover
 {
-	border-color: unset;
+	border: 1px solid #404040;
 	
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
@@ -1224,63 +1168,27 @@ html /deep/ ::-webkit-scrollbar-thumb:active, html /deep/ ::-webkit-scrollbar-bu
 	color: white;
 }
 
-/*tooltip and validation bubble*/
-core-titletooltip, core-validation-bubble
+/*tooltip*/
+core-titletooltip
 {
-	display: inline-block;
-	
 	position: absolute;
-	
-	top: 0;
-	left: 0;
-
 	padding: 5px 7px;
 	margin: 13px;
 
+	background: rgba(254, 254, 205, .95);
+	font-size: 9px;
+	
 	white-space: nowrap;
+
+	-webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, .3), inset 0 -1px 0 rgba(0, 0, 0, .3);
+	-moz-box-shadow: 0 2px 4px rgba(0, 0, 0, .3), inset 0 -1px 0 rgba(0, 0, 0, .3);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, .3), inset 0 -1px 0 rgba(0, 0, 0, .3);
+
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
 	
 	z-index: 9999;
-
-	background-image: none;
-	background-color: var(--title-tooltip-background-color);
-
-	font-size: 9px;
-	color: var(--title-tooltip-font-color);
-
-	border-radius: 3px;
-
-	box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
-}
-
-core-validation-bubble
-{
-	background-color: var(--validation-bubble-background-color);
-
-	color: white;
-}
-
-core-validation-bubble::before
-{
-	content: '';
-
-    display: inline-block;
-
-    position: absolute;
-    left: 0;
-	top: 50%;
-
-    width: 16px;
-    height: 16px;
-
-	padding: 0;
-	margin: -8px 0 0 -8px; 
-
-    transform: scaleY(.4) rotate(45deg);
-
-    background-color: var(--validation-bubble-background-color);
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, .4);
-
-	clip-path: polygon(0% 0%, 200% 200%, 0% 200%);
 }
 
 /*animation keyframes*/
@@ -1401,7 +1309,7 @@ core-validation-bubble::before
 }
 
 /*animation*/
-[core-animation]
+.core-animate
 {
 	visibility: visible!important;
 
@@ -1415,53 +1323,53 @@ core-validation-bubble::before
 	transform-origin: center;
 }
 
-[core-animation~="animate-descend-open"]
+.core-animate.core-animate-descend-open
 {
 	animation: .645s ease-out core-animate-descend-open;
 }
-[core-animation~="animate-descend-close"]
+.core-animate.core-animate-descend-close
 {
 	animation: .645s ease-out core-animate-descend-close;
 }
 
-[core-animation~="animate-ascend-open"]
+.core-animate.core-animate-ascend-open
 {
 	animation: .430s ease-out core-animate-ascend-open;
 }
-[core-animation~="animate-ascend-close"]
+.core-animate.core-animate-ascend-close
 {
 	animation: .430s ease-out core-animate-ascend-close;
 }
 
-[core-animation~="animate-shrink"]
+.core-animate.core-animate-shrink
 {
 	animation: .645s ease-out shrink;
 }
-[core-animation~="animate-shrink"]>*
+.core-animate.core-animate-shrink>*
 {
 	animation: .645s ease-out grow;
 }
 
-[core-animation~="animate-grow"]
+.core-animate.core-animate-grow
 {
 	animation: .645s ease-out grow;
 }
-[core-animation~="animate-grow"]>*
+.core-animate.core-animate-grow>*
 {
 	animation: .645s ease-out shrink;
 }
 
-[core-animation~="animate-fade-in"]
+.core-animate.core-animate-fadein
 {
 	animation: .218s linear fade-in;
 }
 
-[core-animation~="animate-fade-out"]
+.core-animate.core-animate-fadeout
 {
 	animation: .218s linear fade-out;
 }
 
-[core-animation~="animate-bounce"]
+.core-animate.core-animate-bounce
 {
 	animation: .430s ease-in bounce;
 }
