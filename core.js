@@ -5,7 +5,7 @@ var UNDEF = 'undefined',
 //define custom prototype properties
 Object.prototype._internal = {};
 
-Object.prototype.descend = function (prototype)
+Object.prototype.inherit = function (prototype)
 {
 	var obj = Object.create(prototype);
 	//create and populate base prototype object
@@ -26,6 +26,25 @@ Object.prototype.release = function () {
 	
 	return undefined;
 };
+
+Object.prototype.reflect = function (reflectedObj, prototype)
+{
+	var result = !!prototype ? Object.create(prototype) : {};
+	
+	for (nome in reflectedObj)
+		if (reflectedObj.hasOwnProperty(nome))
+			Object.defineProperty(result, nome, {
+				get: function () 
+				{
+					return reflectedObj[nome];
+				},
+				set: function (value) {
+					reflectedObj[nome] = value;
+				}
+			});
+	
+	return result;
+}
 
 //core definition
 var Core = function()
@@ -209,6 +228,10 @@ var Core = function()
 				};
 		}
 		
+		this.animate = function (properties) {
+			return core.animation.animate(this[0], properties)
+		}
+		
 		//Prototype Application
 		//applies the Core prototype to an element
 		if (apply != false)
@@ -217,104 +240,48 @@ var Core = function()
 		}
 	}
 
-	//Enables the use of simple, fixed-duration css animations.
+	//Enables the use of simple Web Animations API animations.
 	this.animation = new function () {
 		var _animation = this;
-
-		this.animationTypes = {
-			descendOpen: {
-				name: "animate-descend-open"
-			},
-			descendClose: {
-				name: "animate-descend-close"
-			},
-			ascendOpen: {
-				name: "animate-ascend-open"
-			},
-			ascendClose: {
-				name: "animate-ascend-close"
-			},
-			fadeIn: {
-				name: "animate-fade-in"
-			},
-			fadeOut: {
-				name: "animate-fade-out"
-			},
-			grow: {
-				name: "animate-grow"
-			},
-			shrink: {
-				name: "animate-shrink"
-			},
-			bounce: {
-				name: "animate-bounce"
-			}
-		}
-
-		function addAnimation(elem, animationType)
-		{
-			//Get animation attribute and split into space-separated items
-			var animattr = elem.getAttribute("core-animation");
-			animattr = animattr || "";
-			
-			var animarray = animattr.split(" ");
-			
-			//Add item to array
-			animarray.push(animationType.name);
-
-			//Join back all the items separated by space, and set the animation attribute
-			elem.setAttribute("core-animation", animarray.join(" "));
+		
+		this.presetKeyframes = {
+			fadeIn: { filter: ["opacity(0)", "opacity(1)"] }, 
+			fadeOut: { filter: ["opacity(1)", "opacity(0)"] },
+			bounce: { transform: ["translate(0, 0)", "translate(10%, 0)", "translate(-10%, 0)", 
+				"translate(10%, 0)", "translate(-10%, 0)", "translate(0, 0)"] },
+			grow: { transform: ["scale(.8)", "scale(1)"] },
+			shrink: { transform: ["scale(1.2)", "scale(1)"] },
+			flip: { transform: ["rotateX(90deg)", "rotateX(0deg)"] }
 		}
 		
-		function removeAnimation(elem, animationType)
+		this.registerPresetKeyframes = function (name, keyframesObj)
 		{
-			//Get animation attribute and split into space-separated items
-			var animarray = elem.getAttribute("core-animation").split(" "),
-				//Get item index
-				index = animarray.indexOf(animationType.name);
-			
-			if (index == -1)
-				return;
-			
-			//Remove item from the array
-			animarray.splice(index);
-			
-			//Join back all the items separated by space, and set the animation attribute
-			elem.setAttribute("core-animation", animarray.join(" "));
-		}
-
-		function removeAllAnimations(elem)
-		{
-			//Remove animation attribute alltogether
-			elem.removeAttribute("core-animation");
-		}
-
-		this.animate = function (elem, obj, callback, thisArg)
-		{
-			if (core.typeCheck.isObject(obj) && !!obj.name)
-			{
-				function animationEnd()
-				{
-					removeAllAnimations(elem);
-
-					if (core.typeCheck.isFunction(callback))
-						callback.call(thisArg);
-					else if (!!callback)
-						core.debugging.warning("Core: <callback> is not a valid function and will not get called.");
-
-					//prevent memory leakage
-					elem.removeEventListener("animationend", animationEnd);
-				}
-				elem.addEventListener("animationend", animationEnd);
-
-				removeAllAnimations(elem);
-
-				//start animating
-				addAnimation(elem, obj);
-			}
+			//Check for duplicates
+			if (core.typeCheck.isUndefined(this.presetKeyframes[name]))
+				this.presetKeyframes[name] = keyframesObj;
 			else
-				core.debugging.warning("Core: Cannot animate element. <obj> is not a valid animation type decriptor, or" +
-					"<elem> is not a valid <HTMLElement>. Animation will not display correctly.");
+			{
+				core.debugging.warning("Could not register keframes. The specified name is already in use.");
+				return false;
+			}
+			
+			return true;
+		}
+		
+		this.removePresetKeyframes = function (name)
+		{
+			delete this.presetKeyframes[name];
+		}
+		
+		this.AnimationProperties = function (keyframes, options)
+		{
+			this.keyframes = keyframes;
+			this.options = options;
+		}
+		
+		this.animate = function (elem, properties)
+		{
+			return elem.animate(properties.keyframes, properties.options);
 		}
 	}
 
@@ -1147,29 +1114,53 @@ var Core = function()
 		
 		CoreDataGrid_prototype.createdCallback = function ()
 		{
-			this.rowElements = [];
+			this.shadowRoot = this.createShadowRoot();
 
-			//add custom scroll funcionality
-			this.addEventListener('scroll', function() {
-				if (rowElements.length > 0)
-				{
-					var firstrow = this.rows[0],
-						frheight = firstrow.clientHeight;
-					this.style.paddingTop = frheight + 'px';
-					firstrow.style.position = 'absolute';
-					firstrow.style.top = this.scrollTop + 'px';
-				}
-			});
+			//The table element
+			this.table = new _userInterface.CoreDataGridTable();
+			this.shadowRoot.appendChild(this.table);
+			
+			Object.defineProperty(this, "head", { get: function  () {
+				return this.table.head;
+			}});
+
+			Object.defineProperty(this, "body", { get: function  () {
+				return this.table.body;
+			}});
 		}
 		
-		//use this to read information from an array
-		CoreDataGrid_prototype.readFromArray = function (array)
-		{
-			//create the table body
-			var bodyElem = new _userInterface.CoreDataGridBody();
+		this.CoreDataGrid = _userInterface.register("core-datagrid", CoreDataGrid_prototype);
+
+		//CoreDataGridTable
+		var CoreDataGridTable_prototype = Object.create(HTMLElement.prototype);
+		
+		CoreDataGridTable_prototype.createdCallback = function () {
+			this.setAttribute("cellspacing", 0);
 			
+			//The head element
+			this.head = new _userInterface.CoreDataGridHead();
+			this.appendChild(this.head);
+			
+			//The body element
+			this.body = new _userInterface.CoreDataGridBody();
+			this.appendChild(this.body);
+		}
+		
+		this.CoreDataGridTable = _userInterface.register("core-datagridtable", CoreDataGridTable_prototype, "table");
+
+		//CoreDataGridBody
+		var CoreDataGridBody_prototype = Object.create(HTMLElement.prototype);
+
+		CoreDataGridBody_prototype.createdCallback = function () {
+			//The array which contains all the rows of this Data Grid
+			this.rows = [];
+		}
+
+		//use this to read information from an array
+		CoreDataGridBody_prototype.readFromArray = function (array)
+		{
 			//create the array that will receive the rows
-			this.rowElements = new Array(array.length);
+			this.rows = new Array(array.length);
 			
 			//acquire row info from the array
 			for (var i = 0; i < array.length; i++)
@@ -1186,12 +1177,17 @@ var Core = function()
 			this.bodyElement = bodyElem;
 		}
 
-		this.CoreDataGrid = _userInterface.register("core-datagrid", CoreDataGrid_prototype);
+		this.CoreDataGridBody = _userInterface.register("core-datagridbody", CoreDataGridBody_prototype, "tbody");
 
-		//CoreDataGridBody
-		var CoreDataGridBody_prototype = Object.create(HTMLElement.prototype);
+		//CoreDataGridHead 
+		var CoreDataGridHead_prototype = Object.inherit(CoreDataGridBody_prototype);
 
-		this.CoreDataGridBody = _userInterface.register("core-datagridbody", CoreDataGridBody_prototype);
+		CoreDataGridHead_prototype.createdCallback = function ()
+		{
+			this._base.createdCallback.call(this);
+		}
+
+		this.CoreDataGridHead = _userInterface.register("core-datagridhead", CoreDataGridHead_prototype, "thead");
 
 		//CoreDataGridRow
 		var CoreDataGridRow_prototype = Object.create(HTMLElement.prototype);
@@ -1224,14 +1220,14 @@ var Core = function()
 			}
 		}
 
-		this.CoreDataGridRow = _userInterface.register("core-datagridrow", CoreDataGridRow_prototype);
+		this.CoreDataGridRow = _userInterface.register("core-datagridrow", CoreDataGridRow_prototype, "tr");
 
 		//CoreDataGridCell
 		var CoreDataGridCell_prototype = Object.create(_userInterface.primitves.CoreElementContainer.prototype);
 		
 		CoreDataGridCell_prototype.selected = false;
 
-		this.CoreDataGridCell = _userInterface.register("core-datagridcell", CoreDataGridCell_prototype);
+		this.CoreDataGridCell = _userInterface.register("core-datagridcell", CoreDataGridCell_prototype, "td");
 
 		//CoreTitleTooltip
 		var CoreTitleTooltip_prototype = Object.create(HTMLElement.prototype);
@@ -1299,7 +1295,7 @@ var Core = function()
 		}
 		
 		//CoreProgressBar
-		var CoreProgressBar_prototype = Object.descend(_userInterface.primitves.CoreLabelableContainer.prototype);
+		var CoreProgressBar_prototype = Object.inherit(_userInterface.primitves.CoreLabelableContainer.prototype);
 		
 		CoreProgressBar_prototype.createdCallback = function ()
 		{
@@ -1430,7 +1426,7 @@ var Core = function()
 		this.CoreIconButton = _userInterface.register("core-iconbutton", CoreIconButton_prototype, "button");
 
 		//CoreCloseButton, based on CoreIconButton
-		var CoreCloseButton_prototype = Object.descend(CoreIconButton_prototype);
+		var CoreCloseButton_prototype = Object.inherit(CoreIconButton_prototype);
 		
 		CoreCloseButton_prototype.createdCallback = function () {
 			this._base.createdCallback.call(this);
@@ -1679,43 +1675,48 @@ var Core = function()
 
 			//open a dialog
 			//<flags>: <object { title, Array elements | message, [Array buttons], [function resultCallback],
-			//[closeButton = true], [draggable = true], [removeWhenDone = true], [Object animation = core.animation.animationTypes.fadeIn] }>
+			//[closeButton = true], [draggable = true], [removeWhenDone = true], [Object animation = core.animation.presetKeyframes.fadeIn] }>
 			function openDialog (flags, callback, modal)
 			{
 				var dialog = new _userInterface.CoreDialog();
+
+				const DEFAULT_OPEN_ANIM_DURATION = 218,
+					DEFAULT_CLOSE_ANIM_DURATION = 218;
 
 				//set dialog title
 				dialog.titleBar.setTitle(flags.title);
 
 				function closeDialog () {
 					//POTENTIALLY UGLY hack: callback for closing when animation completes
-					function animationEnd()
+					function closeAnimationEnd()
 					{
 						dialog.close();
 
 						//remove dialog draggability
-						if (dialog.draggabilityInstance !== null)
+						if (dialog.draggabilityInstance != null)
 							dialog.draggabilityInstance = dialog.draggabilityInstance.release();
 
 						//detect if dialog should be removed after closing
-						if (flags.removeWhenDone !== false)
+						if (flags.removeWhenDone != false)
 						{
 							dialog.remove();
 							dialog = dialog.release();
 						}
 					}
-					
-					if (core.typeCheck.isObject(flags.closeAnimationType))
-						core.animation.animate(dialog, flags.closeAnimationType, animationEnd);
-					else
-						core.animation.animate(dialog, core.animation.animationTypes.fadeOut, animationEnd);
 
-					//check if user wants a callback to be called when dialog is closed
+					//Check close animation flag and validate it
+					var closeAnimationKeyframes = flags.closeAnimationKeyframes || core.animation.presetKeyframes.fadeOut,
+						closeAnimationDuration = flags.closeAnimationDuration || DEFAULT_CLOSE_ANIM_DURATION;
+					
+					with (dialog.animate(closeAnimationKeyframes, closeAnimationDuration))
+						onfinish = closeAnimationEnd;
+
+					//Check if a function is to be called back when the dialog is closed
 					if (core.typeCheck.isFunction(flags.returnCallback))
-						//call the dialog callback
 						flags.returnCallback.call(dialog, dialog.returnValue);
 				}
-				
+
+				//Check if a close button is required
 				if (flags.closeButton == false)
 					dialog.titleBar.closeButton.remove();
 				else
@@ -1755,11 +1756,11 @@ var Core = function()
 					//hide the button bar
 					dialog.buttonBar.setAttribute("core-hidden", "");
 
-				//check for dialog animation type
-				if (core.typeCheck.isObject(flags.openAnimationType))
-					core.animation.animate(dialog, flags.openAnimationType);
-				else
-					core.animation.animate(dialog, core.animation.animationTypes.fadeIn);
+				//Check for dialog animation type
+				var openAnimationKeyframes = flags.openAnimationKeyframes || core.animation.presetKeyframes.fadeIn,
+					openAnimationDuration = flags.openAnimationDuration || DEFAULT_OPEN_ANIM_DURATION;;
+
+				dialog.animate(openAnimationKeyframes, openAnimationDuration);
 
 				//append the dialog to the document body
 				document.body.appendChild(dialog);
@@ -2428,14 +2429,14 @@ var Core = function()
 				_titleTooltip.isShowing = true;
 
 				_titleTooltip.tooltip.removeAttribute("core-hidden");
-				core.animation.animate(_titleTooltip.tooltip, core.animation.animationTypes.fadeIn);
+				core.animation.animate(_titleTooltip.tooltip, core.animation.presetKeyframes.fadeIn, {});
 			}
 
 			function hideTooltip()
 			{
 				_titleTooltip.isShowing = false;
 
-				core.animation.animate(_titleTooltip.tooltip, core.animation.animationTypes.fadeOut, function ()
+				core.animation.animate(_titleTooltip.tooltip, core.animation.presetKeyframes.fadeOut, {}, function ()
 				{
 					if (!_titleTooltip.isShowing)
 						_titleTooltip.tooltip.setAttribute("core-hidden", "");

@@ -15,10 +15,6 @@
 	--button-background-image-hover: linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), linear-gradient(#6f6f6f, #404040);
 	--button-background-image-active: var(--button-background-image-hover);
 	
-	--default-button-background-img: linear-gradient(#d0e2f4, #c6dbf1 50%, #a9c9ea 50%, #92b5da), linear-gradient(#6f6f6f, #404040);	
-	--default-button-background-image-hover: linear-gradient(#b8cfe3, #aac3e4 50%, #91b2dd 50%, #799bd2), linear-gradient(#6f6f6f, #404040);
-	--default-button-background-image-active: var(--default-button-background-image-hover);
-
 	--button-border-width: 1px;
 	
 	--button-border-color: transparent;
@@ -36,6 +32,10 @@
 	--button-border-radius: 2px;
 
 	/*	Default button*/
+	--default-button-background-img: linear-gradient(#d0e2f4, #c6dbf1 50%, #a9c9ea 50%, #92b5da), linear-gradient(#6f6f6f, #404040);	
+	--default-button-background-image-hover: linear-gradient(#b8cfe3, #aac3e4 50%, #91b2dd 50%, #799bd2), linear-gradient(#6f6f6f, #404040);
+	--default-button-background-image-active: var(--default-button-background-image-hover);
+
 	--default-button-background-color: #d0e2f4;
 	--default-button-background-color-hover: #b8cfe3;
 	--default-button-background-color-active: var(--default-button-background-color-hover);
@@ -62,6 +62,13 @@
 	/*vallidation bubble style*/
 	--validation-bubble-background-color: #cb0000;
 	--validation-bubble-font-color: white;
+}
+
+/*Preserve 3D and perspective*/
+*
+{
+	transform-style: preserve-3d;
+	perspective: 1000px;
 }
 
 /*body theming background and font*/
@@ -1023,20 +1030,24 @@ core-datagrid
 
 	border: 1px solid rgb(120, 122, 124);
 }
-core-datagridbody
+table[is=core-datagridtable]
 {
-	display: table;
+	display: inline-table;
 }
-core-datagridrow
+thead[is=core-datagridhead]
 {
-	display: table-row;
+}
+tbody[is=core-datagridbody]
+{
+}
+tr[is=core-datagridrow]
+{
 	padding: 0;
 	margin: 0;
 }
 /*the cells for displaying/entering data*/
-core-datagridcell
+td[is=core-datagridcell]
 {
-	display: table-cell;
 	margin: -1px -1px;
 	padding: 0 8px;
 	line-height: 21px;
@@ -1059,24 +1070,24 @@ core-datagridcell
 	background-clip: padding-box;
 }
 /*border behavior*/
-core-datagridcell:last-child
+td[is=core-datagridcell]:last-child
 {
 	border-right-style: hidden;
 }
 /*row hover state*/
-core-datagridrow:hover core-datagridcell
+tr[is=core-datagridrow]:hover td[is=core-datagridcell]
 {
 	background-color: #b3e2ff;
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2);
 }
 /*visual behavior for a focused cell*/
-core-datagridcell:focus
+td[is=core-datagridcell]:focus
 {
 	outline: none;
 	background-color: #7FCEFF!important;
 }
 /*each cell of the first row behaves visually just like a button: */
-core-datagridrow:first-child>core-datagridcell 
+tr[is=core-datagridrow]:first-child>td[is=core-datagridcell] 
 {			
 	text-align: center;
 	font-weight: bold;
@@ -1095,14 +1106,15 @@ core-datagridrow:first-child>core-datagridcell
 	cursor: default;
 }
 /*first-row hover and active cell states*/
-core-datagridrow:first-child>core-datagridcell:hover, core-datagridrow:first-child>core-datagridcell:active
+tr[is=core-datagridrow]:first-child>td[is=core-datagridcell]:hover,
+tr[is=core-datagridrow]:first-child>td[is=core-datagridcell]:active
 {
 	background-color: #d0d1d1;
 	background-image: -webkit-linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(#6f6f6f, #404040);
 	background-image: -moz-linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -moz-linear-gradient(#6f6f6f, #404040);
 	background-image: linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), linear-gradient(#6f6f6f, #404040);
 } 
-core-datagridrow:first-child>core-datagridcell:active
+tr[is=core-datagridrow]:first-child>td[is=core-datagridcell]:active
 {
 	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4);
 	-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4);
