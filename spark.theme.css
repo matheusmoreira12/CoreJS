@@ -11,7 +11,7 @@
 	--button-background-color-hover: #d0d1d1;
 	--button-background-color-active: var(--button-background-color-hover);
 	
-	--button-background-img: linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), linear-gradient(#6f6f6f, #404040);	
+	--button-background-image: linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), linear-gradient(#6f6f6f, #404040);	
 	--button-background-image-hover: linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), linear-gradient(#6f6f6f, #404040);
 	--button-background-image-active: var(--button-background-image-hover);
 	
@@ -32,7 +32,7 @@
 	--button-border-radius: 2px;
 
 	/*	Default button*/
-	--default-button-background-img: linear-gradient(#d0e2f4, #c6dbf1 50%, #a9c9ea 50%, #92b5da), linear-gradient(#6f6f6f, #404040);	
+	--default-button-background-image: linear-gradient(#d0e2f4, #c6dbf1 50%, #a9c9ea 50%, #92b5da), linear-gradient(#6f6f6f, #404040);	
 	--default-button-background-image-hover: linear-gradient(#b8cfe3, #aac3e4 50%, #91b2dd 50%, #799bd2), linear-gradient(#6f6f6f, #404040);
 	--default-button-background-image-active: var(--default-button-background-image-hover);
 
@@ -59,16 +59,21 @@
 	--title-tooltip-background-color: rgba(254, 254, 205, .95);
 	--title-tooltip-font-color: black;
 	
-	/*vallidation bubble style*/
+	/*validation bubble style*/
 	--validation-bubble-background-color: #cb0000;
 	--validation-bubble-font-color: white;
-}
+	
+	/*Data Grid style*/
+	--data-grid-head-background-image: linear-gradient(#fdfdfd, #f3f3f3 50%, #b8baba 50%, #a4a5a6);
+	--data-grid-head-background-color: #d0d1d1;
 
-/*Preserve 3D and perspective*/
-*
-{
-	transform-style: preserve-3d;
-	perspective: 1000px;
+	--data-grid-body-background-image: none;
+	--data-grid-body-background-color: white;
+
+    /*Dialog style*/
+    --dialog-title-bar-background-image: none;
+    --dialog-content-background-image: none;
+    --dialog-button-bar-background-image: none;
 }
 
 /*body theming background and font*/
@@ -87,6 +92,10 @@ body
 	cursor: default;
 	
 	scroll-behavior: smooth;
+
+    /*Preserve 3D and perspective*/
+	transform-style: preserve-3d;
+	perspective: 1000px;
 }
 
 /*anchor theming*/
@@ -119,7 +128,8 @@ a
 }
 
 /*label support*/
-label[is=core-label]
+label[is=core-label],
+::shadow label[is=core-label]
 {
 	display: inline-block;
 	
@@ -132,11 +142,7 @@ label[is=core-label]
 	line-height: 13px;
 
 }
-input+label[is=core-label]
-{
-	float: left;
-}
-input:focus+label[is=core-label]
+::shadow label[is=core-label].core-label-focused
 {
 	text-shadow: 0 0 var(--focus-halo-spread) var(--focus-halo-color);
 }
@@ -253,10 +259,10 @@ input:focus+label[is=core-label]
 }
 
 /*button*/
-button,
+button, ::shadow button,
 core-select,
-input[is="core-radio"],
-input[is="core-checkbox"]
+input[type=radio], ::shadow input[type=radio],
+input[type=checkbox], ::shadow input[type=checkbox]
 {
 	--accent-shadow: inset 0 0 0 1px var(--button-accent-color);
 	--hover-shadow: 0 0 transparent;
@@ -271,7 +277,7 @@ input[is="core-checkbox"]
 	--background-color-hover: var(--button-background-color-hover);
 	--background-color-active: var(--button-background-color-active);
 	
-	--background-image: var(--button-background-img);
+	--background-image: var(--button-background-image);
 	--background-image-hover: var(--button-background-image-hover);
 	--background-image-active: var(--button-background-image-active);
 		
@@ -311,10 +317,10 @@ button[is=core-iconbutton]
 	width: auto!important;
 	min-width: 0!important;
 }
-button:enabled:hover,
+button:enabled:hover, ::shadow button:enabled:hover,
 core-select:not([disabled]):hover,
-input[is="core-radio"]:enabled:hover,
-input[is="core-checkbox"]:enabled:hover
+input[type=radio]:enabled:hover, ::shadow input[type=radio]:enabled:hover,
+input[type=checkbox]:enabled:hover, ::shadow input[type=checkbox]:enabled:hover
 {
 	border-color: var(--border-color-hover);
 
@@ -324,10 +330,10 @@ input[is="core-checkbox"]:enabled:hover
 	--hover-shadow: 0 1px 2px var(--button-hover-shadow-color);
 	--accent-shadow: 0 0 transparent;
 }
-button:enabled:active,
+button:enabled:active, ::shadow button:enabled:active,
 core-select[core-expanded],
-input[is="core-radio"]:enabled:active,
-input[is="core-checkbox"]:enabled:active
+input[type=radio]:enabled:active, ::shadow input[type=radio]:enabled:active,
+input[type=checkbox]:enabled:active, ::shadow input[type=checkbox]:enabled:active
 {
 	border-color: var(--border-color-active);
 	
@@ -337,10 +343,10 @@ input[is="core-checkbox"]:enabled:active
 	--active-shadow: inset 0 1px 2px var(--button-active-shadow-color);
 	--accent-shadow: 0 0 transparent;
 }
-button:focus,
+button:focus, ::shadow button:focus,
 core-select:focus,
-input[is="core-radio"]:focus,
-input[is="core-checkbox"]:focus
+input[type=radio]:focus, ::shadow input[type=radio]:focus,
+input[type=checkbox]:focus, ::shadow input[type=checkbox]:focus
 {
 	outline: none;
 
@@ -350,24 +356,24 @@ input[is="core-checkbox"]:focus
 	--border-color-hover: var(--focus-border-color);
 	--border-color-active: var(--focus-border-color);
 }
-button:disabled,
+button:disabled, ::button:disabled,
 core-select[disabled],
-input[is="core-radio"]:disabled,
-input[is="core-checkbox"]:disabled
+input[type=radio]:disabled, ::shadow input[type=radio]:disabled,
+input[type=checkbox]:disabled, ::shadow input[type=checkbox]:disabled
 {
 	pointer-events: none;
 	
 	opacity: .3;
 }
 
-button[core-default],
-button[is=core-iconbutton][core-default]
+/*Default button style*/
+button[default], core-button[default]::shadow>button
 {
 	--background-color: var(--default-button-background-color);
 	--background-color-hover: var(--default-button-background-color-hover);
 	--background-color-active: var(--default-button-background-color-active);
 
-	--background-image: var(--default-button-background-img);
+	--background-image: var(--default-button-background-image);
 	--background-image-hover: var(--default-button-background-image-hover);
 	--background-image-active: var(--default-button-background-image-active);
 
@@ -459,8 +465,8 @@ input:invalid:focus
 }
 
 /*radiobutton*/
-input[is="core-radio"],
-input[is="core-checkbox"]
+input[type=radio],
+input[type=checkbox]
 {
 	position: relative;
 	
@@ -476,14 +482,14 @@ input[is="core-checkbox"]
 	border-radius: 1px;
 }
 
-input[is="core-radio"]
+input[type=radio]
 {
 	-webkit-border-radius: 7px!important;
 	-moz-border-radius: 7px!important;
 	border-radius: 7px!important;
 }
 
-input[is="core-checkbox"]:checked::after
+input[type=checkbox]:checked::after
 {
 	content: "";
 
@@ -502,7 +508,7 @@ input[is="core-checkbox"]:checked::after
 	background-position: -86px -7px;	
 }
 
-input[is="core-radio"]:checked::after
+input[type=radio]:checked::after
 {
 	content: "";
 
@@ -896,11 +902,14 @@ core-progressbar
 }
 
 /*pogress bar fill*/
-core-progressbarfill
+core-progressbar::shadow core-progressbarfill
 {
 	position: absolute;
 	display: inline-block;
-	height: 100%;
+	left:0;
+	top: 0;
+	bottom: 0;
+
 	width: 0;
 	
 	margin: 0;
@@ -929,7 +938,7 @@ core-progressbarfill
 	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
 }
 
-core-progressbar.core-progressbar-indeterminate>core-progressbarfill
+core-progressbar[indeterminate]::shadow core-progressbarfill
 {
 	width:  100%!important;
 	background-image:  -webkit-repeating-linear-gradient(-45deg, transparent, transparent 3.54%, rgba(0, 0, 0, .2) 3.54%, rgba(0, 0, 0, .2) 7.09%, transparent 7.09%), -webkit-linear-gradient(#fdfdfd, #d3d3d3), -webkit-linear-gradient(#6f6f6f, #404040);
@@ -943,7 +952,7 @@ core-progressbar.core-progressbar-indeterminate>core-progressbarfill
 	animation:  linear .625s indeterminate-progressbar infinite;
 }
 
-core-progressbar>core-label
+core-progressbar::shadow core-label
 {
 	display: block;
 	margin: 10px 0 0 0;
@@ -1015,40 +1024,61 @@ core-datagrid
 {
 	display: inline-block;
 	position: relative;
-	overflow-x: auto;
-	overflow-y: auto;
+/*	overflow-x: auto;
+	overflow-y: auto;*/
 	
 	-webkit-border-radius: 1px;
 	-moz-border-radius: 1px;
 	border-radius: 1px;
 	
-	border-collapse: separate;
-	border-spacing: 0;
-
 	background: rgb(202, 202, 202);
 	-webkit-box-shadow: inset 2px 2px 2px rgba(0, 0, 0, .2);
 
 	border: 1px solid rgb(120, 122, 124);
 }
-table[is=core-datagridtable]
+
+core-datagrid::shadow table[is=core-datagridtable]
 {
 	display: inline-table;
+	
+	border-collapse: separate;
+	border-spacing: 0;
+	
+	background: transparent;
 }
-thead[is=core-datagridhead]
+
+core-datagrid::shadow thead[is=core-datagridhead]
 {
+	margin: 0;
+
+	background-color: var(--data-grid-head-background-color);
+	background-image: var(--data-grid-head-background-image);
 }
-tbody[is=core-datagridbody]
+
+core-datagrid::shadow tbody[is=core-datagridbody]
 {
+	margin: 0;
+	
+	background-color: var(--data-grid-body-background-color);
+	background-image: var(--data-grid-body-background-image);
 }
-tr[is=core-datagridrow]
+
+core-datagrid::shadow tr[is=core-datagridrow]
 {
 	padding: 0;
 	margin: 0;
+	
+	background: transparent;
 }
-/*the cells for displaying/entering data*/
-td[is=core-datagridcell]
+
+core-datagrid::shadow tr[is=core-datagridrow]:hover
 {
-	margin: -1px -1px;
+	background-color: rgba(0, 192, 255, .5);
+}
+
+/*the cells for displaying/entering data*/
+core-datagrid::shadow td[is=core-datagridcell]
+{
 	padding: 0 8px;
 	line-height: 21px;
 	height: 21px;
@@ -1062,64 +1092,38 @@ td[is=core-datagridcell]
 
 	cursor: text;
 	
-	background: #fff;
+	background: transparent;
 	
-	border: 1px #e6e6e6;
-	border-style: hidden solid solid hidden;
+	border: 0;
 
 	background-clip: padding-box;
 }
-/*border behavior*/
-td[is=core-datagridcell]:last-child
+
+core-datagrid::shadow td[is=core-datagridcell]+td[is=core-datagridcell]
 {
-	border-right-style: hidden;
+	border-left: solid 1px #e6e6e6;
 }
-/*row hover state*/
-tr[is=core-datagridrow]:hover td[is=core-datagridcell]
+
+core-datagrid::shadow tr[is=core-datagridrow]+tr[is=core-datagridrow] td[is=core-datagridcell]
 {
-	background-color: #b3e2ff;
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2);
+	border-top: solid 1px #e6e6e6; 
 }
+
 /*visual behavior for a focused cell*/
-td[is=core-datagridcell]:focus
+core-datagrid::shadow td[is=core-datagridcell]:focus
 {
 	outline: none;
-	background-color: #7FCEFF!important;
+	background-color: #7fceff!important;
 }
 /*each cell of the first row behaves visually just like a button: */
-tr[is=core-datagridrow]:first-child>td[is=core-datagridcell] 
+core-datagrid::shadow thead[is=core-datagridhead] td[is=core-datagridcell] 
 {			
 	text-align: center;
 	font-weight: bold;
 
-	border-color: transparent;
-	border-bottom-style: solid;
-
-	background-color: #fdfdfd;
-	background-image: -webkit-linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -webkit-linear-gradient(#6f6f6f, #404040);
-	background-image: -moz-linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -moz-linear-gradient(#6f6f6f, #404040);
-	background-image: linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), linear-gradient(#6f6f6f, #404040);
-	background-size: 110% 110%;
-	background-position: center;
-	background-clip: padding-box, border-box;
-	
 	cursor: default;
 }
-/*first-row hover and active cell states*/
-tr[is=core-datagridrow]:first-child>td[is=core-datagridcell]:hover,
-tr[is=core-datagridrow]:first-child>td[is=core-datagridcell]:active
-{
-	background-color: #d0d1d1;
-	background-image: -webkit-linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(#6f6f6f, #404040);
-	background-image: -moz-linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -moz-linear-gradient(#6f6f6f, #404040);
-	background-image: linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), linear-gradient(#6f6f6f, #404040);
-} 
-tr[is=core-datagridrow]:first-child>td[is=core-datagridcell]:active
-{
-	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4);
-	-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4);
-	box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4);
-}
+
 /*cell resizer handle*/
 core-datagridcell::-webkit-resizer
 {
@@ -1135,13 +1139,13 @@ core-datagridcell:hover::-webkit-resizer
 
 /*Theme Customizations*/
 /*scrollbar*/
-html /deep/ ::-webkit-scrollbar, html /deep/ ::-webkit-scrollbar-button
+::-webkit-scrollbar, ::-webkit-scrollbar-button
 {
 	height: 16px;
 	width: 16px;
 }
 /*	scrollbar button*/
-html /deep/ ::-webkit-scrollbar-button
+::-webkit-scrollbar-button
 {
 	background-color: rgb(253, 253, 253);
 	background-image: url(ui-icon-sprite-21x21.svg), -webkit-linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -webkit-linear-gradient(#6f6f6f, #404040);
@@ -1151,56 +1155,56 @@ html /deep/ ::-webkit-scrollbar-button
 	border: solid 1px transparent;
 	-webkit-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
 }
-html /deep/ ::-webkit-scrollbar-button:vertical
+::-webkit-scrollbar-button:vertical
 {
 	background-image: url(ui-icon-sprite-21x21.svg), -webkit-linear-gradient(left, #fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -webkit-linear-gradient(#6f6f6f, #404040);
 }
-html /deep/ ::-webkit-scrollbar-button:hover, html /deep/ ::-webkit-scrollbar-button:active
+::-webkit-scrollbar-button:hover, ::-webkit-scrollbar-button:active
 {
 	background-color: #d0d1d1;
 	background-image: url(ui-icon-sprite-21x21.svg), -webkit-linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(#6f6f6f, #404040);
 }
-html /deep/ ::-webkit-scrollbar-button:vertical:hover, html /deep/ ::-webkit-scrollbar-button:vertical:active
+::-webkit-scrollbar-button:vertical:hover, ::-webkit-scrollbar-button:vertical:active
 {
 	background-image: url(ui-icon-sprite-21x21.svg), -webkit-linear-gradient(left, #d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(#6f6f6f, #404040);
 }
-html /deep/ ::-webkit-scrollbar-button:vertical:decrement
+::-webkit-scrollbar-button:vertical:decrement
 {
 	background-position: -3px -3px, center, center;
 }
-html /deep/ ::-webkit-scrollbar-button:vertical:increment
+::-webkit-scrollbar-button:vertical:increment
 {
 	background-position: -3px -23px, center, center;
 }
-html /deep/ ::-webkit-scrollbar-button:horizontal:decrement
+::-webkit-scrollbar-button:horizontal:decrement
 {
 	background-position: -24px -3px, center, center;
 }
-html /deep/ ::-webkit-scrollbar-button:horizontal:increment
+::-webkit-scrollbar-button:horizontal:increment
 {
 	background-position: -23px -23px, center, center;
 }
 /*	scrollbar track*/
-html /deep/ ::-webkit-scrollbar-track
+::-webkit-scrollbar-track
 {
 	border: 1px solid rgb(120, 122, 124);
 	background: rgb(202, 202, 202);
 	-webkit-box-shadow: inset 2px 2px 2px rgba(0, 0, 0, .2);
 }
-html /deep/ ::-webkit-scrollbar-track:vertical
+::-webkit-scrollbar-track:vertical
 {
 	margin: -1px 0;
 }
-html /deep/ ::-webkit-scrollbar-track:horizontal
+::-webkit-scrollbar-track:horizontal
 {
 	margin: 0 -1px;
 }
-html /deep/ ::-webkit-scrollbar-track-piece
+::-webkit-scrollbar-track-piece
 {
 	-webkit-box-shadow: inset 2px 2px 2px rgba(0, 0, 0, .2);
 }
 /*	scrollbar thumb*/
-html /deep/ ::-webkit-scrollbar-thumb
+::-webkit-scrollbar-thumb
 {
 	background-color: #fdfdfd;
 	background-image: -webkit-linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -webkit-linear-gradient(#6f6f6f, #404040);
@@ -1211,21 +1215,21 @@ html /deep/ ::-webkit-scrollbar-thumb
 	
 	-webkit-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
 }
-html /deep/ ::-webkit-scrollbar-thumb:hover, html /deep/ ::-webkit-scrollbar-thumb:active
+::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-thumb:active
 {
 	background-color: #d1d0d0;
 	background-image: -webkit-linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(#6f6f6f, #404040);
 }
-html /deep/ ::-webkit-scrollbar-thumb:vertical
+::-webkit-scrollbar-thumb:vertical
 {
 	background-image: -webkit-linear-gradient(left, #fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -webkit-linear-gradient(left, #6f6f6f, #404040);
 }
-html /deep/ ::-webkit-scrollbar-thumb:vertical:hover, html /deep/ ::-webkit-scrollbar-thumb:vertical:active
+::-webkit-scrollbar-thumb:vertical:hover, ::-webkit-scrollbar-thumb:vertical:active
 {
 	background-image: -webkit-linear-gradient(left, #d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(left, #6f6f6f, #404040);
 }
 /*	scrollbar button and scrollbar thumb active state*/
-html /deep/ ::-webkit-scrollbar-thumb:active, html /deep/ ::-webkit-scrollbar-button:active
+::-webkit-scrollbar-thumb:active, ::-webkit-scrollbar-button:active
 {
 	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4);	
 }

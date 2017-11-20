@@ -2,25 +2,24 @@
 <html>
     <head>
 		<link rel="stylesheet" type="text/css" href="spark.theme.css">
-		<script type="text/javascript" src="core.js"></script>
+		<script type="text/javascript" src="preloader.core.js"></script>
 		<script defer="defer">
             window.onload = function () {
-                var usernameFormItem = new core.userInterface.CoreFormItem(),
-                    passwordFormItem = new core.userInterface.CoreFormItem(),
-                    usernameInput = new core.userInterface.CoreInput(),
+                var usernameInput = new core.userInterface.CoreInput(),
                     passwordInput = new core.userInterface.CoreInput(),
                     dialogMessage = new core.userInterface.CoreDialogMessage();
                     
                 dialogMessage.innerText = "Seja bem-vindo ao prontuário eletrônico. \nPara começar, efetue seu login";
                     
-                usernameFormItem.appendChild(usernameInput);
-                usernameFormItem.label = "Nome de usuário";
-                passwordFormItem.appendChild(passwordInput);
-                passwordFormItem.label = "Senha";
-                
+                usernameInput.label = "Nome de usuário";
+                usernameInput.style.display = "block";
+                passwordInput.label = "Senha";
+                passwordInput.style.display = "block";
+
                 core.userInterface.dialogs.showModal({
-                    openAnimationType: core.animation.animationTypes.shrink,
-                    elements: [dialogMessage, usernameFormItem, passwordFormItem], 
+                    openAnimationKeyframes: core.animation.presetKeyframes.shrink,
+                    openAnimationDuration: 425,
+                    elements: [dialogMessage, usernameInput, passwordInput], 
                     title: "Login",
                     closeButton: false, buttons: [{
 							value: 1,
