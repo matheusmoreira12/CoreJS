@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<!--Contains the necessary information for loading modules correctly.-->
+<preloaderInfo>
+
+  <!-- The following resources are required for the correct working of Core.js
+        and must not be altered. -->
+  <resource type="stylesheet" src="/spark.theme.css"/>
+
+  <resource type="script" src="/Core.Exceptions.js"/>
+  <resource type="script" src="/Core.MethodGroup.js"/>
+  <resource type="script" src="/Core.Collections.js"/>
+  <resource type="script" src="/Core.ArrayUtils.js"/>
+  <resource type="script" src="/Core.StringUtils.js"/>
+  <resource type="script" src="/Core.UserInterface.js"/>
+  <resource type="script" src="/Core.UserInterface.Icons.js"/>
+  <resource type="script" src="/Core.UserInterface.Primitives.js"/>
+  <resource type="script" src="/Core.UserInterface.ProgressBar.js"/>
+  <resource type="script" src="/Core.UserInterface.IconElement.js"/>
+  <resource type="script" src="/Core.UserInterface.Button.js"/>
+  <resource type="script" src="/Core.UserInterface.Dialog.js"/>
+  <resource type="script" src="/Core.UserInterface.Datagrid.js"/>
+
+  <!-- Any customizations must be made here: -->
+
+</preloaderInfo>

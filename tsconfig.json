@@ -1,0 +1,27 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es6",
+    "outDir": "Compiled"
+  },
+  "include": [
+    "Core.ts",
+    "Core.Exceptions.ts",
+    "Core.Collections.ts",
+    "Core.MethodGroup.ts",
+    "Core.ArrayUtils.ts",
+    "Core.StringUtils.ts",
+    "Core.Web.ts",
+    "Core.Web.Ajax.ts",
+    "Core.UserInterface.ts",
+    "Core.UserInterface.Primitives",
+    "Core.UserInterface.Button.ts",
+    "Core.UserInterface.DataGrid.ts",
+    "Core.UserInterface.Dialogs.ts",
+    "Core.UserInterface.Icons",
+    "Core.UserInterface.IconElement.ts",
+    "Core.UserInterface.ProgressBar.ts",
+    "Core.UserInterface.Utils.ts",
+    "preloader-info.xml"
+  ]
+}

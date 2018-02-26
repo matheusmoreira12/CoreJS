@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A62EF6C4-5015-438C-B8B0-B632B2A7A033}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		3566.Metro-Theme-Light-WPF_2.jpg = 3566.Metro-Theme-Light-WPF_2.jpg
+		cb-index.htm = cb-index.htm
+		Core.ArrayUtils.ts = Core.ArrayUtils.ts
+		Core.Collections.ts = Core.Collections.ts
+		Core.Events.ts = Core.Events.ts
+		Core.Exceptions.ts = Core.Exceptions.ts
+		Core.MethodGroup.ts = Core.MethodGroup.ts
+		Core.Preloader.ts = Core.Preloader.ts
+		Core.StringUtils.ts = Core.StringUtils.ts
+		Core.ts = Core.ts
+		Core.UserInterface.Animations.ts = Core.UserInterface.Animations.ts
+		Core.UserInterface.Button.ts = Core.UserInterface.Button.ts
+		Core.UserInterface.DataGrid.ts = Core.UserInterface.DataGrid.ts
+		Core.UserInterface.Dialogs.ts = Core.UserInterface.Dialogs.ts
+		Core.UserInterface.Forms.ts = Core.UserInterface.Forms.ts
+		Core.UserInterface.IconElement.ts = Core.UserInterface.IconElement.ts
+		Core.UserInterface.Icons.ts = Core.UserInterface.Icons.ts
+		Core.UserInterface.Primitives.ts = Core.UserInterface.Primitives.ts
+		Core.UserInterface.ProgressBar.ts = Core.UserInterface.ProgressBar.ts
+		Core.UserInterface.Utils.ts = Core.UserInterface.Utils.ts
+		Core.Validation.ts = Core.Validation.ts
+		Core.Web.Ajax.ts = Core.Web.Ajax.ts
+		Core.Web.ts = Core.Web.ts
+		metro-light.theme.css = metro-light.theme.css
+		preloader-info.xml = preloader-info.xml
+		spark.theme.css = spark.theme.css
+		tsconfig.json = tsconfig.json
+		ui-grab-active-cursor-48x48.svg = ui-grab-active-cursor-48x48.svg
+		ui-grab-cursor-48x48.svg = ui-grab-cursor-48x48.svg
+		ui-icon-sprite-21x21.svg = ui-icon-sprite-21x21.svg
+		ui-not-allowed-cursor-48x48.svg = ui-not-allowed-cursor-48x48.svg
+		ui-wait-cursor-48x48.svg = ui-wait-cursor-48x48.svg
+	EndProjectSection
+	ProjectSection(FolderGlobals) = preProject
+		__JSONSchema = http://json.schemastore.org/tsdrc
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

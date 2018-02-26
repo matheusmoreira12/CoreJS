@@ -2,24 +2,27 @@
 {
 	/*Theming*/
 	/*All controls*/
-	--focus-border-color: rgb(0, 137, 183);
+	--focus-border-color: rgba(0, 114, 153, .8);
 	--focus-halo-color: rgba(0, 83, 235, .7);
 	--focus-halo-spread: 8px;
 	
-	/*Button style*/
-	--button-background-color: #fdfdfd;
-	--button-background-color-hover: #d0d1d1;
-	--button-background-color-active: var(--button-background-color-hover);
+	--disabled-opacity: .3;
 	
-	--button-background-image: linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), linear-gradient(#6f6f6f, #404040);	
-	--button-background-image-hover: linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), linear-gradient(#6f6f6f, #404040);
-	--button-background-image-active: var(--button-background-image-hover);
+	/*Button style*/
+	--button-background-color: #F0F0F0;
+	--button-background-image: linear-gradient(rgba(255, 255, 255, .15), rgba(255, 255, 255, .05) 50%, rgba(0, 0, 0, .05) 50%, rgba(0, 0, 0, .15));	
+
+	--button-background-color-hover: #C2C2C2;
+	--button-background-image-hover: var(--button-background-image);
+
+	--button-background-color-active: var(--button-background-color-hover);
+	--button-background-image-active: var(--button-background-image);
 	
 	--button-border-width: 1px;
 	
-	--button-border-color: transparent;
-	--button-border-color-hover: transparent;
-	--button-border-color-active: transparent;
+	--button-border-color: rgba(65, 65, 65, .8);
+	--button-border-color-hover: var(--button-border-color);
+	--button-border-color-active: var(--button-border-color);
 	
 	--button-font-color: black;
 	--button-font-color-hover: black;
@@ -106,25 +109,18 @@ a
 	text-decoration: none;	
 }
 
-/*non-selection rule exception: elements with editable contents and/or explicitly selectable*/
-[contenteditable], [core-selectable], input
-{
-	-webkit-user-select: auto;
-	-moz-user-select: auto;
-	user-select: auto;
-	cursor: auto;
-}
-
 /*hidden element support*/
-[core-hidden]
+[hidden]
 {
 	display: none;
 }
 
 /*disabled element support*/
-[core-disabled]
+:disabled, [disabled]
 {
-	pointer-events: none!important;
+	pointer-events: none;
+
+	opacity: var(--disabled-opacity);
 }
 
 /*label support*/
@@ -301,7 +297,7 @@ input[type=checkbox], ::shadow input[type=checkbox]
 	background-image: var(--background-image);
 	background-size: 110% 110%;
 	background-position: center;
-	background-clip: padding-box, border-box;
+	background-clip: border-box;
 	
 	border-radius:  var(--button-border-radius);
 	
@@ -355,15 +351,6 @@ input[type=checkbox]:focus, ::shadow input[type=checkbox]:focus
 	--border-color: var(--focus-border-color);
 	--border-color-hover: var(--focus-border-color);
 	--border-color-active: var(--focus-border-color);
-}
-button:disabled, ::button:disabled,
-core-select[disabled],
-input[type=radio]:disabled, ::shadow input[type=radio]:disabled,
-input[type=checkbox]:disabled, ::shadow input[type=checkbox]:disabled
-{
-	pointer-events: none;
-	
-	opacity: .3;
 }
 
 /*Default button style*/
