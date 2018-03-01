@@ -1,7 +1,7 @@
-///<reference path="Core.ts"/>
-///<reference path="Core.Exceptions.ts"/>
-///<reference path="Core.Validation.ts"/>
-///<reference path="Core.MethodGroup.ts"/>
+
+
+
+
 
 namespace Core.Collections {
 

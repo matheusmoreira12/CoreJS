@@ -1,7 +1,7 @@
-///<reference path="Core.ts"/>
-///<reference path="Core.Validation.ts"/>
-///<reference path="Core.MethodGroup.ts"/>
-///<reference path="Core.Web.Ajax.ts"/>
+
+
+
+
 
 namespace Core.Events {
     //Progress event

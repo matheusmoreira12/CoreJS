@@ -1,6 +1,6 @@
-///<reference path="Core.ts"/>
-///<reference path="Core.Validation.ts"/>
-///<reference path="Core.Collections.ts"/>
+
+
+
 
 namespace Core {
 

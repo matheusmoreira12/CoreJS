@@ -1,4 +1,4 @@
-///<reference path="Core.StringUtils.ts"/>
+
 
 namespace Core.UserInterface {
 

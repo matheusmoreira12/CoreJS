@@ -1,5 +1,5 @@
-///<reference path="Core.ts"/>
-///<reference path="Core.Validation.ts"/>
+
+
 
 namespace Core {
 

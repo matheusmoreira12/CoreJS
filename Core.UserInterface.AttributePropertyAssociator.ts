@@ -1,7 +1,7 @@
-///<reference path="Core.ts"/>
-///<reference path="Core.Validation.ts"/>
-///<reference path="Core.Collections.ts"/>
-///<reference path="Core.Events.ts"/>
+
+
+
+
 
 namespace Core.UserInterface {
     export class AttributePropertyAssociator {
