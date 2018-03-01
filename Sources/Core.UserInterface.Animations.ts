@@ -1,6 +1,6 @@
-///<reference path="Core.ts"/>
-///<reference path="Core.Collections.ts"/>
-///<reference path="Core.StringUtils.ts"/>
+
+
+
 
 namespace Core {
     enum AnimationTimeStampUnit { Seconds = 0, Milliseconds = 1, Percent = 2 }

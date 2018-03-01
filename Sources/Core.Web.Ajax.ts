@@ -1,6 +1,6 @@
-///<reference path="Core.ts"/>
-///<reference path="Core.Web.ts"/>
-///<reference path="Core.Events.ts"/>
+
+
+
 
 namespace Core.Web {
 
