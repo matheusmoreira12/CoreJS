@@ -1,0 +1,22 @@
+namespace Core.APIs {
+    export class APIPermissions {
+        constructor(grantWindowAccess: boolean = false, grantDOMAccess: boolean = false) {
+            //Runtime validation
+            Validation.RuntimeValidator.validateParameter("grantWindowAccess", grantWindowAccess, BOOL);
+            Validation.RuntimeValidator.validateParameter("grantDOMAccess", grantWindowAccess, BOOL);
+
+            this.grantDOMAccess = grantDOMAccess;
+            this.grantWindowAccess = grantWindowAccess;
+        }
+
+        grantWindowAccess: boolean;
+        grantDOMAccess: boolean;
+    }
+
+    export class API {
+        constructor(apiName: string, apiURL: string, permissions: APIPermissions) {
+        }
+
+        apiURL: string;
+    }
+}

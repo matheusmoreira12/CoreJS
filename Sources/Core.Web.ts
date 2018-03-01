@@ -72,19 +72,17 @@ namespace Core.Web {
     export const STATUS_NOT_EXTENDED = 510;
     export const STATUS_NETWORK_AUTH_REQUIRED = 511;
 
-    export class LoadError extends Error {
-        constructor(wrapper: RequestWrapper, message?: string) {
-            if (!(wrapper instanceof RequestWrapper))
-                throw new TypeError('Parameter "wrapper" is not a valid Core.Ajax.RequestWrapper.');
-            if (typeof message !== STRING && typeof message != UNDEF)
-                throw new TypeError('Parameter "message" is not a valid String.');
+    export class LoadException extends Exceptions.Exception {
+        constructor(ajax: AjaxRequest, message?: string) {
+            Validation.RuntimeValidator.validateParameter("ajax", ajax, AjaxRequest, true, false);
+            Validation.RuntimeValidator.validateParameter("messaage", message, STRING, false);
 
-            super();
+            let xhr = ajax.baseRequest;
 
-            let xhr = wrapper.baseRequest;
-
-            this.message = (message ? (message + ' ') : '') + wrapper.info.method + ' request to "' +
-                wrapper.info.url + '" failed with status code ' + xhr.status + '("' + xhr.statusText + '").';
+            let messageXml = StringUtils.format("{0}{1} request to {2} failed with status code {3}({4}).",
+                message ? (message + " ") : "", ajax.info.method, ajax.info.url, xhr.status, xhr.statusText);
+            
+            super(messageXml);
         }
     }
 

@@ -32,7 +32,7 @@ namespace Core {
         }
 
         export class RuntimeValidator {
-            private static _parameterTypeIsValid(paramValue: any, paramExpectedType: ExpectedTypeDecorator) {
+            private static __parameterTypeIsValid(paramValue: any, paramExpectedType: ExpectedTypeDecorator) {
                 if (paramExpectedType instanceof Function)
                     return (paramValue instanceof paramExpectedType);
                 else if (typeof paramExpectedType == STRING)
@@ -42,7 +42,7 @@ namespace Core {
                         " The specified expected type is invalid.");
             }
 
-            private static parameterTypeIsValid(paramValue: any, paramExpectedType: ExpectedTypeDecorator)
+            private static _parameterTypeIsValid(paramValue: any, paramExpectedType: ExpectedTypeDecorator)
                 : boolean {
                 if (paramExpectedType instanceof Array) {
                     if (paramExpectedType.length == 0)
@@ -51,18 +51,24 @@ namespace Core {
                     for (var i = 0; i < paramExpectedType.length; i++) {
                         let type = paramExpectedType[i];
 
-                        if (this._parameterTypeIsValid(paramValue, type))
+                        if (this.__parameterTypeIsValid(paramValue, type))
                             return true;
                     }
 
                     return false;
                 }
                 else
-                    return this._parameterTypeIsValid(paramValue, paramExpectedType);
+                    return this.__parameterTypeIsValid(paramValue, paramExpectedType);
             }
 
             static validateParameter(paramName: string, paramValue: any, paramExpectedType: ExpectedTypeDecorator,
                 isRequired: boolean = false, isNullable: boolean = true) {
+                //Runtime validation
+                if (!Object.is(this.validateParameter.caller, this.validateParameter)) {
+                    this.validateParameter("paramName", paramName, STRING, true, false);
+                    this.validateParameter("paramValue", paramValue, [], true);
+                    this.validateParameter("paramExpectedType", paramExpectedType, [STRING, Function, Array], true, false);
+                }
 
                 let isNull = paramValue === null,
                     isUndefined = typeof paramValue == UNDEF;
@@ -76,8 +82,26 @@ namespace Core {
                         throw new Exceptions.ParameterMissingException(paramName);
                 }
                 else {
-                    if (!this.parameterTypeIsValid(paramValue, paramExpectedType))
+                    if (!this._parameterTypeIsValid(paramValue, paramExpectedType))
                         throw new Exceptions.InvalidParameterTypeException(paramName, paramExpectedType);
+                }
+            }
+
+            static validateArrayParameter(paramName: string, paramValue: any[], memberExpectedType: ExpectedTypeDecorator,
+                isNullable: boolean = true) {
+                //Runtime validation
+                this.validateParameter("paramName", paramName, STRING, true, false);
+                this.validateParameter("paramValue", paramValue, Array, true, false);
+                this.validateParameter("memberExpectedType", paramName, [STRING, Function, Array], true, false);
+
+                try {
+                    for (let i = 0; i < paramValue.length; i++) {
+                        let member = paramValue[i];
+                        RuntimeValidator.validateParameter(paramName, member, memberExpectedType, false, isNullable);
+                    }
+                }
+                catch (e) {
+                    throw (e);
                 }
             }
         }

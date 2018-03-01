@@ -9,6 +9,7 @@ namespace Core.UserInterface {
         private createTableElement() {
             let tableElement = new DataGridContent();
             this.shadow.appendChild(tableElement);
+
             //The table element
             this.tableElement = tableElement;
         }
