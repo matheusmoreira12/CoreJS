@@ -5,13 +5,12 @@ namespace Core {
 
         export class Utils {
             private static _expectedTypeNameAsMessageTags(expectedType: Validation.ExpectedTypeDecorator) {
-                if (expectedType instanceof Function && expectedType.length == 0)
+                if (expectedType instanceof Function)
                     return Exceptions.Exception.getMessageTag("type", expectedType.name);
                 else if (typeof expectedType == STRING)
                     return Exceptions.Exception.getMessageTag("type", <string>expectedType);
-                else
-                    throw new Exceptions.InvalidParameterTypeException("expectedType", [STRING, Function],
-                        "Cannot convert parameter {0} to text because it is not a {1}.");
+
+                return null;
             }
 
             public static expectedTypeNameAsMessageTags(expectedType: ExpectedTypeDecorator) {
@@ -63,19 +62,13 @@ namespace Core {
 
             static validateParameter(paramName: string, paramValue: any, paramExpectedType: ExpectedTypeDecorator,
                 isRequired: boolean = false, isNullable: boolean = true) {
-                //Runtime validation
-                if (!Object.is(this.validateParameter.caller, this.validateParameter)) {
-                    this.validateParameter("paramName", paramName, STRING, true, false);
-                    this.validateParameter("paramValue", paramValue, [], true);
-                    this.validateParameter("paramExpectedType", paramExpectedType, [STRING, Function, Array], true, false);
-                }
 
                 let isNull = paramValue === null,
                     isUndefined = typeof paramValue == UNDEF;
 
                 if (isNull) {
                     if (!isNullable)
-                        throw new Exceptions.InvalidParameterException(paramName, "Parameter %0 is a non-nullable parameter.");
+                        throw new Exceptions.InvalidParameterException(paramName, "Parameter {0} is a non-nullable parameter.");
                 }
                 else if (isUndefined) {
                     if (isRequired)
@@ -88,20 +81,16 @@ namespace Core {
             }
 
             static validateArrayParameter(paramName: string, paramValue: any[], memberExpectedType: ExpectedTypeDecorator,
-                isNullable: boolean = true) {
-                //Runtime validation
-                this.validateParameter("paramName", paramName, STRING, true, false);
-                this.validateParameter("paramValue", paramValue, Array, true, false);
-                this.validateParameter("memberExpectedType", paramName, [STRING, Function, Array], true, false);
+                itemIsNullable: boolean = true, arrayIsRequired: boolean = true, arrayIsNullable: boolean = false) {
+                //Validate array
+                this.validateParameter(paramName, paramValue, Array, arrayIsRequired, arrayIsNullable);
 
-                try {
-                    for (let i = 0; i < paramValue.length; i++) {
-                        let member = paramValue[i];
-                        RuntimeValidator.validateParameter(paramName, member, memberExpectedType, false, isNullable);
-                    }
-                }
-                catch (e) {
-                    throw (e);
+                //Validate array items
+                for (let i = 0; i < paramValue.length; i++) {
+                    let member = paramValue[i];
+
+                    this.validateParameter(`${paramName}[${i}]`, member, memberExpectedType,
+                        false, itemIsNullable);
                 }
             }
         }

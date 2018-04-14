@@ -1,0 +1,93 @@
+:host(core-progressbar) {
+    --default-width: 194px;
+	--default-height: 4px;
+    --default-min-height: 3px;
+	--default-max-height: 7px;
+}
+
+core-controlouterbox
+{
+    background-color: var(--background-color); 
+    background-image: var(--background-image);
+    background-size: 100% 150%;
+    background-position: center;
+    background-clip: border-box;
+
+    border: solid 1px transparent!important;
+
+    --background-image: var(--progress-bar-background-image);
+    --background-color: var(--progress-bar-background-color);
+    --foreground-image: var(--progress-bar-foreground-image);
+    --foreground-color: var(--progress-bar-foreground-color);
+    --indeterminate-foreground-image: repeating-linear-gradient(-45deg, transparent, transparent 6px, 
+        rgba(0, 0, 0, .2) 6px, rgba(0, 0, 0, .2) 12px, transparent 12px);
+}
+
+/*progress bar*/
+core-controlinnerbox
+{
+    overflow: hidden;
+
+    position: relative;
+
+    width: 196px;
+    min-height: 5px;
+	max-height: 9px;
+	height: 6px;
+
+	border: 1px solid rgba(0, 0, 0, .5);
+
+	background: rgba(0, 0, 0, .25);
+	
+	border-radius: 1px;
+	
+	box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1), inset -1px 1px 0 rgba(0, 0, 0, .1);
+}
+
+/*pogress bar fill*/
+core-progressbarfill
+{
+	position: absolute;
+	left:0;
+	top: 0;
+	bottom: 0;
+
+    width: 0;
+
+    display: inline-block;
+
+	margin: 0;
+	padding: 0;
+
+    border: 0;
+    border-right: solid 1px rgba(0, 0, 0, .6);
+
+    background-color: var(--foreground-color);
+    background-image: var(--foreground-image);
+	background-clip: padding-box;
+	
+	border-radius: 0;
+	
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
+}
+
+core-progressbarfill[indeterminate]
+{
+	width:  100%!important;
+    background-image: var(--indeterminate-foreground-image), var(--foreground-image);
+    background-size: 17px 100%;
+	
+	animation:  linear .625s indeterminate-progressbar infinite;
+}
+
+@keyframes indeterminate-progressbar
+{
+	0%
+	{
+		background-position: -8.5px 0;
+	}
+	100%
+	{
+		background-position: 8.5px 0;
+	}
+}

@@ -1,13 +1,16 @@
-
-
-
+///<reference path="Core.Validation.ts"/>
 
 namespace Core {
 
-    export type EventListenerDecorator = (source : any, ...params : any[])=>void;
+    export type Method = (target: any, args: Object) => void;
 
     export class MethodGroup {
-        
+
+        /**
+         * Initializes a new instance of the class <MethodGroup>.
+         * @param target The target that gets passed to the listeners when this <MethodGroup> is invoked.
+         * @param defaultListener The default listener for this <MethodGroup>.
+         */
         constructor(target, defaultListener?) {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("target", target, [], true);
@@ -18,48 +21,86 @@ namespace Core {
             if (defaultListener)
                 this.attach(defaultListener);
         }
-        
-        private attachedListeners = new Collections.GenericCollection<EventListenerDecorator>();
-        private attachedHandlers = new Collections.GenericCollection<MethodGroup>();
+
+        /**
+         * Detaches the specified <MethodGroup> from this <MethodGroup>.
+         */
+        private attachedListeners = new Array<Method>();
+        /**
+         * Detaches the specified method from this <MethodGroup>.
+         */
+        private attachedHandlers = new Array<MethodGroup>();
         private propagationStopped: boolean;
 
         protected target;
-        
+
+        /**
+         * Stops the propation of this <MethodGroup>.
+         */
         stopPropagation() {
             this.propagationStopped = true;
         }
 
-        invoke(thisArg?: any, ...params: any[]) {
-            thisArg = thisArg || null;
+        /**
+         * Invokes all the listeners associated with this <MethodGroup>.
+         * @param args The method arguments object.
+         */
+        invoke(args: Object) {
             this.propagationStopped = false;
-            
+
             //Invoke all attached listeners
-            for (let i = 0; i < this.attachedListeners.length && !this.propagationStopped; i++)
-                this.attachedListeners[i](thisArg, [this.target, ...params]);
-            
+            for (let listeners of this.attachedListeners) {
+                if (this.propagationStopped)
+                    break;
+
+                listeners(this.target, args);
+            }
+
             //Invoke all attached handlers
-            for (let i = 0; i < this.attachedHandlers.length && !this.propagationStopped; i++)
-                this.attachedHandlers[i].invoke.apply(thisArg, [this.target, ...params]);
+            for (let handler of this.attachedHandlers) {
+                if (this.propagationStopped)
+                    break;
+
+                handler.invoke(args);
+            }
         }
-        
-        attach(listener: MethodGroup | EventListenerDecorator) {
+
+        /**
+         * Attaches the specified method or <MethodGroup> to this <MethodGroup>.
+         * @param listener The method or <MethodGroup> to be attached.
+         */
+        attach(listener: MethodGroup | Method) {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("listener", listener, [Function, MethodGroup], true);
 
             if (listener instanceof MethodGroup)
-                this.attachedHandlers.add(listener);
+                this.attachedHandlers.push(listener);
             else
-                this.attachedListeners.add(listener);
+                this.attachedListeners.push(listener);
         }
 
-        detach(listener: MethodGroup | EventListenerDecorator) {
+        private _detachHandler(handler: MethodGroup) {
+            let index = this.attachedHandlers.indexOf(handler);
+            this.attachedHandlers.splice(index, 1);
+        }
+
+        private _detachListener(listener: Method) {
+            let index = this.attachedListeners.indexOf(listener);
+            this.attachedListeners.splice(index, 1);
+        }
+
+        /**
+         * Detaches the specified method or <MethodGroup> from this <MethodGroup>.
+         * @param listener The method or <MethodGroup> to be detached.
+         */
+        detach(listener: MethodGroup | Method) {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("listener", listener, [Function, MethodGroup], true);
 
             if (listener instanceof MethodGroup)
-                this.attachedHandlers.remove(listener);
+                this._detachHandler(listener);
             else
-                this.attachedListeners.remove(listener);
+                this._detachListener(listener);
         }
     }
 }

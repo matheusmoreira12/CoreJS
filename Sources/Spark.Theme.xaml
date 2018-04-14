@@ -1,0 +1,59 @@
+<Resources>
+
+  <ControlTemplate target="{class Control}"
+    backgroundImage="null"
+    backgroundColor="gainsboro"
+    backgroundSize="normal"
+    backgroundClip="border-box"
+    borderWidth="1px"
+    borderColor="DimGray"
+    borderStyle="solid">
+
+    <ControlOuterBox style.borderWidth="{Binding borderWidth}">
+      <ControlOuterBox.style background-color="{TemplateBinding Converter=CSSColorConverter backgroundColor}"
+        background-image="{TemplateBinding Converter=CSSBrushListConverter backgroundImage}"
+        border-width="{TemplateBinding Converter=CSSBorderWidthConverter borderWidth}"
+        border-style="{TemplateBinding Converter=CSSBorderStyleConverter borderStyle}"
+        border-color="{TemplateBinding Converter=CSSBorderColorConverter borderColor}"/>
+
+      <ControlInnerBox>
+        <ControlInnerBox.style background-color="transparent"
+          background-image="none"
+          border-width="0"
+          border-style="none"
+          border-color="transparent"/>
+
+        <ContentPresenter/>
+      </ControlInnerBox>
+    </ControlOuterBox>
+  </ControlTemplate>
+
+  <ControlTemplate target="{class ProgressBar}">
+    <Control.BackgroundImage>
+      <LinearGradient>
+        <GradientStop Color="rgba(255, 255, 255, .6)" Offset="0"/>
+        <GradientStop Color="transparent" Offset="1"/>
+      </LinearGradient>
+    </Control.BackgroundImage>
+    <Control.ForegroundImage>
+      <LinearGradient>
+        <GradientStop Color="rgba(255, 255, 255, .2)" Offset="0"/>
+        <GradientStop Color="rgba(0, 0, 0, .2)" Offset="1"/>
+      </LinearGradient>
+    </Control.ForegroundImage>
+    <ControlOuterBox>
+      <ControlInnerBox>
+        <ProgressBarFill>
+          <style background-color="{TemplateBinding Converter=CSSColorConverter Control.foregroundColor}"
+            background-image="{TemplateBinding Converter=CSSBrushListConverter Control.foregroundImage}"
+            border-width="0"
+            border-style="none"
+            border-color="transparent"
+            border-right="1px solid rgba(0, 0, 0, .6)"/>
+
+        </ProgressBarFill>
+      </ControlInnerBox>
+    </ControlOuterBox>
+  </ControlTemplate>
+
+</Resources>

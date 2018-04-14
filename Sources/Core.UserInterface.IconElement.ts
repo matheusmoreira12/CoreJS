@@ -5,7 +5,7 @@ namespace Core.UserInterface {
         constructor() {
             super();
 
-            this.shadow = Utils.attachShadow(this);         
+            this.shadow = this.attachShadow({ mode: "open" });         
             this.createSpriteImageElement();
         }
 

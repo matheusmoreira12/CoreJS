@@ -1,30 +1,33 @@
-//<reference path="Core.Events.js"/>
+///<reference path="Core.UserInterface.Control.ts"/>
 
 namespace Core.UserInterface {
-    //CoreProgressBarFill
-    export class ProgressBar extends Primitives.LabelableContainer {
+    //CoreProgressBar
+    export class ProgressBar extends Control {
+
+        private _populate() {
+            //Populate progress bar fill
+            let fillElement = document.createElement("core-progressbarfill");
+            this._fillElement = fillElement;
+
+            this._innerBox.appendChild(fillElement);
+        }
 
         constructor () {
             super();
+            this._stylesheetManager.prependStylesheet("../Themes/progress-bar.base.theme.css");
 
-            this.min = 0;
-            this.max = 1;
-            this.value = 0;
-            this.indeterminate = true;
+            this._populate();
 
-            this.labelFormat = 'LOADING {2}%'
-
-            this.fillElement = new ProgressBarFill();
-            this.shadow.appendChild(this.fillElement);
-
-            this.updateVisuals();
+            this._updateVisuals();
         }
 
-        fillElement: ProgressBarFill;
+        private _stylesheetElement: HTMLLinkElement;
+        private _innerElement: ProgressBarFill;
+        private _fillElement: ProgressBarFill;
 
-        private onProgress(src, done: number, total: number, progress: number) {
+        private _onProgress(target:any, args: Events.ProgressEventArgs) {
         }
-        progressEvent: Events.ProgressEvent = new Events.ProgressEvent(this);
+        progressEvent: Events.ProgressEvent = new Events.ProgressEvent(this, this._onProgress);
 
         //ProgressBar.labelFormat property
         set labelFormat(value) {
@@ -33,19 +36,21 @@ namespace Core.UserInterface {
         get labelFormat() {
             return this._labelFormat;
         }
-        _labelFormat : string;
+        private _labelFormat : string = "LOADING {2}%";
+
+        public labelElement: Primitives.Label = null;
 
         //ProgressBar.indeterminate property        
         set indeterminate(value) {
             this._indeterminate = value || false;
             
             //Reflect changes visually
-            this.updateVisuals();
+            this._updateVisuals();
         }
         get indeterminate() {
             return this._indeterminate;
         }
-        _indeterminate : boolean;
+        private _indeterminate : boolean = true;
 
         //ProgressBar.value property
         set value(value) {
@@ -58,12 +63,12 @@ namespace Core.UserInterface {
             this._indeterminate = false;
 
             //Reflect changes visually
-            this.updateVisuals();
+            this._updateVisuals();
         }
         get value() {
             return this._value;
         }
-        _value : number;
+        private _value : number = 0;
 
         //ProgressBar.min property
         set min(value) {
@@ -73,12 +78,12 @@ namespace Core.UserInterface {
             this._min = value;
 
             //Reflect changes visually
-            this.updateVisuals();
+            this._updateVisuals();
         }
         get min() {
             return this._min;
         }
-        _min : number;
+        _min : number = 0;
 
         //ProgressBar.max property
         set max(value) {
@@ -88,16 +93,21 @@ namespace Core.UserInterface {
             this._min = value;
 
             //Reflect changes visually
-            this.updateVisuals();
+            this._updateVisuals();
         }
         get max() {
             return this._max;
         }
-        _max : number;
+        _max : number = 1;
 
-        private updateVisuals() {
+        private _updateLabel(done: number, total: number, percent: number) {
+            if (this.labelElement instanceof Primitives.Label)
+                this.labelElement.setText(this._labelFormat, done, total, percent);
+        }
+        
+        private _updateVisuals() {
             if (this.indeterminate)
-                this.fillElement.setAttribute('indeterminate', '');
+                this._fillElement.setAttribute('indeterminate', '');
             else {
                 //Get the equivalent percentage of value
                 let done = this._value - this._min,
@@ -105,20 +115,21 @@ namespace Core.UserInterface {
                     percent = done / total * 100;
 
                 //Update fill width
-                this.fillElement.style.width = percent + '%';
-                this.removeAttribute('indeterminate');
+                this._fillElement.style.width = percent + '%';
+                this._fillElement.removeAttribute('indeterminate');
 
                 //Update label
-                this.setLabelText(this._labelFormat, done, total, percent);
+                this._updateLabel(done, total, percent);
             }
         }
     }
     customElements.define('core-progressbar', ProgressBar);
 
-    //CoreProgressBarFill
-    class ProgressBarFill extends HTMLElement {
-        
-    }
-    customElements.define('core-progressbarfill', ProgressBarFill);
+    //CoreProgressBarInner
+    class ProgressBarInner extends HTMLElement { }
+    customElements.define('core-progressbarinner', ProgressBarInner);
 
+    //CoreProgressBarFill
+    class ProgressBarFill extends HTMLElement { }
+    customElements.define('core-progressbarfill', ProgressBarFill);
 }

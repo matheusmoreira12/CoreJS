@@ -435,7 +435,7 @@ input[is="core-checkbox"]:checked::after
 	
 	margin: -7px 0 0 -5px;
 
-	background-image: url(ui-icon-sprite-21x21.svg);
+	background-image: url(Images/ui-icon-sprite-21x21.svg);
 	background-position: -86px -7px;	
 }
 
@@ -484,7 +484,7 @@ input[is="core-radio"]:checked::after
 	width: 9px;
 	height: 9px;
 
-	background-image: url(ui-icon-sprite-21x21.svg);
+	background-image: url(Images/ui-icon-sprite-21x21.svg);
 	background-position: -7px -48px;
 }
 .core-dropdown.core-dropdown-up::after
@@ -515,7 +515,7 @@ core-select::before
 	
 	margin-top: -4px;
 	
-	background-image: url(ui-icon-sprite-21x21.svg);
+	background-image: url(Images/ui-icon-sprite-21x21.svg);
 	background-position: -7px -48px;
 }
 core-select::after
@@ -1076,7 +1076,7 @@ html /deep/ ::-webkit-scrollbar, html /deep/ ::-webkit-scrollbar-button
 html /deep/ ::-webkit-scrollbar-button
 {
 	background-color: rgb(253, 253, 253);
-	background-image: url(ui-icon-sprite-21x21.svg), -webkit-linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -webkit-linear-gradient(#6f6f6f, #404040);
+	background-image: url(Images/ui-icon-sprite-21x21.svg), -webkit-linear-gradient(#fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -webkit-linear-gradient(#6f6f6f, #404040);
 	background-repeat: no-repeat;
 	background-size: auto, 110% 110%, 110% 110%;
 	background-clip: padding-box, padding-box, border-box;
@@ -1085,16 +1085,16 @@ html /deep/ ::-webkit-scrollbar-button
 }
 html /deep/ ::-webkit-scrollbar-button:vertical
 {
-	background-image: url(ui-icon-sprite-21x21.svg), -webkit-linear-gradient(left, #fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -webkit-linear-gradient(#6f6f6f, #404040);
+	background-image: url(Images/ui-icon-sprite-21x21.svg), -webkit-linear-gradient(left, #fdfdfd, #f3f3f3 50%, #eaeaea 50%, #d3d3d3), -webkit-linear-gradient(#6f6f6f, #404040);
 }
 html /deep/ ::-webkit-scrollbar-button:hover, html /deep/ ::-webkit-scrollbar-button:active
 {
 	background-color: #d0d1d1;
-	background-image: url(ui-icon-sprite-21x21.svg), -webkit-linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(#6f6f6f, #404040);
+	background-image: url(Images/ui-icon-sprite-21x21.svg), -webkit-linear-gradient(#d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(#6f6f6f, #404040);
 }
 html /deep/ ::-webkit-scrollbar-button:vertical:hover, html /deep/ ::-webkit-scrollbar-button:vertical:active
 {
-	background-image: url(ui-icon-sprite-21x21.svg), -webkit-linear-gradient(left, #d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(#6f6f6f, #404040);
+	background-image: url(Images/ui-icon-sprite-21x21.svg), -webkit-linear-gradient(left, #d1d0d0, #c9caca 50%, #b8baba 50%, #a4a5a6), -webkit-linear-gradient(#6f6f6f, #404040);
 }
 html /deep/ ::-webkit-scrollbar-button:vertical:decrement
 {

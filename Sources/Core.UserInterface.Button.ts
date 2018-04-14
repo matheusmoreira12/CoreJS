@@ -1,8 +1,6 @@
-
-
-
-
-
+///<reference path="Core.UserInterface.Primitives.ts"/>
+///<reference path="Core.UserInterface.Icons.ts"/>
+///<reference path="Core.UserInterface.IconElement.ts"/>
 
 namespace Core.UserInterface {
 
@@ -11,35 +9,40 @@ namespace Core.UserInterface {
 
         private createIconElement() {
             let iconElement = new IconElement();
-            this.shadow.appendChild(iconElement);
+            this.shadowRoot.appendChild(iconElement);
 
             this.iconElement = iconElement;
         }
 
         private createContentElement() {
             let contentElement = new Primitives.ContentContainer();
-            this.shadow.appendChild(contentElement);
+            this.shadowRoot.appendChild(contentElement);
 
             this.contentElement = contentElement;
         }
 
-        constructor(content: Content = null, icon: Icons.Icon = null, value: string = null) {
+        constructor() {
             super();
 
-            Validation.RuntimeValidator.validateParameter("content", content, Content);
-            Validation.RuntimeValidator.validateParameter("icon", icon, Icons.Icon);
-            Validation.RuntimeValidator.validateParameter("value", icon, String);
+            this.attachShadow({ mode: "open" });
 
             this.createIconElement();
             this.createContentElement();
-
-            this.content = content;
-            this.icon = icon;
-            this.value = value;
-            this.isDefault = false;
         }
 
         attributePropertyAssociator = new AttributePropertyAssociator(this);
+
+        //Button.value property
+        get value(): string {
+            return this._value;
+        }
+        set value(value: string) {
+            //Run time validation
+            Validation.RuntimeValidator.validateParameter("value", value, STRING, true, true);
+
+            this._value = value;
+        }
+        private _value: string = null;
 
         //Button.isDefault property
         get isDefault() {
@@ -49,7 +52,7 @@ namespace Core.UserInterface {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("value", value, BOOL);
 
-            Utils.setAttribute(this, "isDefault", value ? "isDefault" : null);
+            this.setAttribute("isDefault", value ? "isDefault" : null);
 
             this._isDefault = value;
         }
@@ -74,6 +77,9 @@ namespace Core.UserInterface {
             return this.contentElement.content;
         }
         set content(value: Content) {
+            //Runtime validation
+            Validation.RuntimeValidator.validateParameter("value", value, Content);
+
             this.contentElement.content = value;
         }
 
@@ -83,7 +89,7 @@ namespace Core.UserInterface {
         private contentElement: Primitives.ContentContainer;
 
     }
-    Utils.defineCustomElement("core-button", Button, "button");
+    customElements.define("core-button", Button, { extends: "button" });
 
     //CloseButton, based on IconElementButton
     export class CloseButton extends Button {
@@ -91,14 +97,10 @@ namespace Core.UserInterface {
         constructor() {
             super();
 
-            this.addEventListener("focus", function () {
-                this.blur();
-            });
-
             this.tabIndex = -1;
             this.icon = Icons.IconManager.getIconByNames("default", "close");
         }
     }
-    Utils.defineCustomElement("core-closebutton", CloseButton, "button");
+    customElements.define("core-closebutton", CloseButton, { extends: "button" });
 
 }

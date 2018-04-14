@@ -1,14 +1,10 @@
-
-
-
-
 namespace Core.Exceptions {
 
     export class Exception extends Error {
 
         protected static getMessagePlainText(messageXml: string) {
             //remove all xml tags from messageXml
-            return messageXml.replace(/<.*>/g, "\"");
+            return messageXml.replace(/<\w+>|<\/\w+>/g, "\"");
         }
 
         public static getMessageTag(tagName: string, content: string) { 
@@ -17,8 +13,10 @@ namespace Core.Exceptions {
 
         constructor(messageXml?: string, innerException?: Error, ...extraParams: any[]) {
             //Runtime validation
-            Validation.RuntimeValidator.validateParameter("messageXml", messageXml, String);
-            Validation.RuntimeValidator.validateParameter("innerException", innerException, Error);
+            if (messageXml && typeof messageXml !== STRING)
+                throw new InvalidParameterTypeException("messageXml", STRING)
+            if (innerException && !(innerException instanceof Error))
+                Validation.RuntimeValidator.validateParameter("innerException", innerException, Error);
 
             //Message formatting
             messageXml = StringUtils.format(messageXml, ...extraParams);
@@ -77,11 +75,27 @@ namespace Core.Exceptions {
         paramName: string;
     }
 
+    export class ParameterOutOfRangeException extends Exception implements InvalidParameterException {
+        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]) {
+            //Runtime validation
+            Validation.RuntimeValidator.validateParameter("paramName", paramName, STRING, true, false)
+
+            //Message XML fallback value
+            messageXml = messageXml || "The parameter was outside of the matrix bounds."
+
+            //Add <paramName> to the list of params
+            extraParams = [Exception.getMessageTag("param", paramName), ...extraParams];
+
+            super(messageXml, innerException, extraParams);
+        }
+
+        paramName: string;
+    }
+
     export class InvalidParameterTypeException extends Exception implements InvalidParameterException {
 
         constructor(paramName: string, expectedType: Validation.ExpectedTypeDecorator, messageXml?: string,
             innerException?: Error, ...extraParams: any[]) {
-
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("paramName", paramName, STRING, true, false)
             Validation.RuntimeValidator.validateParameter("expectedType", expectedType, [STRING, Function, Array], true, false);

@@ -1,71 +1,82 @@
-/// <reference path="Core.UserInterface.Forms.ts"/>
-/// <reference path="Core.UserInterface.Primitives.ts"/>
-/// <reference path="Core.UserInterface.Button.ts"/>
-
 namespace Core.UserInterface.Dialogs {
 
     //CoreDialogTitle
     export class DialogTitle extends Primitives.ContentContainer {
     }
-    Utils.defineCustomElement('core-dialogTitle', DialogTitle);
+    customElements.define('core-dialogtitle', DialogTitle);
 
     //CoreDialogTitleBar
-    export class DialogTitleBar extends HTMLElement {
-        titleElement: DialogTitle;
-        closeButton: CloseButton;
-
-        constructor(title?: Content) {
+    export class DialogTitleBar extends HTMLDialogElement {
+        constructor() {
             super();
 
-            this.titleElement = new DialogTitle(title);
-            this.appendChild(this.titleElement);
+            this._titleElement = <DialogTitle>document.createElement("core-dialogtitle");
+            this.appendChild(this._titleElement);
 
-            this.closeButton = new CloseButton();
-            this.appendChild(this.closeButton);
+            this._closeButtonElement = <CloseButton>document.createElement("core-closebutton");
+            this.appendChild(this._closeButtonElement);
         }
+
+        _titleElement: DialogTitle;
+        _closeButtonElement: CloseButton;
 
         get titleContent(): Content {
-            return this.titleElement.content;
+            return this._titleElement.content;
         }
         set titleContent(value: Content) {
-            this.titleElement.content = value;
+            this._titleElement.content = value;
         }
     }
-    Utils.defineCustomElement('core-dialogTitleBar', DialogTitleBar, 'section');
+    customElements.define('core-dialogtitlebar', DialogTitleBar, { extends: "section" });
 
     //CoreDialogContent
     export class DialogContent extends Primitives.ElementContainer {
     }
-    Utils.defineCustomElement('core-dialogContent', DialogContent, 'section');
+    customElements.define('core-dialogcontent', DialogContent, { extends: "section" });
 
     //CoreDialogMessage
     export class DialogMessage extends Primitives.ContentContainer {
     }
-    Utils.defineCustomElement('core-dialogMessage', DialogMessage);
+    customElements.define('core-dialogmessage', DialogMessage, { extends: "section" });
 
     //CoreDialog
     export class Dialog extends HTMLDialogElement {
-        constructor(title?: Content, contentElements?: HTMLElement[], buttonType?: Forms.ButtonType) {
+        constructor() {
             super();
 
             this.returnValue = null;
 
-            this.titleBar = new DialogTitleBar(title);
-            this.appendChild(this.titleBar);
+            this._titleBarElement = <DialogTitleBar>document.createElement("core-dialogtitlebar");
+            this.appendChild(this._titleBarElement);
 
-            this.content = new DialogContent(...contentElements);
-            this.appendChild(this.content);
+            this._contentElement = <DialogContent>document.createElement("core-dialogcontent");
+            this.appendChild(this._contentElement);
 
-            this.buttonBar = new Forms.ButtonBar(buttonType);
-            this.appendChild(this.buttonBar);
+            this._buttonBarElement = <Forms.ButtonBar>document.createElement("core-buttonbar");
+            this.appendChild(this._buttonBarElement);
         }
 
-        titleBar: DialogTitleBar;
-        content: DialogContent;
-        buttonBar: Forms.ButtonBar;
+        get dialogTitle(): Content {
+            return this._titleBarElement.titleContent;
+        }
+        set dialogTitle(value: Content) {
+            this._titleBarElement.titleContent = value;
+        }
+
+        get messageElements(): Primitives.ElementList {
+            return this._contentElement.elements;
+        }
+
+        get buttonBarElements() {
+            return this._buttonBarElement.elements;
+        }
+
+        _titleBarElement: DialogTitleBar;
+        _contentElement: DialogContent;
+        _buttonBarElement: Forms.ButtonBar;
         returnValue: string;
     }
-    Utils.defineCustomElement('core-dialog', Dialog, 'dialog');
+    customElements.define('core-dialog', Dialog, { extends: "dialog" });
 
     //interface dialogs
     export class Dialogs {

@@ -1,6 +1,5 @@
-
-
-
+///<reference path="Core.Validation.ts"/>
+///<reference path="Core.Events.ts"/>
 
 namespace Core.APIs {
 
@@ -37,12 +36,12 @@ namespace Core.APIs {
             let api = this;
             let ajax = this._ajaxRequest = Web.Ajax.get(this._apiURL, new Web.AjaxRequestOptions());
 
-            function ajaxLoaded(src: Web.AjaxRequest, innerReq: XMLHttpRequest, reqInfo: Web.AjaxRequestInfo): void {
-                api._applyAPI(innerReq.responseText);
+            function ajaxLoaded(target: Web.AjaxRequest, args: Events.AjaxEventArgs): void {
+                api._applyAPI(args.baseRequest.responseText);
             }
             ajax.loadedEvent.attach(ajaxLoaded);
 
-            function ajaxError(src: Web.AjaxRequest, innerReq: XMLHttpRequest, reqInfo: Web.AjaxRequestInfo): void {
+            function ajaxError(target: Web.AjaxRequest, args: Events.AjaxEventArgs): void {
 
             }
             ajax.errorEvent.attach(ajaxError);

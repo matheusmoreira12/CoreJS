@@ -1,32 +1,46 @@
-
-
-
+///<reference path="Core.Lists.ts"/>
 
 namespace Core {
-    enum AnimationTimeStampUnit { Seconds = 0, Milliseconds = 1, Percent = 2 }
+    enum TimeStampUnit { Milliseconds, Seconds, Minutes, Hours, Percent }
 
-    class AnimationTimeStamp {
-        private static getUnitFromString(unitStr: string): AnimationTimeStampUnit {
+    class TimeStamp {
+        private static _parseUnit(unitStr: string): TimeStampUnit {
             switch (unitStr) {
+                case "h":
+                    return TimeStampUnit.Hours;
+                case "min":
+                    return TimeStampUnit.Minutes;
                 case "s":
-                    return AnimationTimeStampUnit.Seconds;
+                    return TimeStampUnit.Seconds;
                 case "ms":
-                    return AnimationTimeStampUnit.Milliseconds;
+                    return TimeStampUnit.Milliseconds;
                 case "%":
-                    return AnimationTimeStampUnit.Percent;
+                    return TimeStampUnit.Percent;
             }
 
             return null;
         }
 
-        static fromString(timeStampStr: string) {
+        static parse(str: string) {
             //Runtime validation
-            Validation.RuntimeValidator.validateParameter("timeStampStr", timeStampStr, STRING, true, false);
+            Validation.RuntimeValidator.validateParameter("timeStampStr", str, STRING, true, false);
 
-            let amountLastIndex = StringUtils.lastIndexOfAny(timeStampStr, StringUtils.toCharRange("[0-9]"));
+            let valueStr = str.match(/^\d+/);
+
+            if (valueStr === null)
+                throw new Exceptions.InvalidOperationException("Cannot parse time stamp. Value is missing.");
+
+            let value = Number(valueStr),
+                unitStr = str.substring(valueStr.length),
+                unit = this._parseUnit(unitStr);
+
+            if (unit === null)
+                throw new Exceptions.InvalidOperationException("Cannor parse time stamp. Invalid or missing unit.");
+
+            return new TimeStamp(value, unit);
         }
 
-        constructor(value: number, unit: AnimationTimeStampUnit) {
+        constructor(value: number, unit: TimeStampUnit) {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter('value', value, NUMBER, true, false);
 
@@ -35,42 +49,43 @@ namespace Core {
         }
 
         value: number;
-        unit: AnimationTimeStampUnit;
+        unit: TimeStampUnit;
     }
 
-    class AnimationAction {
+    class AnimationScene {
+        time: TimeStamp;
     }
 
-    class AnimationActionCollection extends Collections.GenericCollection<AnimationAction> {
-        add(action: AnimationAction) {
-            Validation.RuntimeValidator.validateParameter("action", action, AnimationAction, true, false);
+    class AnimationSceneList extends Lists.GenericList<AnimationScene> {
+        add(scene: AnimationScene) {
+            Validation.RuntimeValidator.validateParameter("scene", scene, AnimationScene, true, false);
 
-            super.add(action);
+            super.add(scene);
         }
-        insert(action: AnimationAction, index: number) {
-            Validation.RuntimeValidator.validateParameter("action", action, AnimationAction, true, false);
+        insert(scene: AnimationScene, index: number) {
+            Validation.RuntimeValidator.validateParameter("scene", scene, AnimationScene, true, false);
             Validation.RuntimeValidator.validateParameter("index", index, NUMBER, true, false);
 
-            super.insert(action, index);
+            super.insert(scene, index);
         }
-        removeAt(index: number): AnimationAction {
+        removeAt(index: number): AnimationScene {
             Validation.RuntimeValidator.validateParameter("index", index, NUMBER, true, false);
 
             return super.removeAt(index);
         }
-        remove(action: AnimationAction) {
-            Validation.RuntimeValidator.validateParameter("action", action, AnimationAction, true, false);
+        remove(scene: AnimationScene) {
+            Validation.RuntimeValidator.validateParameter("scene", scene, AnimationScene, true, false);
 
-            super.remove(action);
+            super.remove(scene);
         }
     }
 
     class AnimationStoryboard {
-        constructor(...actions: AnimationAction[]) {
-            this.actions = new AnimationActionCollection(actions);
+        constructor(...scenes: AnimationScene[]) {
+            this.scenes = new AnimationSceneList(scenes);
         }
 
-        actions: AnimationActionCollection;
+        scenes: AnimationSceneList;
 
         toKeyframes(): Object {
             return null;

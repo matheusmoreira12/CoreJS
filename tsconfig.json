@@ -1,11 +1,12 @@
 {
-  "compileOnSave": true,
   "compilerOptions": {
     "target": "es6",
-    "outDir": "\\",
-    "outFile": "Core.js"
+    "declaration": true,
+    "outFile": "Built/Core.js",
+    "module": "system",
+    "sourceMap": true
   },
   "include": [
-    "Sources\\*.ts"
+    "Sources/*.ts"
   ]
 }

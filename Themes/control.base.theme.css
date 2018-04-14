@@ -1,0 +1,34 @@
+:host {
+    display: inline-block;
+    margin: 2px;
+
+    --default-width: 80px;
+    --default-min-width: 0;
+    --default-max-width: 9999px;
+    --default-height: 80px;
+    --default-min-height: 0;
+    --default-max-height: 9999px;
+}
+
+core-controlouterbox {
+    display: inline-block;
+    border: solid 1px rgba(0, 0, 0, .6);
+
+    border-radius: 0;
+}
+
+core-controlinnerbox {
+    display: inline-block;
+
+    width: var(--custom-width, var(--default-width));
+    min-width: var(--custom-min-width, var(--default-min-width));
+    max-width: var(--custom-max-width, var(--default-max-width));
+    height: var(--custom-height, var(--default-height));
+    min-height: var(--custom-min-height, var(--default-min-height));
+    max-height: var(--custom-max-height, var(--default-max-height));
+
+    background-color: whitesmoke;
+    border: solid 1px gray;
+
+    border-radius: 0;
+}

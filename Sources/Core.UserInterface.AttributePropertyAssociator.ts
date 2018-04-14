@@ -1,21 +1,16 @@
-
-
-
-
+///<reference path="Core.Lists.ts"/>
 
 namespace Core.UserInterface {
+
     export class AttributePropertyAssociator {
         constructor(target: Node) {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("target", target, Node, true, false);
 
             this.target = target;
-
-            this.propertyChangedEvent.attach(this.onPropertyChanged);
-            this.attributeChangedEvent.attach(this.onAttributeChanged);
         }
 
-        private _associations = new Collections.GenericCollection<[string, string]>();
+        private _associations = new Lists.GenericList<[string, string]>();
 
         protected target: Node;
 
@@ -37,28 +32,26 @@ namespace Core.UserInterface {
                 return null;
         }
 
-        private 
+        private _onPropertyChanged(target: any, args: Events.PropertyChangedEventArgs) {
+            let assocAttrName = this._getAssociatedAttributeName(args.propertyName);
 
+        }
         //Property changed event
-        propertyChangedEvent = new Events.PropertyChangedEvent(this);
-        private _onPropertyChanged(src: any, propertyName: string, oldValue: any, newValue: any) {
-            let assocAttrName = this._getAssociatedAttributeName(propertyName);
-
-        }
+        propertyChangedEvent = new Events.PropertyChangedEvent(this, this.onPropertyChanged);
         //  Invokes the propertyChanged event
-        onPropertyChanged(propertyName: string, oldValue: any, newValue: any) {
-            this.propertyChangedEvent.invoke(propertyName, oldValue, newValue);
+        onPropertyChanged(propertyName: string, args: Events.PropertyChangedEventArgs) {
+            this.propertyChangedEvent.invoke(args);
         }
 
-        //Attribute changed event
-        attributeChangedEvent = new Events.PropertyChangedEvent(this);
-        private _onAttributeChanged(src: any, attributeName: string, oldValue: any, newValue: any) {
-            let assocPropName = this._getAssociatedPropertyName(attributeName);
+        private _onAttributeChanged(target: any, args: Events.PropertyChangedEventArgs) {
+            let assocPropName = this._getAssociatedPropertyName(args.propertyName);
             
         }
+        //Attribute changed event
+        attributeChangedEvent = new Events.PropertyChangedEvent(this, this.onAttributeChanged);
         //  Invokes the attributeChanged event
-        onAttributeChanged(propertyName: string, oldValue: any, newValue: any) {
-            this.attributeChangedEvent.invoke(propertyName, oldValue, newValue);
+        onAttributeChanged(propertyName: string, args: Events.PropertyChangedEventArgs) {
+            this.attributeChangedEvent.invoke(args);
         }
 
         associate(propertyName: string, attributeName: string = propertyName) {

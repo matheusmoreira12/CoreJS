@@ -1,81 +1,45 @@
-
-
-
-
+///<reference path="Core.MethodGroup.ts"/>
 
 namespace Core.Events {
     //Progress event
-    export type ProgressEventListener = (src: any, done: number, total: number, percent: number) => void;
+    export type ProgressEventListener = (target: any, args: ProgressEventArgs) => void;
+
+    export type ProgressEventArgs = { done: number, total: number };
 
     export class ProgressEvent extends MethodGroup {
-        constructor(target: any, defaultListener?: ProgressEventListener) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("target", target, [Function, Web.AjaxRequest], true);
-
-            super(target);
+        protected target: any;
+        stopPropagation(): void {
+            super.stopPropagation();
         }
-
-        target: any;
-
-        attach(listener: ProgressEventListener | ProgressEvent) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("listener", listener, [Function, ProgressEvent]);
-
+        invoke(args: ProgressEventArgs): void {
+            super.invoke(args);
+        }
+        attach(listener: ProgressEvent | ProgressEventListener): void {
             super.attach(listener);
         }
 
-        detach(listener: ProgressEventListener | ProgressEvent) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("listener", listener, [Function, ProgressEvent]);
-
+        detach(listener: ProgressEvent | ProgressEventListener): void {
             super.detach(listener);
-        }
-
-        invoke(done: number, total: number, thisArg?: any) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("done", done, NUMBER, true, false);
-            Validation.RuntimeValidator.validateParameter("total", total, NUMBER, true, false);
-
-            let percentage = done / total * 100;
-
-            super.invoke(null, done, total, percentage);
         }
     }
 
     //PropertyChanged event
-    export type PropertyChangedEventListener = (src: any, propertyName: string, oldValue: any, newValue: any) => void;
+    export type PropertyChangedEventArgs = { propertyName: string, oldValue: any, newValue: any };
+    export type PropertyChangedEventListener = (target: any, args: PropertyChangedEventArgs) => void;
 
     export class PropertyChangedEvent extends MethodGroup {
-        constructor(target: any, defaultListener?: PropertyChangedEventListener) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("target", target, [Function, Web.AjaxRequest], true);
-
-            super(target);
+        protected target: any;
+        stopPropagation(): void {
+            super.stopPropagation();
         }
-
-        target: any;
-
-        attach(listener: PropertyChangedEventListener | PropertyChangedEvent) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("listener", listener, [Function, PropertyChangedEvent]);
-
+        invoke(args: PropertyChangedEventArgs): void {
+            super.invoke(args);
+        }
+        attach(listener: PropertyChangedEvent | PropertyChangedEventListener): void {
             super.attach(listener);
         }
-
-        detach(listener: PropertyChangedEventListener | PropertyChangedEvent) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("listener", listener, [Function, PropertyChangedEvent]);
-
+        detach(listener: PropertyChangedEvent | PropertyChangedEventListener): void {
             super.detach(listener);
-        }
-
-        invoke(propertyName: string, oldValue: any, newValue: any, thisArg?: any) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("propertyName", propertyName, STRING, true, false);
-            Validation.RuntimeValidator.validateParameter("oldValue", oldValue, [], true);
-            Validation.RuntimeValidator.validateParameter("newValue", newValue, [], true);
-
-            super.invoke(null, this.target.baseRequest, this.target.info);
         }
     }
 }

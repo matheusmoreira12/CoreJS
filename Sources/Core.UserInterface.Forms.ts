@@ -1,6 +1,4 @@
-//<reference path="Core.Collections.ts">
-//<reference path="Core.UserInterface.ts"/>
-//<reference path="Core.UserInterface.Primitives.ts"/>
+///<reference path="Core.UserInterface.ts"/>
 
 namespace Core.UserInterface.Forms {
 
@@ -23,7 +21,7 @@ namespace Core.UserInterface.Forms {
         }
         private _element: HTMLElement = null;
     }
-    Utils.defineCustomElement("core-formitem", FormItem);
+    customElements.define("core-formitem", FormItem);
 
 
     export class ButtonOptions {
@@ -50,7 +48,7 @@ namespace Core.UserInterface.Forms {
         constructor(defaultValue?: string, ...buttons: ButtonOptions[]) {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("defaultValue", defaultValue, STRING);
-            Validation.RuntimeValidator.validateArrayParameter("buttons", buttons, ButtonType, false);
+            Validation.RuntimeValidator.validateArrayParameter("buttons", buttons, ButtonOptions, false);
 
             this.buttons = buttons;
             this.defaultValue = defaultValue || null;
@@ -73,14 +71,17 @@ namespace Core.UserInterface.Forms {
     export const BTN_TYPE_OKCANCEL = new ButtonType("cancel", BTN_OPTIONS_OK, BTN_OPTIONS_CANCEL);
 
     //CoreDialogButtonBar
-    export class ButtonBar extends HTMLElement {
-        private _getButtonsFromType(type: ButtonType): Button[] {
+    export class ButtonBar extends Primitives.ElementContainer {
+        private static _getButtonsFromType(type: ButtonType): Button[] {
             let result = new Array<Button>();
 
             for (var i = 0; i < type.buttons.length; i++) {
                 let buttonOptions = type.buttons[i];
 
-                let buttonElement = new Button(buttonOptions.content, buttonOptions.icon, buttonOptions.value);
+                let buttonElement : Button = <Button>document.createElement("core-button");
+                buttonElement.content = buttonOptions.content;
+                buttonElement.icon = buttonOptions.icon;
+                buttonElement.value = buttonOptions.value;
                 buttonElement.isDefault = type.defaultValue === buttonOptions.value;
 
                 result.push(buttonElement);
@@ -94,14 +95,11 @@ namespace Core.UserInterface.Forms {
 
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("buttonType", buttonType, ButtonType, false, false);
-
-            this.buttons = new Collections.GenericCollection<HTMLButtonElement>();
         }
 
-        buttons: Collections.GenericCollection<HTMLButtonElement>;
         defaultButton: HTMLButtonElement = null;
     }
 
-    Utils.defineCustomElement("core-dialogbuttonbar", ButtonBar);
+    customElements.define("core-dialogbuttonbar", ButtonBar);
 
 }

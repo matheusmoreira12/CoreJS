@@ -1,14 +1,12 @@
-
-
-
+///<reference path="Core.UserInterface.Primitives.ts"/>
 
 namespace Core.UserInterface {
 
     //CoreDataGrid
     export class DataGrid extends HTMLElement {
         private createTableElement() {
-            let tableElement = new DataGridContent();
-            this.shadow.appendChild(tableElement);
+            let tableElement = <DataGridTable>document.createElement("core-datagridtable");
+            this.shadowRoot.appendChild(tableElement);
 
             //The table element
             this.tableElement = tableElement;
@@ -17,39 +15,42 @@ namespace Core.UserInterface {
         constructor() {
             super();
             
-            this.shadow = Utils.attachShadow(this);
+            this.attachShadow({ mode: "open" });
+
             this.createTableElement();
         }
 
 
         protected shadow: ShadowRoot;
-        private tableElement: DataGridContent;
+        private tableElement: DataGridTable;
         
         get head() { return this.tableElement.head; }
         get body() { return this.tableElement.body; }
     }
 
-    Utils.defineCustomElement('core-dataGrid', DataGrid);
+    customElements.define('core-datagrid', DataGrid);
 
     //CoreDataGridTable
-    export class DataGridContent extends HTMLElement {
+    export class DataGridTable extends HTMLElement {
 
         private createHeadElement() {
-            let head = new DataGridSection();
-            this.appendChild(this.head);
+            let head = <DataGridSection>document.createElement("core-datagridsection");
+            this.shadowRoot.appendChild(head);
 
             this.head = head;
         }
 
         private createBodyElement() {
-            let body = new DataGridSection();
-            this.appendChild(this.body);
+            let body = <DataGridSection>document.createElement("core-datagridsection");
+            this.shadowRoot.appendChild(body);
 
             this.body = body;
         }
 
         constructor() {
             super();
+
+            this.attachShadow({ mode: "open" });
 
             this.createHeadElement();
             this.createBodyElement();
@@ -58,20 +59,17 @@ namespace Core.UserInterface {
         head: DataGridSection;
         body: DataGridSection;
     }
-
-    Utils.defineCustomElement('core-dataGridTable', DataGridContent);
+    customElements.define('core-datagridtable', DataGridTable);
 
     //CoreDataGridBody
-    class DataGridSection extends Primitives.ElementContainer {
+    export class DataGridSection extends Primitives.ElementContainer {
     }
-
-    Utils.defineCustomElement('core-dataGridSection', DataGridSection);
+    customElements.define('core-datagridsection', DataGridSection);
 
     //CoreDataGridRow
     export class DataGridRow extends Primitives.ElementContainer {
     }
-
-    Utils.defineCustomElement('core-datagridrow', DataGridRow, 'tr');
+    customElements.define('core-datagridrow', DataGridRow);
 
     //CoreDataGridCell
     export class DataGridCell extends Primitives.ElementContainer {
@@ -81,7 +79,6 @@ namespace Core.UserInterface {
         
         selected: boolean;
     }
-
-    Utils.defineCustomElement('core-datagridcell', DataGridCell, 'td');
+    customElements.define('core-datagridcell', DataGridCell);
 
 }

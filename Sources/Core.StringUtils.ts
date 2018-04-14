@@ -1,6 +1,3 @@
-
-
-
 namespace Core {
 
     export class SearchMatch {
@@ -44,7 +41,7 @@ namespace Core {
             return result;
         }
 
-        static searchString(input: string, regexp: RegExp): SearchMatchList {
+        public static searchString(input: string, regexp: RegExp): SearchMatchList {
             let matches = SearchMatchList._getMatches(input, regexp);
             return new SearchMatchList(...matches);
         }
@@ -57,10 +54,10 @@ namespace Core {
 
         input: string;
     }
-    
-    export class StringUtils {
+
+    export namespace StringUtils {
         // This encoding function is from Philippe Tenenhaus's example at http://www.philten.com/us-xmlhttprequest-image/
-        static encodeBase64(inputStr : string) 
+        export function encodeBase64(inputStr : string) 
         {
             let b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
             let outputStr = "";
@@ -101,26 +98,26 @@ namespace Core {
             return outputStr;
         }
 
-        static isValidIdentifier(str : string) {
+        export function isValidIdentifier(str : string) {
             return /^[a-zA-Z_]\w*$/.test(str);
         }
 
-        static capitalize(str : string) {
+        export function capitalize(str : string) {
             return str.replace(/(?:^|s)S/g, (match) => match.toUpperCase());
         }
         
-        static toCamelCase(str : string) {
+        export function toCamelCase(str : string) {
             return str.replace(/^\w|[\s-]\w/g, (match, index) => {
                 match = match.replace(/[\s-]/, "");
                 return index == 0 ? match.toLowerCase() : match.toUpperCase();
             });
         }
         
-        static fromCamelCase(str) {
+        export function fromCamelCase(str) {
             return str.replace(/^[a-z]|[A-Z]/g, (match, index) => (index > 0 ? " " : "") + match.toUpperCase());
         }
 
-        static splice(str : string, start : number, delCount : number, newSubStr : string) {
+        export function splice(str : string, start : number, delCount : number, newSubStr : string) {
             if (start < 0 || start >= str.length)
                 throw new RangeError('The value for parameter "start" was outside the string bounds.');
             if (delCount < 0 || (start + delCount) >= str.length)
@@ -130,24 +127,22 @@ namespace Core {
         }
 
         //Formats the provided test, replacing the parameter indexes by their respective values
-        static format(text : string, ...params : any[])
+        export function format(text : string, ...params : any[])
         {
-            //get params from arguments
-            params = Array.prototype.slice.apply(arguments).slice(1);
-
             return text.replace(/{\d+}/g, (match: string): string => {
-                let paramIndex: number = Number(match.substring(1, match.length - 2));
-                return String(params[paramIndex]);
+                let paramIndexStr: string = match.replace(/^{|}$/g, "");
+
+                return String(params[paramIndexStr]);
             });
         }
 
         //Returns a SearchMatchList containing all the matches for the desired RegExp.
-        static searchRegExp(str: string, regexp: RegExp): SearchMatchList {
+        export function searchRegExp(str: string, regexp: RegExp): SearchMatchList {
             return SearchMatchList.searchString(str, regexp);
         }
 
         //Converts an array of single-character-long strings to string
-        static fromCharArray(arr: string[]) {
+        export function fromCharArray(arr: string[]) {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("arr", arr, Array, true, false);
 
@@ -155,7 +150,7 @@ namespace Core {
         }
 
         //Converts a string to an array of single-character-long strings
-        static toCharArray(str: string) {
+        export function toCharArray(str: string) {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("str", str, STRING, true, false);
 
@@ -163,7 +158,7 @@ namespace Core {
         }
 
         //Gets the char range between two characters
-        static getCharRange(startChar: string, endChar: string): string[] {
+        export function getCharRange(startChar: string, endChar: string): string[] {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("startChar", startChar, STRING, true, false);
             Validation.RuntimeValidator.validateParameter("endChar", endChar, STRING, true, false);
@@ -183,7 +178,7 @@ namespace Core {
         }
 
         //Gets the char range denoted by a RegEx-like [] notation
-        static toCharRange(representation: string): string[] {
+        export function toCharRange(representation: string): string[] {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("representation", representation, STRING, true, false);
 
@@ -194,7 +189,7 @@ namespace Core {
         }
 
         //Returns the index of any of the specified strings, from the specified start position
-        static indexOfAny(str: string, searchStrings: string[], position: number = 0): number {
+        export function indexOfAny(str: string, searchStrings: string[], position: number = 0): number {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("str", str, STRING, true, false);
             Validation.RuntimeValidator.validateParameter("searchStrings", searchStrings, Array, true, false);
@@ -210,7 +205,7 @@ namespace Core {
         }
 
         //Returns the index of any of the specified strings, from the specified start position
-        static lastIndexOfAny(str: string, searchStrings: string[], position: number = 0): number {
+        export function lastIndexOfAny(str: string, searchStrings: string[], position: number = 0): number {
             //Runtime validation
             Validation.RuntimeValidator.validateParameter("str", str, STRING, true, false);
             Validation.RuntimeValidator.validateParameter("searchStrings", searchStrings, Array, true, false);
@@ -223,6 +218,15 @@ namespace Core {
             }
 
             return -1;
+        }
+
+        export function matchString(str: string, regex: RegExp): string {
+            let matches = str.match(regex);
+
+            if (matches == null)
+                return null;
+
+            return matches.toString();
         }
     }
 }
