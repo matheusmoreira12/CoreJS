@@ -1,4 +1,4 @@
-///<reference path="Core.Lists.ts"/>
+///<reference path="Core.Collections.ts"/>
 
 namespace Core {
     enum TimeStampUnit { Milliseconds, Seconds, Minutes, Hours, Percent }
@@ -56,7 +56,7 @@ namespace Core {
         time: TimeStamp;
     }
 
-    class AnimationSceneList extends Lists.GenericList<AnimationScene> {
+    class AnimationSceneList extends Collections.GenericList<AnimationScene> {
         add(scene: AnimationScene) {
             Validation.RuntimeValidator.validateParameter("scene", scene, AnimationScene, true, false);
 

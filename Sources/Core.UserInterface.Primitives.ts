@@ -2,7 +2,7 @@
 
 namespace Core.UserInterface.Primitives {
 
-    export class ElementList extends Lists.GenericList<HTMLElement> {
+    export class ElementList extends Collections.GenericList<HTMLElement> {
         public constructor(parentContainer: ElementContainer, original: HTMLElement[]);
         public constructor(parentContainer: ElementContainer);
         public constructor(parentContainer: ElementContainer, original?: HTMLElement[]) {
@@ -71,16 +71,16 @@ namespace Core.UserInterface.Primitives {
             this.shadowRoot.removeChild(elem);
         }
 
-        private _onElementAdded(target: ElementList, args: Events.ListEventArgs<HTMLElement>) {
+        private _onElementAdded(target: ElementList, args: Collections.ListEventArgs<HTMLElement>) {
             target.parentContainer._adoptElement(args.newItem, args.newIndex);
         }
 
-        private _onElementChanged(target: ElementList, args: Events.ListEventArgs<HTMLElement>) {
+        private _onElementChanged(target: ElementList, args: Collections.ListEventArgs<HTMLElement>) {
             target.parentContainer._rejectElement(args.oldItem);
             target.parentContainer._adoptElement(args.newItem, args.newIndex);
         }
 
-        private _onElementRemoved(target: ElementList, args: Events.ListEventArgs<HTMLElement>) {
+        private _onElementRemoved(target: ElementList, args: Collections.ListEventArgs<HTMLElement>) {
             target.parentContainer._rejectElement(args.oldItem);
         }
 

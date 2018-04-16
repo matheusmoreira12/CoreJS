@@ -63,7 +63,7 @@ namespace Core.UserInterface.Icons {
         }
     }
 
-    export class IconList extends Lists.GenericList<Icon> {
+    export class IconList extends Collections.GenericList<Icon> {
         constructor(name: string, spriteSrc: string, width: number, height: number, icons?: Icon[]) {
             //Run time validation
             Validation.RuntimeValidator.validateParameter("name", name, STRING, true, false);
@@ -99,15 +99,15 @@ namespace Core.UserInterface.Icons {
                 icon.parentList = this;
         }
 
-        private _onItemAdded(target: IconList, args: Events.ListEventArgs<Icon>) {
+        private _onItemAdded(target: IconList, args: Collections.ListEventArgs<Icon>) {
             this._adoptIcon(args.newItem);
         }
 
-        private _onItemRemoved(target: IconList, args: Events.ListEventArgs<Icon>) {
+        private _onItemRemoved(target: IconList, args: Collections.ListEventArgs<Icon>) {
             this._rejectIcon(args.oldItem);
         }
 
-        private _onItemChanged(target: IconList, args: Events.ListEventArgs<Icon>) {
+        private _onItemChanged(target: IconList, args: Collections.ListEventArgs<Icon>) {
             this._adoptIcon(args.newItem);
             this._rejectIcon(args.oldItem);
         }
@@ -121,8 +121,8 @@ namespace Core.UserInterface.Icons {
     }
 
     export class IconManager {
-        private static activeIconLists: Lists.GenericList<IconList> =
-            new Lists.GenericList<IconList>();
+        private static activeIconCollections: Collections.GenericList<IconList> =
+            new Collections.GenericList<IconList>();
 
         static addList(iconList: IconList) {
             //Run time validation
@@ -133,7 +133,7 @@ namespace Core.UserInterface.Icons {
             if (isNameAlreadyInUse)
                 throw new Error("Cannot add icon collection. Name is already in use.");
 
-            this.activeIconLists.add(iconList);
+            this.activeIconCollections.add(iconList);
         }
 
         static removeList(iconList: IconList) {
@@ -141,14 +141,14 @@ namespace Core.UserInterface.Icons {
             Validation.RuntimeValidator.validateParameter("iconList", iconList,
                 IconList, true, false);
 
-            this.activeIconLists.remove(iconList);
+            this.activeIconCollections.remove(iconList);
         }
 
         static getListByName(name) {
             //Run time validation
             Validation.RuntimeValidator.validateParameter("name", name, STRING, true, false);
 
-            return this.activeIconLists.filter(function (iconList) {
+            return this.activeIconCollections.filter(function (iconList) {
                 return iconList.name == name;
             })[0] || null;
         }

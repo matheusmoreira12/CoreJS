@@ -1,7 +1,7 @@
 ///<reference path="Core.MethodGroup.ts"/>
 ///<reference path="Core.Validation.ts"/>
 
-namespace Core.Lists {
+namespace Core.Collections {
 
     export type TestFunction<T> = (item: T, index: number, list: IGenericList<T>) => boolean;
     export type SelectFunction<T, U> = (item: T, index: number, list: IGenericList<T>) => U;
@@ -28,18 +28,18 @@ namespace Core.Lists {
             /**
          * Gets invoked every time a new item gets added to this list.
          */
-        itemAddedEvent: Events.ListEvent<T>;
-        invokeOnItemAdded(args: Events.ListEventArgs<T>): void;
+        itemAddedEvent: Collections.ListEvent<T>;
+        invokeOnItemAdded(args: Collections.ListEventArgs<T>): void;
         /**
          * Gets invoked every time an item gets removed from this list.
          */
-        itemRemovedEvent: Events.ListEvent<T>;
-        invokeOnItemRemoved(args: Events.ListEventArgs<T>): void;
+        itemRemovedEvent: Collections.ListEvent<T>;
+        invokeOnItemRemoved(args: Collections.ListEventArgs<T>): void;
         /**
          * Gets invoked every time an item gets replaced by a new one in this list.
          */
-        itemChangedEvent: Events.ListEvent<T>;
-        invokeOnItemChanged(args: Events.ListEventArgs<T>): void;
+        itemChangedEvent: Collections.ListEvent<T>;
+        invokeOnItemChanged(args: Collections.ListEventArgs<T>): void;
         /**
          * Gets the first item in this list.
          * @returns The first item in this list.
@@ -369,9 +369,9 @@ namespace Core.Lists {
             else if (arg instanceof Array)
                 this.addMultiple(<T[]>arg);
 
-            this.itemAddedEvent = new Events.ListEvent(this);
-            this.itemRemovedEvent = new Events.ListEvent(this);
-            this.itemChangedEvent = new Events.ListEvent(this);
+            this.itemAddedEvent = new Collections.ListEvent(this);
+            this.itemRemovedEvent = new Collections.ListEvent(this);
+            this.itemChangedEvent = new Collections.ListEvent(this);
         }
 
         /**
@@ -407,22 +407,22 @@ namespace Core.Lists {
         /**
          * Gets invoked every time a new item gets added to this list.
          */
-        itemAddedEvent: Events.ListEvent<T>;
-        invokeOnItemAdded(args: Events.ListEventArgs<T>): void {
+        itemAddedEvent: Collections.ListEvent<T>;
+        invokeOnItemAdded(args: Collections.ListEventArgs<T>): void {
             this.itemAddedEvent.invoke(args);
         }
         /**
          * Gets invoked every time an item gets removed from this list.
          */
-        itemRemovedEvent: Events.ListEvent<T>;
-        invokeOnItemRemoved(args: Events.ListEventArgs<T>): void {
+        itemRemovedEvent: Collections.ListEvent<T>;
+        invokeOnItemRemoved(args: Collections.ListEventArgs<T>): void {
             this.itemRemovedEvent.invoke(args);
         }
         /**
          * Gets invoked every time an item gets replaced by a new one in this list.
          */
-        itemChangedEvent: Events.ListEvent<T>;
-        invokeOnItemChanged(args: Events.ListEventArgs<T>): void {
+        itemChangedEvent: Collections.ListEvent<T>;
+        invokeOnItemChanged(args: Collections.ListEventArgs<T>): void {
             this.itemChangedEvent.invoke(args);
         }
         /**
@@ -663,15 +663,13 @@ namespace Core.Lists {
         value: T;
         parent: GenericTreeItem<T>;
     }
-}
 
-namespace Core.Events {
     //List Item event
     export type ListEventArgs<T> = { oldItem: T, newItem: T, oldIndex: number, newIndex: number };
-    export type ListEventListener<T> = (target: Lists.GenericList<T>, args: ListEventArgs<T>) => void;
+    export type ListEventListener<T> = (target: Collections.GenericList<T>, args: ListEventArgs<T>) => void;
 
     export class ListEvent<T> extends MethodGroup {
-        constructor(target: Lists.GenericList<T>, defaultListener?: ListEventListener<T>) {
+        constructor(target: Collections.GenericList<T>, defaultListener?: ListEventListener<T>) {
             super(target);
         }
 

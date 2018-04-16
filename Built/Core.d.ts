@@ -118,41 +118,7 @@ declare namespace Core {
         static syncArrays(srcArray: any[], destArray: any[], removeCallback?: Function, insertCallback?: Function, changeCallback?: Function, thisArg?: any): void;
     }
 }
-declare namespace Core.Exceptions {
-    class Exception extends Error {
-        protected static getMessagePlainText(messageXml: string): string;
-        static getMessageTag(tagName: string, content: string): string;
-        constructor(messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        messageXml: string;
-        innerException: Error;
-        extraParams: any[];
-    }
-    class InvalidOperationException extends Exception {
-        constructor(messageXml?: string, innerException?: Error, ...extraParams: any[]);
-    }
-    class InvalidTypeException extends Exception {
-        constructor(varName: string, expectedType: Validation.ExpectedTypeDecorator, messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        varName: string;
-    }
-    class InvalidParameterException extends Exception {
-        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        paramName: string;
-    }
-    class ParameterOutOfRangeException extends Exception implements InvalidParameterException {
-        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        paramName: string;
-    }
-    class InvalidParameterTypeException extends Exception implements InvalidParameterException {
-        constructor(paramName: string, expectedType: Validation.ExpectedTypeDecorator, messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        paramName: string;
-        expectedType: string | string[] | Function;
-    }
-    class ParameterMissingException extends Exception implements InvalidParameterException {
-        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        paramName: string;
-    }
-}
-declare namespace Core.Lists {
+declare namespace Core.Collections {
     type TestFunction<T> = (item: T, index: number, list: IGenericList<T>) => boolean;
     type SelectFunction<T, U> = (item: T, index: number, list: IGenericList<T>) => U;
     type CastFunction<T, U> = (item: T, index: number, list: IGenericList<T>) => U;
@@ -177,18 +143,18 @@ declare namespace Core.Lists {
         /**
      * Gets invoked every time a new item gets added to this list.
      */
-        itemAddedEvent: Events.ListEvent<T>;
-        invokeOnItemAdded(args: Events.ListEventArgs<T>): void;
+        itemAddedEvent: Collections.ListEvent<T>;
+        invokeOnItemAdded(args: Collections.ListEventArgs<T>): void;
         /**
          * Gets invoked every time an item gets removed from this list.
          */
-        itemRemovedEvent: Events.ListEvent<T>;
-        invokeOnItemRemoved(args: Events.ListEventArgs<T>): void;
+        itemRemovedEvent: Collections.ListEvent<T>;
+        invokeOnItemRemoved(args: Collections.ListEventArgs<T>): void;
         /**
          * Gets invoked every time an item gets replaced by a new one in this list.
          */
-        itemChangedEvent: Events.ListEvent<T>;
-        invokeOnItemChanged(args: Events.ListEventArgs<T>): void;
+        itemChangedEvent: Collections.ListEvent<T>;
+        invokeOnItemChanged(args: Collections.ListEventArgs<T>): void;
         /**
          * Gets the first item in this list.
          * @returns The first item in this list.
@@ -418,18 +384,18 @@ declare namespace Core.Lists {
         /**
          * Gets invoked every time a new item gets added to this list.
          */
-        itemAddedEvent: Events.ListEvent<T>;
-        invokeOnItemAdded(args: Events.ListEventArgs<T>): void;
+        itemAddedEvent: Collections.ListEvent<T>;
+        invokeOnItemAdded(args: Collections.ListEventArgs<T>): void;
         /**
          * Gets invoked every time an item gets removed from this list.
          */
-        itemRemovedEvent: Events.ListEvent<T>;
-        invokeOnItemRemoved(args: Events.ListEventArgs<T>): void;
+        itemRemovedEvent: Collections.ListEvent<T>;
+        invokeOnItemRemoved(args: Collections.ListEventArgs<T>): void;
         /**
          * Gets invoked every time an item gets replaced by a new one in this list.
          */
-        itemChangedEvent: Events.ListEvent<T>;
-        invokeOnItemChanged(args: Events.ListEventArgs<T>): void;
+        itemChangedEvent: Collections.ListEvent<T>;
+        invokeOnItemChanged(args: Collections.ListEventArgs<T>): void;
         /**
          * Gets the first item in this list.
          * @returns The first item in this list.
@@ -607,22 +573,61 @@ declare namespace Core.Lists {
         value: T;
         parent: GenericTreeItem<T>;
     }
-}
-declare namespace Core.Events {
     type ListEventArgs<T> = {
         oldItem: T;
         newItem: T;
         oldIndex: number;
         newIndex: number;
     };
-    type ListEventListener<T> = (target: Lists.GenericList<T>, args: ListEventArgs<T>) => void;
+    type ListEventListener<T> = (target: Collections.GenericList<T>, args: ListEventArgs<T>) => void;
     class ListEvent<T> extends MethodGroup {
-        constructor(target: Lists.GenericList<T>, defaultListener?: ListEventListener<T>);
+        constructor(target: Collections.GenericList<T>, defaultListener?: ListEventListener<T>);
         target: any;
         attach(listener: ListEventListener<T> | ListEvent<T>): void;
         detach(listener: ListEventListener<T> | ListEvent<T>): void;
         invoke(args: ListEventArgs<T>): void;
     }
+}
+declare namespace Core.Exceptions {
+    class Exception extends Error {
+        protected static getMessagePlainText(messageXml: string): string;
+        static getMessageTag(tagName: string, content: string): string;
+        constructor(messageXml?: string, innerException?: Error, ...extraParams: any[]);
+        messageXml: string;
+        innerException: Error;
+        extraParams: any[];
+    }
+    class InvalidOperationException extends Exception {
+        constructor(messageXml?: string, innerException?: Error, ...extraParams: any[]);
+    }
+    class InvalidTypeException extends Exception {
+        constructor(varName: string, expectedType: Validation.ExpectedTypeDecorator, messageXml?: string, innerException?: Error, ...extraParams: any[]);
+        varName: string;
+    }
+    class InvalidParameterException extends Exception {
+        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]);
+        paramName: string;
+    }
+    class ParameterOutOfRangeException extends Exception implements InvalidParameterException {
+        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]);
+        paramName: string;
+    }
+    class InvalidParameterTypeException extends Exception implements InvalidParameterException {
+        constructor(paramName: string, expectedType: Validation.ExpectedTypeDecorator, messageXml?: string, innerException?: Error, ...extraParams: any[]);
+        paramName: string;
+        expectedType: string | string[] | Function;
+    }
+    class ParameterMissingException extends Exception implements InvalidParameterException {
+        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]);
+        paramName: string;
+    }
+}
+declare namespace Core.Hash {
+    function generateHashCode(str: string): number;
+    function concatenateHashCodes(hashCodes: Iterable<number>): number;
+}
+declare namespace Core.ObjectManipulation {
+    function cloneObject(obj: object): object;
 }
 declare namespace Core {
     class SearchMatch {
@@ -654,7 +659,6 @@ declare namespace Core {
         function indexOfAny(str: string, searchStrings: string[], position?: number): number;
         function lastIndexOfAny(str: string, searchStrings: string[], position?: number): number;
         function matchString(str: string, regex: RegExp): string;
-        function getHashCode(str: string): number;
     }
 }
 declare namespace Core {
@@ -662,14 +666,35 @@ declare namespace Core {
     const STRING = "string";
     const NUMBER = "number";
     const BOOL = "boolean";
+    interface ICloneable<T> {
+        clone(): T;
+    }
+}
+declare namespace Core {
     class Type {
-        private static _iterateSuperclasses(obj);
-        private static _stringifyType(obj);
-        private static _hashifyType(obj);
-        equals(targetType: Type): boolean;
-        name: string;
-        hashCode: number;
+        private static _getConstructor(obj);
+        private static _getParentType(constr);
+        /**
+         * Returns a value indicating whether the specified source type is equivalent to the specified reference type.
+         * @param tSrc The source type.
+         * @param tRef The reference type.
+         */
+        static equals(tSrc: Type, tRef: Type): boolean;
+        /**
+         * Creates a new instance of Type from the specified instance or constructor.
+         * @param obj The instance or constructor the Type is being created from.
+         */
         constructor(obj: Object | Function);
+        private _typeConstructor;
+        /**
+         * Returns a value indicating whether the specified source type is equivalent to the specified reference type.
+         * @param tRef The reference type.
+         */
+        equals(tRef: Type): boolean;
+        /** Returns the name of this Type.*/
+        readonly name: string;
+        /** Returns the parent type of this Type.*/
+        readonly parentType: Type;
     }
 }
 declare namespace Core {
@@ -786,7 +811,7 @@ declare namespace Core.UserInterface {
         s: FlexibleValue;
         v: FlexibleValue;
     }
-    class BrushList extends Lists.GenericList<Brush> {
+    class BrushList extends Collections.GenericList<Brush> {
         static parse(str: string): BrushList;
         toString(): string;
         add(item: Brush): void;
@@ -831,7 +856,7 @@ declare namespace Core.UserInterface {
     class ConicGradientBrush extends GradientBrush {
         constructor(stops?: GradientStop[]);
     }
-    class GradientStopList extends Lists.GenericList<GradientStop> {
+    class GradientStopList extends Collections.GenericList<GradientStop> {
         add(item: GradientStop): void;
         addMultiple(items: GradientStop[]): void;
         insert(item: GradientStop): void;
@@ -886,7 +911,7 @@ declare namespace Core.UserInterface {
     }
 }
 declare namespace Core.UserInterface.Primitives {
-    class ElementList extends Lists.GenericList<HTMLElement> {
+    class ElementList extends Collections.GenericList<HTMLElement> {
         constructor(parentContainer: ElementContainer, original: HTMLElement[]);
         constructor(parentContainer: ElementContainer);
         add(item: HTMLElement): void;
@@ -954,7 +979,7 @@ declare namespace Core.UserInterface.Icons {
         private _height;
         readonly spriteSrc: any;
     }
-    class IconList extends Lists.GenericList<Icon> {
+    class IconList extends Collections.GenericList<Icon> {
         constructor(name: string, spriteSrc: string, width: number, height: number, icons?: Icon[]);
         name: string;
         spriteSrc: string;
@@ -968,7 +993,7 @@ declare namespace Core.UserInterface.Icons {
         getIconByName(name: string): any;
     }
     class IconManager {
-        private static activeIconLists;
+        private static activeIconCollections;
         static addList(iconList: IconList): void;
         static removeList(iconList: IconList): void;
         static getListByName(name: any): any;

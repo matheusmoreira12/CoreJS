@@ -309,113 +309,14 @@ var Core;
     }
     Core.ArrayUtils = ArrayUtils;
 })(Core || (Core = {}));
-var Core;
-(function (Core) {
-    var Exceptions;
-    (function (Exceptions) {
-        class Exception extends Error {
-            constructor(messageXml, innerException, ...extraParams) {
-                //Runtime validation
-                if (messageXml && typeof messageXml !== Core.STRING)
-                    throw new InvalidParameterTypeException("messageXml", Core.STRING);
-                if (innerException && !(innerException instanceof Error))
-                    Core.Validation.RuntimeValidator.validateParameter("innerException", innerException, Error);
-                //Message formatting
-                messageXml = Core.StringUtils.format(messageXml, ...extraParams);
-                let messageText = Exception.getMessagePlainText(messageXml);
-                //Initialization
-                super(messageText);
-                this.messageXml = messageXml;
-                this.extraParams = extraParams;
-            }
-            static getMessagePlainText(messageXml) {
-                //remove all xml tags from messageXml
-                return messageXml.replace(/<\w+>|<\/\w+>/g, "\"");
-            }
-            static getMessageTag(tagName, content) {
-                return Core.StringUtils.format("<{0}>{1}</{0}>", tagName, content);
-            }
-        }
-        Exceptions.Exception = Exception;
-        class InvalidOperationException extends Exception {
-            constructor(messageXml, innerException, ...extraParams) {
-                //Initialization
-                super(messageXml, innerException, ...extraParams);
-            }
-        }
-        Exceptions.InvalidOperationException = InvalidOperationException;
-        class InvalidTypeException extends Exception {
-            constructor(varName, expectedType, messageXml, innerException, ...extraParams) {
-                //Runtime validation
-                Core.Validation.RuntimeValidator.validateParameter("expectedType", expectedType, [Core.STRING, Function, Array]);
-                messageXml = messageXml || "Invalid type for variable {0}. A value of type {1} was expected.";
-                extraParams = [Core.Validation.Utils.expectedTypeNameAsMessageTags(expectedType), ...extraParams];
-                //Initialization
-                super(messageXml, innerException, ...extraParams);
-            }
-        }
-        Exceptions.InvalidTypeException = InvalidTypeException;
-        class InvalidParameterException extends Exception {
-            constructor(paramName, messageXml, innerException, ...extraParams) {
-                //Runtime validation
-                Core.Validation.RuntimeValidator.validateParameter("paramName", paramName, "string");
-                messageXml = messageXml || "Invalid value for parameter {0}.";
-                extraParams = [Exception.getMessageTag("param", paramName), ...extraParams];
-                //Initialization
-                super(messageXml, innerException, ...extraParams);
-                this.paramName = paramName;
-            }
-        }
-        Exceptions.InvalidParameterException = InvalidParameterException;
-        class ParameterOutOfRangeException extends Exception {
-            constructor(paramName, messageXml, innerException, ...extraParams) {
-                //Runtime validation
-                Core.Validation.RuntimeValidator.validateParameter("paramName", paramName, Core.STRING, true, false);
-                //Message XML fallback value
-                messageXml = messageXml || "The parameter was outside of the matrix bounds.";
-                //Add <paramName> to the list of params
-                extraParams = [Exception.getMessageTag("param", paramName), ...extraParams];
-                super(messageXml, innerException, extraParams);
-            }
-        }
-        Exceptions.ParameterOutOfRangeException = ParameterOutOfRangeException;
-        class InvalidParameterTypeException extends Exception {
-            constructor(paramName, expectedType, messageXml, innerException, ...extraParams) {
-                //Runtime validation
-                Core.Validation.RuntimeValidator.validateParameter("paramName", paramName, Core.STRING, true, false);
-                Core.Validation.RuntimeValidator.validateParameter("expectedType", expectedType, [Core.STRING, Function, Array], true, false);
-                //Message XML fallback value
-                messageXml = messageXml || "Invalid value for parameter {0}. A value of type {1} was expected.";
-                extraParams = [Exception.getMessageTag("param", paramName),
-                    Core.Validation.Utils.expectedTypeNameAsMessageTags(expectedType), ...extraParams];
-                //Initialization
-                super(messageXml, innerException, ...extraParams);
-                this.paramName = paramName;
-            }
-        }
-        Exceptions.InvalidParameterTypeException = InvalidParameterTypeException;
-        class ParameterMissingException extends Exception {
-            constructor(paramName, messageXml, innerException, ...extraParams) {
-                //Runtime validation
-                Core.Validation.RuntimeValidator.validateParameter("paramName", paramName, "string");
-                messageXml = messageXml || "Parameter {0} is required and must be specified.";
-                extraParams.push(Exception.getMessageTag("param", paramName));
-                //Initialization
-                super(messageXml, innerException, ...extraParams);
-                this.paramName = paramName;
-            }
-        }
-        Exceptions.ParameterMissingException = ParameterMissingException;
-    })(Exceptions = Core.Exceptions || (Core.Exceptions = {}));
-})(Core || (Core = {}));
 ///<reference path="Core.MethodGroup.ts"/>
 ///<reference path="Core.Validation.ts"/>
 var Core;
 ///<reference path="Core.MethodGroup.ts"/>
 ///<reference path="Core.Validation.ts"/>
 (function (Core) {
-    var Lists;
-    (function (Lists) {
+    var Collections;
+    (function (Collections) {
         let IGenericList;
         (function (IGenericList) {
             function toArray(list) {
@@ -549,7 +450,7 @@ var Core;
                 Array.prototype.fill.call(list, value, startIndex, startIndex + count);
             }
             IGenericList.fill = fill;
-        })(IGenericList = Lists.IGenericList || (Lists.IGenericList = {}));
+        })(IGenericList = Collections.IGenericList || (Collections.IGenericList = {}));
         class GenericList {
             constructor(arg) {
                 /**
@@ -561,9 +462,9 @@ var Core;
                     this.fill(null, 0, arg);
                 else if (arg instanceof Array)
                     this.addMultiple(arg);
-                this.itemAddedEvent = new Core.Events.ListEvent(this);
-                this.itemRemovedEvent = new Core.Events.ListEvent(this);
-                this.itemChangedEvent = new Core.Events.ListEvent(this);
+                this.itemAddedEvent = new Collections.ListEvent(this);
+                this.itemRemovedEvent = new Collections.ListEvent(this);
+                this.itemChangedEvent = new Collections.ListEvent(this);
             }
             /**
              * Returns an iterator for this <IGenericList>.
@@ -810,7 +711,7 @@ var Core;
                 IGenericList.fill(this, value, startIndex, count);
             }
         }
-        Lists.GenericList = GenericList;
+        Collections.GenericList = GenericList;
         class KeyValuePair {
             constructor(key, value) {
                 //Runtime validation
@@ -820,18 +721,13 @@ var Core;
                 this.value = value;
             }
         }
-        Lists.KeyValuePair = KeyValuePair;
+        Collections.KeyValuePair = KeyValuePair;
         class GenericDictionary extends GenericList {
         }
-        Lists.GenericDictionary = GenericDictionary;
+        Collections.GenericDictionary = GenericDictionary;
         class GenericTreeItem extends GenericList {
         }
-        Lists.GenericTreeItem = GenericTreeItem;
-    })(Lists = Core.Lists || (Core.Lists = {}));
-})(Core || (Core = {}));
-(function (Core) {
-    var Events;
-    (function (Events) {
+        Collections.GenericTreeItem = GenericTreeItem;
         class ListEvent extends Core.MethodGroup {
             constructor(target, defaultListener) {
                 super(target);
@@ -846,8 +742,161 @@ var Core;
                 super.invoke(args);
             }
         }
-        Events.ListEvent = ListEvent;
-    })(Events = Core.Events || (Core.Events = {}));
+        Collections.ListEvent = ListEvent;
+    })(Collections = Core.Collections || (Core.Collections = {}));
+})(Core || (Core = {}));
+var Core;
+(function (Core) {
+    var Exceptions;
+    (function (Exceptions) {
+        class Exception extends Error {
+            constructor(messageXml, innerException, ...extraParams) {
+                //Runtime validation
+                if (messageXml && typeof messageXml !== Core.STRING)
+                    throw new InvalidParameterTypeException("messageXml", Core.STRING);
+                if (innerException && !(innerException instanceof Error))
+                    Core.Validation.RuntimeValidator.validateParameter("innerException", innerException, Error);
+                //Message formatting
+                messageXml = Core.StringUtils.format(messageXml, ...extraParams);
+                let messageText = Exception.getMessagePlainText(messageXml);
+                //Initialization
+                super(messageText);
+                this.messageXml = messageXml;
+                this.extraParams = extraParams;
+            }
+            static getMessagePlainText(messageXml) {
+                //remove all xml tags from messageXml
+                return messageXml.replace(/<\w+>|<\/\w+>/g, "\"");
+            }
+            static getMessageTag(tagName, content) {
+                return Core.StringUtils.format("<{0}>{1}</{0}>", tagName, content);
+            }
+        }
+        Exceptions.Exception = Exception;
+        class InvalidOperationException extends Exception {
+            constructor(messageXml, innerException, ...extraParams) {
+                //Initialization
+                super(messageXml, innerException, ...extraParams);
+            }
+        }
+        Exceptions.InvalidOperationException = InvalidOperationException;
+        class InvalidTypeException extends Exception {
+            constructor(varName, expectedType, messageXml, innerException, ...extraParams) {
+                //Runtime validation
+                Core.Validation.RuntimeValidator.validateParameter("expectedType", expectedType, [Core.STRING, Function, Array]);
+                messageXml = messageXml || "Invalid type for variable {0}. A value of type {1} was expected.";
+                extraParams = [Core.Validation.Utils.expectedTypeNameAsMessageTags(expectedType), ...extraParams];
+                //Initialization
+                super(messageXml, innerException, ...extraParams);
+            }
+        }
+        Exceptions.InvalidTypeException = InvalidTypeException;
+        class InvalidParameterException extends Exception {
+            constructor(paramName, messageXml, innerException, ...extraParams) {
+                //Runtime validation
+                Core.Validation.RuntimeValidator.validateParameter("paramName", paramName, "string");
+                messageXml = messageXml || "Invalid value for parameter {0}.";
+                extraParams = [Exception.getMessageTag("param", paramName), ...extraParams];
+                //Initialization
+                super(messageXml, innerException, ...extraParams);
+                this.paramName = paramName;
+            }
+        }
+        Exceptions.InvalidParameterException = InvalidParameterException;
+        class ParameterOutOfRangeException extends Exception {
+            constructor(paramName, messageXml, innerException, ...extraParams) {
+                //Runtime validation
+                Core.Validation.RuntimeValidator.validateParameter("paramName", paramName, Core.STRING, true, false);
+                //Message XML fallback value
+                messageXml = messageXml || "The parameter was outside of the matrix bounds.";
+                //Add <paramName> to the list of params
+                extraParams = [Exception.getMessageTag("param", paramName), ...extraParams];
+                super(messageXml, innerException, extraParams);
+            }
+        }
+        Exceptions.ParameterOutOfRangeException = ParameterOutOfRangeException;
+        class InvalidParameterTypeException extends Exception {
+            constructor(paramName, expectedType, messageXml, innerException, ...extraParams) {
+                //Runtime validation
+                Core.Validation.RuntimeValidator.validateParameter("paramName", paramName, Core.STRING, true, false);
+                Core.Validation.RuntimeValidator.validateParameter("expectedType", expectedType, [Core.STRING, Function, Array], true, false);
+                //Message XML fallback value
+                messageXml = messageXml || "Invalid value for parameter {0}. A value of type {1} was expected.";
+                extraParams = [Exception.getMessageTag("param", paramName),
+                    Core.Validation.Utils.expectedTypeNameAsMessageTags(expectedType), ...extraParams];
+                //Initialization
+                super(messageXml, innerException, ...extraParams);
+                this.paramName = paramName;
+            }
+        }
+        Exceptions.InvalidParameterTypeException = InvalidParameterTypeException;
+        class ParameterMissingException extends Exception {
+            constructor(paramName, messageXml, innerException, ...extraParams) {
+                //Runtime validation
+                Core.Validation.RuntimeValidator.validateParameter("paramName", paramName, "string");
+                messageXml = messageXml || "Parameter {0} is required and must be specified.";
+                extraParams.push(Exception.getMessageTag("param", paramName));
+                //Initialization
+                super(messageXml, innerException, ...extraParams);
+                this.paramName = paramName;
+            }
+        }
+        Exceptions.ParameterMissingException = ParameterMissingException;
+    })(Exceptions = Core.Exceptions || (Core.Exceptions = {}));
+})(Core || (Core = {}));
+var Core;
+(function (Core) {
+    var Hash;
+    (function (Hash) {
+        function generateHashCode(str) {
+            let outHashCode = 0;
+            if (str.length === 0)
+                return outHashCode;
+            for (let i = 0; i < str.length; i++) {
+                let chr = str.charCodeAt(i);
+                outHashCode = ((outHashCode << 5) - outHashCode) + chr;
+            }
+            return outHashCode;
+        }
+        Hash.generateHashCode = generateHashCode;
+        function concatenateHashCodes(hashCodes) {
+            let outHashCode = 17;
+            for (let hashCode of hashCodes)
+                outHashCode = ((outHashCode << 5) - outHashCode) + hashCode;
+            return outHashCode;
+        }
+        Hash.concatenateHashCodes = concatenateHashCodes;
+    })(Hash = Core.Hash || (Core.Hash = {}));
+})(Core || (Core = {}));
+var Core;
+(function (Core) {
+    var ObjectManipulation;
+    (function (ObjectManipulation) {
+        function cloneObject(obj) {
+            function cloneRecursive(value, recursionArray) {
+                let outValue = null;
+                console.log(recursionArray);
+                if (recursionArray.findIndex(r => Object.is(r, value)) !== -1)
+                    return;
+                recursionArray = new Array(...recursionArray);
+                recursionArray.push(value);
+                if (value !== null && typeof value === "object") {
+                    outValue = {};
+                    Object.setPrototypeOf(outValue, Object.getPrototypeOf(value));
+                    for (let name in value) {
+                        let member = value[name], outMember = null;
+                        outMember = cloneRecursive(member, recursionArray);
+                        outValue[name] = outMember;
+                    }
+                }
+                else
+                    outValue = value;
+                return outValue;
+            }
+            return cloneRecursive(obj, []);
+        }
+        ObjectManipulation.cloneObject = cloneObject;
+    })(ObjectManipulation = Core.ObjectManipulation || (Core.ObjectManipulation = {}));
 })(Core || (Core = {}));
 var Core;
 (function (Core) {
@@ -1036,17 +1085,6 @@ var Core;
             return matches.toString();
         }
         StringUtils.matchString = matchString;
-        function getHashCode(str) {
-            let hash = 0;
-            if (str.length === 0)
-                return hash;
-            for (let i = 0; i < str.length; i++) {
-                let chr = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + chr;
-            }
-            return hash;
-        }
-        StringUtils.getHashCode = getHashCode;
     })(StringUtils = Core.StringUtils || (Core.StringUtils = {}));
 })(Core || (Core = {}));
 var Core;
@@ -1055,42 +1093,58 @@ var Core;
     Core.STRING = "string";
     Core.NUMBER = "number";
     Core.BOOL = "boolean";
+})(Core || (Core = {}));
+var Core;
+(function (Core) {
     class Type {
+        /**
+         * Creates a new instance of Type from the specified instance or constructor.
+         * @param obj The instance or constructor the Type is being created from.
+         */
         constructor(obj) {
-            if (!(obj instanceof Function))
-                obj = obj.constructor;
-            this.name = obj.name;
-            this.hashCode = Type._hashifyType(obj);
-            return Object.freeze(this);
+            this._typeConstructor = Type._getConstructor(obj);
         }
-        static *_iterateSuperclasses(obj) {
-            while (obj) {
-                yield obj;
-                obj = Object.getPrototypeOf(obj);
-            }
+        static _getConstructor(obj) {
+            if (obj instanceof Function)
+                return obj;
+            else
+                return obj.constructor;
         }
-        static _stringifyType(obj) {
-            let superclasses = Array.from(this._iterateSuperclasses(obj)), superclassNames = superclasses.map(sc => {
-                if (sc instanceof Function)
-                    return sc.name;
-                else
-                    return sc.constructor.name;
-            });
-            return superclassNames.reverse().join(">");
+        static _getParentType(constr) {
+            let superclass = Object.getPrototypeOf(constr.prototype);
+            if (superclass === null)
+                return null;
+            return new Type(superclass);
         }
-        static _hashifyType(obj) {
-            let typeAsString = this._stringifyType(obj), hashCode = Core.StringUtils.getHashCode(typeAsString);
-            return hashCode;
+        /**
+         * Returns a value indicating whether the specified source type is equivalent to the specified reference type.
+         * @param tSrc The source type.
+         * @param tRef The reference type.
+         */
+        static equals(tSrc, tRef) {
+            return Object.is(tSrc._typeConstructor, tRef._typeConstructor);
         }
-        equals(targetType) {
-            return targetType.hashCode === this.hashCode;
+        /**
+         * Returns a value indicating whether the specified source type is equivalent to the specified reference type.
+         * @param tRef The reference type.
+         */
+        equals(tRef) {
+            return Type.equals(this, tRef);
+        }
+        /** Returns the name of this Type.*/
+        get name() {
+            return this._typeConstructor.name;
+        }
+        /** Returns the parent type of this Type.*/
+        get parentType() {
+            return Type._getParentType(this._typeConstructor);
         }
     }
     Core.Type = Type;
 })(Core || (Core = {}));
-///<reference path="Core.Lists.ts"/>
+///<reference path="Core.Collections.ts"/>
 var Core;
-///<reference path="Core.Lists.ts"/>
+///<reference path="Core.Collections.ts"/>
 (function (Core) {
     let TimeStampUnit;
     (function (TimeStampUnit) {
@@ -1136,7 +1190,7 @@ var Core;
     }
     class AnimationScene {
     }
-    class AnimationSceneList extends Core.Lists.GenericList {
+    class AnimationSceneList extends Core.Collections.GenericList {
         add(scene) {
             Core.Validation.RuntimeValidator.validateParameter("scene", scene, AnimationScene, true, false);
             super.add(scene);
@@ -1173,15 +1227,15 @@ var Core;
     Core.KEYFRAMES_SHRINK = { transform: ["scale(1.2)", "scale(1)"] };
     Core.KEYFRAMES_FLIP = { transform: ["rotateX(90deg)", "rotateX(0deg)"] };
 })(Core || (Core = {}));
-///<reference path="Core.Lists.ts"/>
+///<reference path="Core.Collections.ts"/>
 var Core;
-///<reference path="Core.Lists.ts"/>
+///<reference path="Core.Collections.ts"/>
 (function (Core) {
     var UserInterface;
     (function (UserInterface) {
         class AttributePropertyAssociator {
             constructor(target) {
-                this._associations = new Core.Lists.GenericList();
+                this._associations = new Core.Collections.GenericList();
                 //Property changed event
                 this.propertyChangedEvent = new Core.Events.PropertyChangedEvent(this, this.onPropertyChanged);
                 //Attribute changed event
@@ -1458,7 +1512,7 @@ var Core;
             }
         }
         UserInterface.ColorHSV = ColorHSV;
-        class BrushList extends Core.Lists.GenericList {
+        class BrushList extends Core.Collections.GenericList {
             static parse(str) {
                 //Run time validation
                 Core.Validation.RuntimeValidator.validateParameter("str", str, Core.STRING, true, false);
@@ -1604,7 +1658,7 @@ var Core;
             }
         }
         UserInterface.ConicGradientBrush = ConicGradientBrush;
-        class GradientStopList extends Core.Lists.GenericList {
+        class GradientStopList extends Core.Collections.GenericList {
             add(item) {
                 //Run time validation
                 Core.Validation.RuntimeValidator.validateParameter("item", item, GradientStop, true);
@@ -1779,7 +1833,7 @@ var Core;
     (function (UserInterface) {
         var Primitives;
         (function (Primitives) {
-            class ElementList extends Core.Lists.GenericList {
+            class ElementList extends Core.Collections.GenericList {
                 constructor(parentContainer, original) {
                     super(original);
                     this.parentContainer = parentContainer;
@@ -1978,7 +2032,7 @@ var Core;
                 }
             }
             Icons.Icon = Icon;
-            class IconList extends Core.Lists.GenericList {
+            class IconList extends Core.Collections.GenericList {
                 constructor(name, spriteSrc, width, height, icons) {
                     //Run time validation
                     Core.Validation.RuntimeValidator.validateParameter("name", name, Core.STRING, true, false);
@@ -2027,17 +2081,17 @@ var Core;
                     let isNameAlreadyInUse = this.getListByName(iconList.name) != null;
                     if (isNameAlreadyInUse)
                         throw new Error("Cannot add icon collection. Name is already in use.");
-                    this.activeIconLists.add(iconList);
+                    this.activeIconCollections.add(iconList);
                 }
                 static removeList(iconList) {
                     //Run time validation
                     Core.Validation.RuntimeValidator.validateParameter("iconList", iconList, IconList, true, false);
-                    this.activeIconLists.remove(iconList);
+                    this.activeIconCollections.remove(iconList);
                 }
                 static getListByName(name) {
                     //Run time validation
                     Core.Validation.RuntimeValidator.validateParameter("name", name, Core.STRING, true, false);
-                    return this.activeIconLists.filter(function (iconList) {
+                    return this.activeIconCollections.filter(function (iconList) {
                         return iconList.name == name;
                     })[0] || null;
                 }
@@ -2054,7 +2108,7 @@ var Core;
                     return icon;
                 }
             }
-            IconManager.activeIconLists = new Core.Lists.GenericList();
+            IconManager.activeIconCollections = new Core.Collections.GenericList();
             Icons.IconManager = IconManager;
         })(Icons = UserInterface.Icons || (UserInterface.Icons = {}));
     })(UserInterface = Core.UserInterface || (Core.UserInterface = {}));
@@ -2347,7 +2401,7 @@ var Core;
         class ControlStylesheetManager {
             constructor(target) {
                 this._target = target;
-                this._stylesheets = new Core.Lists.GenericList();
+                this._stylesheets = new Core.Collections.GenericList();
             }
             prependStylesheet(href) {
                 let stylesheet = document.createElement("link");
@@ -3118,7 +3172,7 @@ var Core;
                 return DependencyObjectType.fromSystemType(baseEnvironmentType);
             }
         }
-        DependencyObjectType._registeredTypes = new Core.Lists.GenericList();
+        DependencyObjectType._registeredTypes = new Core.Collections.GenericList();
         XAML.DependencyObjectType = DependencyObjectType;
         class PropertyMetadata {
             /**
@@ -3182,7 +3236,6 @@ var Core;
         XAML.DependencyPropertyKey = DependencyPropertyKey;
         class DependencyProperty {
             static _registerCommon(name, propertyType, ownerType, metadata, validateValueCallback) {
-                let key = Core.StringUtils.getHashCode(`${name}:${ownerType.name}`);
                 return null;
             }
             /**

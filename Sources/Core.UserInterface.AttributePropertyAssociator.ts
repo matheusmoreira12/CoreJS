@@ -1,4 +1,4 @@
-///<reference path="Core.Lists.ts"/>
+///<reference path="Core.Collections.ts"/>
 
 namespace Core.UserInterface {
 
@@ -10,7 +10,7 @@ namespace Core.UserInterface {
             this.target = target;
         }
 
-        private _associations = new Lists.GenericList<[string, string]>();
+        private _associations = new Collections.GenericList<[string, string]>();
 
         protected target: Node;
 

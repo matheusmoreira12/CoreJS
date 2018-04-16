@@ -5,10 +5,10 @@ namespace Core.UserInterface {
     export class ControlStylesheetManager {
         constructor(target: Control) {
             this._target = target;
-            this._stylesheets = new Lists.GenericList<HTMLLinkElement>();
+            this._stylesheets = new Collections.GenericList<HTMLLinkElement>();
         }
 
-        private _stylesheets: Lists.GenericList<HTMLLinkElement>;
+        private _stylesheets: Collections.GenericList<HTMLLinkElement>;
         private _target: Control;
 
         public prependStylesheet(href): HTMLLinkElement {

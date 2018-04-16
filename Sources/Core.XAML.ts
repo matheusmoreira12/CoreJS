@@ -49,8 +49,8 @@ namespace Core.XAML {
 
     export class DependencyObjectType {
 
-        private static _registeredTypes: Lists.GenericList<DependencyObjectType> =
-            new Lists.GenericList<DependencyObjectType>();
+        private static _registeredTypes: Collections.GenericList<DependencyObjectType> =
+            new Collections.GenericList<DependencyObjectType>();
 
         private static _getUniqueId(type: Type): number {
             let depObjType = this._registeredTypes.first((item) => Object.is(item.environmentType, type)),
@@ -166,7 +166,7 @@ namespace Core.XAML {
     }
 
     namespace DependencyPropertyRegistry {
-        let registryEntries: Lists.GenericList<DependencyPropertyRegistryEntry>;
+        let registryEntries: Collections.GenericList<DependencyPropertyRegistryEntry>;
 
         export function register(property: DependencyProperty, metadata: PropertyMetadata): number {
             let entry = new DependencyPropertyRegistryEntry(property, metadata),
@@ -196,11 +196,6 @@ namespace Core.XAML {
     export class DependencyProperty {
         private static _registerCommon(name: string, propertyType: Type, ownerType: Type,
             metadata: PropertyMetadata, validateValueCallback: ValidateValueCallback): DependencyProperty {
-
-            let nameHashCode = Hash.generateHashCode(name),
-                key = Hash.concatenateHashCodes([, ownerType.hashCode]);
-
-
 
             return null;
         }

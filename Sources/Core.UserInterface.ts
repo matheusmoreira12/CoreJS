@@ -294,7 +294,7 @@ namespace Core.UserInterface {
         public v: FlexibleValue;
     }
 
-    export class BrushList extends Lists.GenericList<Brush> {
+    export class BrushList extends Collections.GenericList<Brush> {
         public static parse(str: string): BrushList {
             //Run time validation
             Validation.RuntimeValidator.validateParameter("str", str, STRING, true, false);
@@ -466,7 +466,7 @@ namespace Core.UserInterface {
         }
     }
 
-    export class GradientStopList extends Lists.GenericList<GradientStop> {
+    export class GradientStopList extends Collections.GenericList<GradientStop> {
         public add(item: GradientStop): void {
             //Run time validation
             Validation.RuntimeValidator.validateParameter("item", item, GradientStop, true);
