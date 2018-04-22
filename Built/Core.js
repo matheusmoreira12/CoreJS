@@ -807,8 +807,8 @@ var Core;
 })(Core || (Core = {}));
 var Core;
 (function (Core) {
-    var ObjectiveXml;
-    (function (ObjectiveXml) {
+    var ObjectiveXML;
+    (function (ObjectiveXML) {
         let IDependencyObject;
         (function (IDependencyObject) {
             function getValue(owner, property) {
@@ -818,7 +818,7 @@ var Core;
             function setValue(owner, property, value) {
             }
             IDependencyObject.setValue = setValue;
-        })(IDependencyObject = ObjectiveXml.IDependencyObject || (ObjectiveXml.IDependencyObject = {}));
+        })(IDependencyObject = ObjectiveXML.IDependencyObject || (ObjectiveXML.IDependencyObject = {}));
         class DependencyObject extends Object {
             /**
              * Gets the value of the specified dependency property.
@@ -836,7 +836,7 @@ var Core;
                 IDependencyObject.setValue(this, property, value);
             }
         }
-        ObjectiveXml.DependencyObject = DependencyObject;
+        ObjectiveXML.DependencyObject = DependencyObject;
         class DependencyObjectType {
             constructor(id, name, environmentType) {
                 this.id = id;
@@ -863,7 +863,7 @@ var Core;
             }
         }
         DependencyObjectType._registeredTypes = new Core.Collections.Generic.List();
-        ObjectiveXml.DependencyObjectType = DependencyObjectType;
+        ObjectiveXML.DependencyObjectType = DependencyObjectType;
         class PropertyMetadata {
             /**
              * Initializes a new instance of the PropertyMetadata class with the specified default value and callbacks.
@@ -895,14 +895,14 @@ var Core;
             merge(baseMetadata, dp) {
             }
         }
-        ObjectiveXml.PropertyMetadata = PropertyMetadata;
+        ObjectiveXML.PropertyMetadata = PropertyMetadata;
         class DependencyPropertyRegistryEntry {
             constructor(property, metadata) {
                 this.property = property;
                 this.metadata = metadata;
             }
         }
-        ObjectiveXml.DependencyPropertyRegistryEntry = DependencyPropertyRegistryEntry;
+        ObjectiveXML.DependencyPropertyRegistryEntry = DependencyPropertyRegistryEntry;
         let DependencyPropertyRegistry;
         (function (DependencyPropertyRegistry) {
             let registryEntries;
@@ -923,7 +923,7 @@ var Core;
             overrideMetadata(forType, typeMetadata) {
             }
         }
-        ObjectiveXml.DependencyPropertyKey = DependencyPropertyKey;
+        ObjectiveXML.DependencyPropertyKey = DependencyPropertyKey;
         class DependencyProperty {
             static _registerCommon(name, propertyType, ownerType, metadata, validateValueCallback) {
                 let keyStr = `${ownerType.inheritanceToString()}#${name}`, key = Core.HashCode.fromString(keyStr);
@@ -970,8 +970,8 @@ var Core;
             }
         }
         DependencyProperty._propertyFromName = new Core.Collections.Generic.Dictionary();
-        ObjectiveXml.DependencyProperty = DependencyProperty;
-    })(ObjectiveXml = Core.ObjectiveXml || (Core.ObjectiveXml = {}));
+        ObjectiveXML.DependencyProperty = DependencyProperty;
+    })(ObjectiveXML = Core.ObjectiveXML || (Core.ObjectiveXML = {}));
 })(Core || (Core = {}));
 var Core;
 (function (Core) {

@@ -1,2 +1,2 @@
-namespace Core.Css {
+namespace Core.CSS {
 }

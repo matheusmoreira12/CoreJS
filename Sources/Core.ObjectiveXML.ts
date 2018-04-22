@@ -1,4 +1,4 @@
-namespace Core.ObjectiveXml {
+namespace Core.ObjectiveXML {
     export interface IValueConverter {
         convert(value: object): object;
         convertBack(value: object): object;

@@ -411,7 +411,7 @@ declare namespace Core {
         static syncArrays(srcArray: any[], destArray: any[], removeCallback?: Function, insertCallback?: Function, changeCallback?: Function, thisArg?: any): void;
     }
 }
-declare namespace Core.Css {
+declare namespace Core.CSS {
 }
 declare namespace Core.Decorators {
     function enumerable<T>(isEnumerable: boolean): (target: object, key: string, descriptor: PropertyDescriptor) => void;
@@ -422,7 +422,7 @@ declare namespace Core.HashCode {
     function fromString(str: string): number;
     function concatenate(hashCodes: Iterable<number>): number;
 }
-declare namespace Core.ObjectiveXml {
+declare namespace Core.ObjectiveXML {
     interface IValueConverter {
         convert(value: object): object;
         convertBack(value: object): object;
