@@ -3,12 +3,6 @@ namespace Core {
     export class ArrayUtils {
         static syncArrays(srcArray: any[], destArray: any[], removeCallback?: Function, insertCallback?: Function,
             changeCallback?: Function, thisArg?: any) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("srcArray", srcArray, Array);
-            Validation.RuntimeValidator.validateParameter("destArray", destArray, Array);
-            Validation.RuntimeValidator.validateParameter("removeCallback", removeCallback, Function);
-            Validation.RuntimeValidator.validateParameter("insertCallback", insertCallback, Function);
-            Validation.RuntimeValidator.validateParameter("changeCallback", changeCallback, Function);
             //change the items both arrays have in common
             for (var i = 0; i < srcArray.length && i < destArray.length; i++)
                 //call <function removeCallback(srcArray, destArray, index) { }>

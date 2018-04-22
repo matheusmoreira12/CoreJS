@@ -1,19 +1,4 @@
 declare namespace Core {
-    namespace Validation {
-        type ExpectedTypeDecorator = string | Function | (string | Function)[];
-        class Utils {
-            private static _expectedTypeNameAsMessageTags(expectedType);
-            static expectedTypeNameAsMessageTags(expectedType: ExpectedTypeDecorator): string;
-        }
-        class RuntimeValidator {
-            private static __parameterTypeIsValid(paramValue, paramExpectedType);
-            private static _parameterTypeIsValid(paramValue, paramExpectedType);
-            static validateParameter(paramName: string, paramValue: any, paramExpectedType: ExpectedTypeDecorator, isRequired?: boolean, isNullable?: boolean): void;
-            static validateArrayParameter(paramName: string, paramValue: any[], memberExpectedType: ExpectedTypeDecorator, itemIsNullable?: boolean, arrayIsRequired?: boolean, arrayIsNullable?: boolean): void;
-        }
-    }
-}
-declare namespace Core {
     type Method = (target: any, args: Object) => void;
     class MethodGroup {
         /**
@@ -53,6 +38,314 @@ declare namespace Core {
          * @param listener The method or <MethodGroup> to be detached.
          */
         detach(listener: MethodGroup | Method): void;
+    }
+}
+declare namespace Core.Collections.Generic {
+    type TestFunction<T> = (item: T, index: number, list: IList<T>) => boolean;
+    type SelectFunction<T, U> = (item: T, index: number, list: IList<T>) => U;
+    type CastFunction<T, U> = (item: T, index: number, list: IList<T>) => U;
+    interface IList<T> extends Iterable<T> {
+    }
+    class List<T> implements IList<T> {
+        /**
+         * Creates a new list containing the specified items.
+         * @param items
+         */
+        constructor(items: Iterable<T>);
+        /**
+         * Creates a new list with the specified number of items.
+         * @param items
+         */
+        constructor(count: number);
+        /**
+         * Creates a new empty list.
+         * @param items
+         */
+        constructor();
+        /**
+         * Returns an iterator for this list.
+         */
+        [Symbol.iterator](): Iterator<T>;
+        /**
+         * Gets an item at the specified zero-based position.
+         * @param index The index of the desired item.
+         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
+         * bounds.
+         */
+        getItemAt(index: number): T;
+        /**
+         * Gets an item at the specified zero-based position.
+         * @param index The index of the desired item.
+         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
+         * bounds.
+         */
+        setItemAt(index: number, item: T): void;
+        /**
+         * Gets the number of elements inside this list.
+         * @returns The number of elements in this list.
+         */
+        readonly count: number;
+        /**
+         * Converts this list to an array.
+         * @returns The resulting array.
+         */
+        toArray(): T[];
+        /**
+         * Gets invoked every time a new item gets added to this list.
+         */
+        itemAddedEvent: ListEvent<T>;
+        protected invokeOnItemAdded(args: ListEventArgs<T>): void;
+        /**
+         * Gets invoked every time an item gets removed from this list.
+         */
+        itemRemovedEvent: ListEvent<T>;
+        protected invokeOnItemRemoved(args: ListEventArgs<T>): void;
+        /**
+         * Gets invoked every time an item gets replaced by a new one in this list.
+         */
+        itemChangedEvent: ListEvent<T>;
+        protected invokeOnItemChanged(args: ListEventArgs<T>): void;
+        /**
+         * Gets the first item in this list.
+         * @returns The first item in this list.
+         */
+        getFirst(): T;
+        /**
+         * Gets the last item in this list.
+         * @returns The last item in this list.
+         */
+        getLast(): T;
+        /**
+         * Returns the zero-based position of the specified item in this list, or -1 if no match is found.
+         * @param item The item being searched.
+         * @param startIndex Optional. The index at which the search is started.
+         * @returns The index of the matching item.
+         */
+        indexOf(item: T, startIndex?: number): number;
+        /**
+         * Returns the last zero-based position of the specified item in this list, or -1 if no match is
+         * found.
+         * @param item The item being searched.
+         * @param endIndex Optional. The index at which the search is stopped.
+         * @returns The index of the last matching item.
+         */
+        lastIndexOf(item: T, endIndex?: number): number;
+        /**
+         * Adds multiple items to this list.
+         * @param items The items being added.
+         */
+        addRange(items: Iterable<T>): void;
+        /**
+         * Adds an item to this list.
+         * @param item The item being added.
+         */
+        add(item: T): void;
+        /**
+         * Inserts multiple items into this list, starting at the specified zero-based position.
+         * @param index The start position at which to start inserting the items.
+         * @param items The items being inserted.
+         * @throws <Exceptions.InvalidOperationException> if no match is found.
+         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
+         * bounds.
+         */
+        insertRange(index: number, items: Iterable<T>): void;
+        /**
+         * Inserts an item into this list at the specified zero-based position.
+         * @param index The position at which the item is being inserted.
+         * @param item The item being inserted.
+         * @throws <Exceptions.InvalidOperationException> if no match is found.
+         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
+         * bounds.
+         */
+        insert(index: number, item: T): void;
+        /**
+         * Moves an item in this list from a zero-based position to another.
+         * @param oldIndex The position the item is at.
+         * @param newIndex The position the item is being moved to.
+         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
+         * bounds.
+         */
+        move(oldIndex: number, newIndex: number): void;
+        /**
+         * Swaps two items at two different zero-based positions.
+         * @param index1 The position of the first item being swapped.
+         * @param index2 The position of the second item being swapped.
+         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
+         * bounds.
+         */
+        swap(index1: number, index2: number): void;
+        /**
+         * Removes an item at the specified zero-based position from this list and returns it.
+         * @param index The position of the item being removed.
+         * @returns The item being removed.
+         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
+         * bounds.
+         */
+        removeAt(index: number): T;
+        /**
+         * Removes an specific item from this generic collection.
+         * @param item The item being removed.
+         * @throws <Exceptions.InvalidOperationException> if no match is found.
+         */
+        remove(item: T): void;
+        /**
+         * Removes the specified number of items from this list, starting at the specified
+         * zero-based position.
+         * @param startIndex The position of the first item being removed.
+         * @param removeCount The number of elements being removed, counting from the start position.
+         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
+         * bounds.
+         */
+        removeRange(startIndex: number, removeCount: number): T[];
+        /**
+         * Replaces the item at the specified zero-based position by another, and returns it.
+         * @param index The position of the item being replaced.
+         * @param newItem The item replacing the current item at the specified position.
+         * @returns The item being replaced.
+         */
+        replaceAt(index: number, newItem: T): T;
+        /**
+         * Replaces an specific item from this generic collection by another.
+         * @param newItem
+         * @param oldItem
+         */
+        replace(oldItem: T, newItem: T): void;
+        /**
+         * Returns an array containing the items that match the specified predicate.
+         * @param testFn The predicate the items are being tested against.
+         */
+        filter(testFn: TestFunction<T>): Iterable<T>;
+        /**
+         * Selects a property from each of the items, according to the specified predicate.
+         * @param selectFn The predicate that determines which property is being selected from the
+         */
+        select<U>(selectFn: SelectFunction<T, U>): Iterable<T>;
+        /**
+         * Returns true if every one of the items in this list matches the specified predicate.
+         * @param testFn The predicate the items are being tested against.
+         */
+        every(testFn: TestFunction<T>): boolean;
+        /**
+         * Returns true if any of the items in this list matches the specified predicate.
+         * @param testFn The predicate the items are being tested against.
+         */
+        any(testFn: TestFunction<T>): boolean;
+        /**
+         * Returns the first item in this list that matches the specified predicate.
+         * @param testFn The predicate the items are being tested against.
+         */
+        first(testFn: TestFunction<T>): T;
+        /**
+         * Returns the last item in this list that matches the specified predicate.
+         * @param testFn The predicate the items are being tested against.
+         */
+        last(testFn: TestFunction<T>): T;
+        /**
+         * Fills this list with the spcified value, starting at the specified zero-based position, for the specified
+         * item count.
+         * @param value The item filling this list.
+         * @param startIndex The zero-based start position.
+         * @param count The number of times the specified item is filling this list.
+         */
+        fill(value: T, startIndex: number, count: number): void;
+    }
+    class KeyValuePair<Tkey, Tvalue> {
+        constructor(key: Tkey, value: Tvalue);
+        key: Tkey;
+        value: Tvalue;
+    }
+    class Dictionary<Tkey, Tvalue> extends List<KeyValuePair<Tkey, Tvalue>> {
+        /**
+         * Creates a new dictionary containing the specified key-value pairs.
+         * @param items
+         */
+        constructor(items: Iterable<KeyValuePair<Tkey, Tvalue>>);
+        /**
+         * Creates a new empty dictionary.
+         * @param items
+         */
+        constructor();
+        add(item: KeyValuePair<Tkey, Tvalue>): void;
+        setByKey(key: Tkey, value: Tvalue): void;
+        getByKey(key: Tkey): Tvalue;
+        hasKey(key: Tkey): boolean;
+    }
+    class GenericTreeItem<T> extends List<GenericTreeItem<T>> {
+        value: T;
+        parent: GenericTreeItem<T>;
+    }
+    type ListEventArgs<T> = {
+        oldItem: T;
+        newItem: T;
+        oldIndex: number;
+        newIndex: number;
+    };
+    type ListEventListener<T> = (target: List<T>, args: ListEventArgs<T>) => void;
+    class ListEvent<T> extends MethodGroup {
+        constructor(target: List<T>, defaultListener?: ListEventListener<T>);
+        target: List<T>;
+        attach(listener: ListEventListener<T> | ListEvent<T>): void;
+        detach(listener: ListEventListener<T> | ListEvent<T>): void;
+        invoke(args: ListEventArgs<T>): void;
+    }
+}
+declare namespace Core.Exceptions {
+    class ExceptionData extends Collections.Generic.Dictionary<any, any> {
+    }
+    class Exception {
+        constructor(message?: string, innerException?: Error);
+        readonly data: ExceptionData;
+        toString(): void;
+    }
+    /**The exception that is thrown when one of the arguments provided to a method is not valid. */
+    class ArgumentException extends Exception {
+        constructor(argumentName: string, message?: string, innerException?: Error);
+    }
+    /**The exception that is thrown when no reference is passed to a method that requires an argument. */
+    class ArgumentMissingException extends Exceptions.ArgumentException {
+    }
+    /**The exception that is thrown when a null reference is passed to a method that does not accept it as a valid
+     * argument. */
+    class ArgumentNullException extends ArgumentException {
+    }
+    /**The exception that is thrown when the value of an argument is outside the allowable range of values as defined
+     * by the invoked method. */
+    class ArgumentOutOfRangeException extends ArgumentException {
+    }
+    /**The exception that is thrown when the format of an argument is invalid, or when a composite format string is
+     * not well formed. */
+    class FormatException extends Exception {
+    }
+    /**The exception that is thrown when an attempt is made to access an element of an array or collection with an
+     * index that is outside its bounds. */
+    class IndexOutOfRangeException extends Exception {
+    }
+    /**A exce��o que � gerada quando uma chamada de m�todo � inv�lida para o estado atual do objeto. */
+    class InvalidOperationException extends Exception {
+    }
+    /**The exception that is thrown when the key specified for accessing an element in a collection does not match
+     * any key in the collection. */
+    class KeyNotFoundException extends Exception {
+    }
+    /**The exception that is thrown when an invoked method is not supported, or when there is an attempt to read,
+     * seek, or write to a stream that does not support the invoked functionality. */
+    class NotSupported extends Exception {
+    }
+    /**The exception that is thrown when a requested method or operation is not implemented. */
+    class NotImplemented extends Exception {
+    }
+    /**The exception that is thrown when the time allotted for a process or operation has expired. */
+    class TimeoutException extends Exception {
+    }
+}
+declare namespace Core {
+    namespace Validation {
+        type ExpectedType = Type | Type[];
+        class RuntimeValidator {
+            private static _parameterTypeIsValid(paramValue, paramExpectedType);
+            static validateParameter(paramName: string, paramValue: any, paramExpectedType: ExpectedType, isRequired?: boolean, isNullable?: boolean): void;
+            static validateArrayParameter(paramName: string, paramValue: any[], memberExpectedType: ExpectedType, itemIsNullable?: boolean, arrayIsRequired?: boolean, arrayIsNullable?: boolean): void;
+        }
     }
 }
 declare namespace Core.Events {
@@ -118,518 +411,255 @@ declare namespace Core {
         static syncArrays(srcArray: any[], destArray: any[], removeCallback?: Function, insertCallback?: Function, changeCallback?: Function, thisArg?: any): void;
     }
 }
-declare namespace Core.Collections {
-    type TestFunction<T> = (item: T, index: number, list: IGenericList<T>) => boolean;
-    type SelectFunction<T, U> = (item: T, index: number, list: IGenericList<T>) => U;
-    type CastFunction<T, U> = (item: T, index: number, list: IGenericList<T>) => U;
-    interface IGenericList<T> extends Iterable<T> {
-        /**
-         * Gets the number of elements inside this list.
-         * @returns The number of elements in this list.
-         */
-        length: number;
-        /**
-         * Converts this list to an array.
-         * @returns The resulting array.
-         */
-        toArray(): Array<T>;
-        /**
-         * Gets an item at the specified zero-based position.
-         * @param index The index of the desired item.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        getItemAt(index: number): T;
-        /**
-     * Gets invoked every time a new item gets added to this list.
-     */
-        itemAddedEvent: Collections.ListEvent<T>;
-        invokeOnItemAdded(args: Collections.ListEventArgs<T>): void;
-        /**
-         * Gets invoked every time an item gets removed from this list.
-         */
-        itemRemovedEvent: Collections.ListEvent<T>;
-        invokeOnItemRemoved(args: Collections.ListEventArgs<T>): void;
-        /**
-         * Gets invoked every time an item gets replaced by a new one in this list.
-         */
-        itemChangedEvent: Collections.ListEvent<T>;
-        invokeOnItemChanged(args: Collections.ListEventArgs<T>): void;
-        /**
-         * Gets the first item in this list.
-         * @returns The first item in this list.
-         */
-        getFirst(): T;
-        /**
-         * Gets the last item in this list.
-         * @returns The last item in this list.
-         */
-        getLast(): T;
-        /**
-         * Returns the zero-based position of the specified item in this list, or -1 if no match is found.
-         * @param item The item being searched.
-         * @param startIndex Optional. The index at which the search is started.
-         * @returns The index of the matching item.
-         */
-        indexOf(item: T, startIndex?: number): number;
-        /**
-         * Returns the last zero-based position of the specified item in this list, or -1 if no match is
-         * found.
-         * @param item The item being searched.
-         * @param endIndex Optional. The index at which the search is stopped.
-         * @returns The index of the last matching item.
-         */
-        lastIndexOf(item: T, endIndex?: number): number;
-        /**
-         * Adds multiple items to this list.
-         * @param items The items being added.
-         */
-        addMultiple(items: T[]): void;
-        /**
-         * Adds an item to this list.
-         * @param item The item being added.
-         */
-        add(item: T): void;
-        /**
-         * Inserts multiple items into this list, starting at the specified zero-based position.
-         * @param items The items being inserted.
-         * @param index The start position at which to start inserting the items.
-         * @throws <Exceptions.InvalidOperationException> if no match is found.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        insertMultiple(items: T[], index: number): void;
-        /**
-         * Inserts an item into this list at the specified zero-based position.
-         * @param item The item being inserted.
-         * @param index The position at which the item is being inserted.
-         * @throws <Exceptions.InvalidOperationException> if no match is found.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        insert(item: T, index: number): void;
-        /**
-         * Moves an item in this list from a zero-based position to another.
-         * @param oldIndex The position the item is at.
-         * @param newIndex The position the item is being moved to.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        moveAt(oldIndex: number, newIndex: number): void;
-        /**
-         * Moves an specific item to the specified zero-based position.
-         * @param item The item being moved.
-         * @param newIndex The position the item is being moved to.
-         * @throws <Exceptions.InvalidOperationException> if no match is found.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        move(item: T, newIndex: number): void;
-        /**
-         * Swaps two items at two different zero-based positions.
-         * @param index1 The position of the first item being swapped.
-         * @param index2 The position of the second item being swapped.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        swap(index1: number, index2: number): void;
-        /**
-         * Removes an item at the specified zero-based position from this list and returns it.
-         * @param index The position of the item being removed.
-         * @returns The item being removed.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        removeAt(index: number): T;
-        /**
-         * Removes an specific item from this generic collection.
-         * @param item The item being removed.
-         * @throws <Exceptions.InvalidOperationException> if no match is found.
-         */
-        remove(item: T): void;
-        /**
-         * Removes the specified number of items from this list, starting at the specified
-         * zero-based position.
-         * @param startIndex The position of the first item being removed.
-         * @param removeCount The number of elements being removed, counting from the start position.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        removeMultipleAt(startIndex: number, removeCount: number): T[];
-        /**
-        * Removes specific items from this generic collection.
-        * @param items The items being removed.
-        * @throws <Exceptions.InvalidOperationException> if no match is found.
-        */
-        removeMultiple(items: T[]): void;
-        /**
-         * Replaces the item at the specified zero-based position by another, and returns it.
-         * @param index The position of the item being replaced.
-         * @param newItem The item replacing the current item at the specified position.
-         * @returns The item being replaced.
-         */
-        replaceAt(index: number, newItem: T): T;
-        /**
-         * Replaces an specific item from this generic collection by another.
-         * @param newItem
-         * @param oldItem
-         */
-        replace(oldItem: T, newItem: T): void;
-        /**
-         * Returns an array containing the items that match the specified predicate.
-         * @param testFn The predicate the items are being tested against.
-         * @param thisArg The local context of the predicate function.
-         */
-        filter(testFn: TestFunction<T>, thisArg?: any): any;
-        /**
-         * Selects a property from each of the items, according to the specified predicate.
-         * @param selectFn The predicate that determines which property is being selected from the
-         * list items.
-         * @param thisArg The local context of the predicate function.
-         * @param thisArg The local context of the predicate function.
-         */
-        select<U>(selectFn: SelectFunction<T, U>, thisArg?: any): U[];
-        /**
-         * Returns true if every one of the items in this list matches the specified predicate.
-         * @param testFn The predicate the items are being tested against.
-         * @param thisArg The local context of the predicate function.
-         */
-        every(testFn: TestFunction<T>, thisArg?: any): boolean;
-        /**
-         * Returns true if any of the items in this list matches the specified predicate.
-         * @param testFn The predicate the items are being tested against.
-         * @param thisArg The local context of the predicate function.
-         */
-        some(testFn: TestFunction<T>, thisArg?: any): boolean;
-        /**
-         * Returns the first item in this list that matches the specified predicate.
-         * @param testFn The predicate the items are being tested against.
-         * @param thisArg The local context of the predicate function.
-         */
-        first(testFn: TestFunction<T>, thisArg?: any): T;
-        /**
-         * Returns the last item in this list that matches the specified predicate.
-         * @param testFn The predicate the items are being tested against.
-         * @param thisArg The local context of the predicate function.
-         */
-        last(testFn: TestFunction<T>, thisArg?: any): T;
-        /**
-         * Fills this list with the spcified value, starting at the specified zero-based position, for the specified
-         * item count.
-         * @param value The item filling this list.
-         * @param startIndex The zero-based start position.
-         * @param count The number of times the specified item is filling this list.
-         */
-        fill(value: T, startIndex: number, count: number): void;
+declare namespace Core.Css {
+}
+declare namespace Core.Decorators {
+    function enumerable<T>(isEnumerable: boolean): (target: object, key: string, descriptor: PropertyDescriptor) => void;
+    function writable(isWritable: boolean): (target: object, key: string, descriptor: PropertyDescriptor) => void;
+    function configurable(isConfigurable: boolean): (target: object, key: string, descriptor: PropertyDescriptor) => void;
+}
+declare namespace Core.HashCode {
+    function fromString(str: string): number;
+    function concatenate(hashCodes: Iterable<number>): number;
+}
+declare namespace Core.ObjectiveXml {
+    interface IValueConverter {
+        convert(value: object): object;
+        convertBack(value: object): object;
     }
-    namespace IGenericList {
-        function toArray<T>(list: IGenericList<T>): Array<T>;
-        function getCount<T>(list: IGenericList<T>): number;
-        function getItemAt<T>(list: IGenericList<T>, index: number): T;
-        function getFirst<T>(list: IGenericList<T>): T;
-        function getLast<T>(list: IGenericList<T>): T;
-        function indexOf<T>(list: IGenericList<T>, item: T, startIndex?: number): number;
-        function lastIndexOf<T>(list: IGenericList<T>, item: T, endIndex?: number): number;
-        function addMultiple<T>(list: IGenericList<T>, items: T[]): void;
-        function add<T>(list: IGenericList<T>, item: T): void;
-        function insertMultiple<T>(list: IGenericList<T>, items: T[], index: number): void;
-        function insert<T>(list: IGenericList<T>, item: T, index: number): void;
-        function moveAt<T>(list: IGenericList<T>, oldIndex: number, newIndex: number): void;
-        function move<T>(list: IGenericList<T>, item: T, newIndex: number): void;
-        function swap<T>(list: IGenericList<T>, index1: number, index2: number): void;
-        function removeAt<T>(list: IGenericList<T>, index: number): T;
-        function remove<T>(list: IGenericList<T>, item: T): void;
-        function removeMultipleAt<T>(list: IGenericList<T>, startIndex: number, removeCount: number): T[];
-        function removeMultiple<T>(list: IGenericList<T>, items: T[]): void;
-        function replaceAt<T>(list: IGenericList<T>, index: number, newItem: T): T;
-        function replace<T>(list: IGenericList<T>, oldItem: T, newItem: T): void;
-        function filter<T>(list: IGenericList<T>, predicate: TestFunction<T>, thisArg?: any): Array<T>;
-        function select<T, U>(list: IGenericList<T>, predicate: SelectFunction<T, U>, thisArg?: any): Array<U>;
-        function every<T>(list: IGenericList<T>, predicate: TestFunction<T>, thisArg?: any): boolean;
-        function some<T>(list: IGenericList<T>, predicate: TestFunction<T>, thisArg?: any): boolean;
-        function first<T>(list: IGenericList<T>, predicate: TestFunction<T>, thisArg?: any): T;
-        function last<T>(list: IGenericList<T>, predicate: TestFunction<T>, thisArg?: any): T;
-        function fill<T>(list: IGenericList<T>, value: T, startIndex: number, count: number): void;
+    interface IDependencyObject extends Object {
+        /**
+         * Gets the value of the specified dependency property.
+         * @param property The dependency property.
+         */
+        getValue(property: DependencyProperty): object;
+        /**
+         * Sets the value of the specified dependency property.
+         * @param property The dependency property.
+         * @param value The new value for the specified dependency property.
+         */
+        setValue(property: DependencyProperty, value: object): void;
     }
-    class GenericList<T> implements IGenericList<T> {
-        /**
-         * Creates a new instance of <IGenericList> from the original array items.
-         * @param original
-         */
-        constructor(...items: T[]);
-        constructor(original: T[]);
-        constructor(count: T[]);
-        constructor();
-        /**
-         * Returns an iterator for this <IGenericList>.
-         */
-        [Symbol.iterator](): Iterator<T>;
-        /**
-         * Gets an item at the specified zero-based position.
-         * @param index The index of the desired item.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        getItemAt(index: number): T;
-        /**
-         * Gets the number of elements inside this list.
-         * @returns The number of elements in this list.
-         */
-        length: number;
-        /**
-         * Converts this list to an array.
-         * @returns The resulting array.
-         */
-        toArray(): T[];
-        /**
-         * Gets invoked every time a new item gets added to this list.
-         */
-        itemAddedEvent: Collections.ListEvent<T>;
-        invokeOnItemAdded(args: Collections.ListEventArgs<T>): void;
-        /**
-         * Gets invoked every time an item gets removed from this list.
-         */
-        itemRemovedEvent: Collections.ListEvent<T>;
-        invokeOnItemRemoved(args: Collections.ListEventArgs<T>): void;
-        /**
-         * Gets invoked every time an item gets replaced by a new one in this list.
-         */
-        itemChangedEvent: Collections.ListEvent<T>;
-        invokeOnItemChanged(args: Collections.ListEventArgs<T>): void;
-        /**
-         * Gets the first item in this list.
-         * @returns The first item in this list.
-         */
-        getFirst(): T;
-        /**
-         * Gets the last item in this list.
-         * @returns The last item in this list.
-         */
-        getLast(): T;
-        /**
-         * Returns the zero-based position of the specified item in this list, or -1 if no match is found.
-         * @param item The item being searched.
-         * @param startIndex Optional. The index at which the search is started.
-         * @returns The index of the matching item.
-         */
-        indexOf(item: T, startIndex?: number): number;
-        /**
-         * Returns the last zero-based position of the specified item in this list, or -1 if no match is
-         * found.
-         * @param item The item being searched.
-         * @param endIndex Optional. The index at which the search is stopped.
-         * @returns The index of the last matching item.
-         */
-        lastIndexOf(item: T, endIndex?: number): number;
-        /**
-         * Adds multiple items to this list.
-         * @param items The items being added.
-         */
-        addMultiple(items: T[]): void;
-        /**
-         * Adds an item to this list.
-         * @param item The item being added.
-         */
-        add(item: T): void;
-        /**
-         * Inserts multiple items into this list, starting at the specified zero-based position.
-         * @param items The items being inserted.
-         * @param index The start position at which to start inserting the items.
-         * @throws <Exceptions.InvalidOperationException> if no match is found.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        insertMultiple(items: T[], index: number): void;
-        /**
-         * Inserts an item into this list at the specified zero-based position.
-         * @param item The item being inserted.
-         * @param index The position at which the item is being inserted.
-         * @throws <Exceptions.InvalidOperationException> if no match is found.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        insert(item: T, index: number): void;
-        /**
-         * Moves an item in this list from a zero-based position to another.
-         * @param oldIndex The position the item is at.
-         * @param newIndex The position the item is being moved to.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        moveAt(oldIndex: number, newIndex: number): void;
-        /**
-         * Moves an specific item to the specified zero-based position.
-         * @param item The item being moved.
-         * @param newIndex The position the item is being moved to.
-         * @throws <Exceptions.InvalidOperationException> if no match is found.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        move(item: T, newIndex: number): void;
-        /**
-         * Swaps two items at two different zero-based positions.
-         * @param index1 The position of the first item being swapped.
-         * @param index2 The position of the second item being swapped.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        swap(index1: number, index2: number): void;
-        /**
-         * Removes an item at the specified zero-based position from this list and returns it.
-         * @param index The position of the item being removed.
-         * @returns The item being removed.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        removeAt(index: number): T;
-        /**
-         * Removes an specific item from this generic collection.
-         * @param item The item being removed.
-         * @throws <Exceptions.InvalidOperationException> if no match is found.
-         */
-        remove(item: T): void;
-        /**
-         * Removes the specified number of items from this list, starting at the specified
-         * zero-based position.
-         * @param startIndex The position of the first item being removed.
-         * @param removeCount The number of elements being removed, counting from the start position.
-         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
-         * bounds.
-         */
-        removeMultipleAt(startIndex: number, removeCount: number): T[];
-        /**
-        * Removes specific items from this generic collection.
-        * @param items The items being removed.
-        * @throws <Exceptions.InvalidOperationException> if no match is found.
-        */
-        removeMultiple(items: T[]): void;
-        /**
-         * Replaces the item at the specified zero-based position by another, and returns it.
-         * @param index The position of the item being replaced.
-         * @param newItem The item replacing the current item at the specified position.
-         * @returns The item being replaced.
-         */
-        replaceAt(index: number, newItem: T): T;
-        /**
-         * Replaces an specific item from this generic collection by another.
-         * @param newItem
-         * @param oldItem
-         */
-        replace(oldItem: T, newItem: T): void;
-        /**
-         * Returns an array containing the items that match the specified predicate.
-         * @param testFn The predicate the items are being tested against.
-         * @param thisArg The local context of the predicate function.
-         */
-        filter(testFn: TestFunction<T>, thisArg?: any): any;
-        /**
-         * Selects a property from each of the items, according to the specified predicate.
-         * @param selectFn The predicate that determines which property is being selected from the
-         * list items.
-         * @param thisArg The local context of the predicate function.
-         */
-        select<U>(selectFn: SelectFunction<T, U>, thisArg?: any): U[];
-        /**
-         * Returns true if every one of the items in this list matches the specified predicate.
-         * @param testFn The predicate the items are being tested against.
-         * @param thisArg The local context of the predicate function.
-         */
-        every(testFn: TestFunction<T>, thisArg?: any): boolean;
-        /**
-         * Returns true if any of the items in this list matches the specified predicate.
-         * @param testFn The predicate the items are being tested against.
-         * @param thisArg The local context of the predicate function.
-         */
-        some(testFn: TestFunction<T>, thisArg?: any): boolean;
-        /**
-         * Returns the first item in this list that matches the specified predicate.
-         * @param testFn The predicate the items are being tested against.
-         * @param thisArg The local context of the predicate function.
-         */
-        first(testFn: TestFunction<T>, thisArg?: any): T;
-        /**
-         * Returns the last item in this list that matches the specified predicate.
-         * @param testFn The predicate the items are being tested against.
-         * @param thisArg The local context of the predicate function.
-         */
-        last(testFn: TestFunction<T>, thisArg?: any): T;
-        /**
-         * Fills this list with the spcified value, starting at the specified zero-based position, for the specified
-         * item count.
-         * @param value The item filling this list.
-         * @param startIndex The zero-based start position.
-         * @param count The number of times the specified item is filling this list.
-         */
-        fill(value: T, startIndex: number, count: number): void;
+    namespace IDependencyObject {
+        function getValue(owner: IDependencyObject, property: DependencyProperty): object;
+        function setValue(owner: IDependencyObject, property: DependencyProperty, value: object): void;
     }
-    class KeyValuePair<Tkey, Tvalue> {
-        constructor(key: Tkey, value: Tvalue);
-        key: Tkey;
-        value: Tvalue;
+    class DependencyObject extends Object implements IDependencyObject {
+        /**
+         * Gets the value of the specified dependency property.
+         * @param property The dependency property.
+         */
+        getValue(property: DependencyProperty): object;
+        /**
+         * Sets the value of the specified dependency property.
+         * @param property The dependency property.
+         * @param value The new value for the specified dependency property.
+         */
+        setValue(property: DependencyProperty, value: object): void;
     }
-    class GenericDictionary<Tkey, Tvalue> extends GenericList<KeyValuePair<Tkey, Tvalue>> {
+    class DependencyObjectType {
+        private static _registeredTypes;
+        private static _getUniqueId(type);
+        static fromSystemType(type: Type): DependencyObjectType;
+        private constructor();
+        /**
+         * Gets the DependencyObjectType of the immediate base class of the current DependencyObjectType.
+         */
+        readonly baseType: DependencyObjectType;
+        /**
+         * Gets a zero-based unique identifier for constant-time array lookup operations.
+         */
+        id: number;
+        /**
+         * Gets the name of the represented common language runtime (CLR) system type.
+         */
+        name: string;
+        /**
+         * Gets the common language runtime (CLR) system type represented by this DependencyObjectType.
+         */
+        environmentType: Type;
     }
-    class GenericTreeItem<T> extends GenericList<GenericTreeItem<T>> {
-        value: T;
-        parent: GenericTreeItem<T>;
-    }
-    type ListEventArgs<T> = {
-        oldItem: T;
-        newItem: T;
-        oldIndex: number;
-        newIndex: number;
+    type DependencyPropertyChangedEventArgs = {
+        property: DependencyProperty;
+        oldValue: object;
+        newValue: object;
     };
-    type ListEventListener<T> = (target: Collections.GenericList<T>, args: ListEventArgs<T>) => void;
-    class ListEvent<T> extends MethodGroup {
-        constructor(target: Collections.GenericList<T>, defaultListener?: ListEventListener<T>);
-        target: any;
-        attach(listener: ListEventListener<T> | ListEvent<T>): void;
-        detach(listener: ListEventListener<T> | ListEvent<T>): void;
-        invoke(args: ListEventArgs<T>): void;
+    type PropertyChangedCallback = (owner: IDependencyObject, args: DependencyPropertyChangedEventArgs) => void;
+    type CoerceValueCallback = (owner: IDependencyObject, baseValue: object) => object;
+    class PropertyMetadata {
+        /**
+         * Initializes a new instance of the PropertyMetadata class with the specified default value and callbacks.
+         * @param defaultValue The default value of the dependency property, usually provided as a value of some
+         * specific type.
+         * @param propertyChangedCallback Reference to a handler implementation that is to be called by the property
+         * system whenever the effective value of the property changes.
+         * @param coerceValueCallback Reference to a handler implementation that is to be called whenever the property
+         * system calls CoerceValue(DependencyProperty) against this property.
+         */
+        constructor(defaultValue?: object, propertyChangedCallback?: PropertyChangedCallback, coerceValueCallback?: CoerceValueCallback);
+        /**Gets or sets a reference to a CoerceValueCallback implementation specified in this metadata. */
+        coerceValueCallback: CoerceValueCallback;
+        /**Gets or sets the default value of the dependency property. */
+        defaultValue: object;
+        /**Gets a value that determines whether the metadata has been applied to a property in some way, resulting
+         * in the immutable state of that metadata instance. */
+        isSealed: boolean;
+        /**Gets or sets a reference to a PropertyChangedCallback implementation specified in this metadata. */
+        propertyChangedCallback: PropertyChangedCallback;
+        /**
+         * Called when this metadata has been applied to a property, which indicates that the metadata is being sealed.
+         * @param dp The dependency property to which the metadata has been applied.
+         * @param targetType The type associated with this metadata if this is type-specific metadata. If this
+         * is default metadata, this value is a null reference.
+         */
+        onApply(dp: DependencyProperty, targetType: Type): void;
+        /**
+         * Merges this metadata with the base metadata.
+         * @param baseMetadata The base metadata to merge with this instance's values.
+         * @param dp The dependency property to which this metadata is being applied.
+         */
+        merge(baseMetadata: PropertyMetadata, dp: DependencyProperty): void;
     }
-}
-declare namespace Core.Exceptions {
-    class Exception extends Error {
-        protected static getMessagePlainText(messageXml: string): string;
-        static getMessageTag(tagName: string, content: string): string;
-        constructor(messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        messageXml: string;
-        innerException: Error;
-        extraParams: any[];
+    class DependencyPropertyRegistryEntry {
+        property: DependencyProperty;
+        metadata: PropertyMetadata;
+        constructor(property: DependencyProperty, metadata: PropertyMetadata);
     }
-    class InvalidOperationException extends Exception {
-        constructor(messageXml?: string, innerException?: Error, ...extraParams: any[]);
+    type ValidateValueCallback = (value: object) => boolean;
+    class DependencyPropertyKey {
+        property: DependencyProperty;
+        /**
+         * Overrides the metadata of a read-only dependency property that is represented by this dependency
+         * property identifier.
+         * @param ownerType
+         * @param metadata
+         */
+        overrideMetadata(forType: Type, typeMetadata: PropertyMetadata): void;
     }
-    class InvalidTypeException extends Exception {
-        constructor(varName: string, expectedType: Validation.ExpectedTypeDecorator, messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        varName: string;
+    class DependencyProperty {
+        private static _propertyFromName;
+        private static _registerCommon(name, propertyType, ownerType, metadata, validateValueCallback);
+        /**
+         * Registers a dependency property with the specified property name, property type, owner type,
+         * property metadata, and a value validation callback for the property.
+         * @param name
+         * @param propertyType
+         * @param ownerType
+         * @param metadata
+         * @param validateValueCallback
+         */
+        static register(name: string, propertyType: Type, ownerType: Type, metadata?: PropertyMetadata, validateValueCallback?: ValidateValueCallback): DependencyProperty;
+        /**
+         * Registers an attached property with the specified property type, owner type, property metadata,
+         * and value validation callback for the property.
+         * @param name
+         * @param propertyType
+         * @param ownerType
+         * @param metadata
+         * @param validateValueCallback
+         */
+        static registerAttached(name: string, propertyType: Type, ownerType: Type, metadata?: PropertyMetadata, validateValueCallback?: ValidateValueCallback): DependencyProperty;
+        /**
+         * Gets the name of the dependency property.
+         */
+        name: string;
+        /**
+         * Gets the type that the dependency property uses for its value.
+         */
+        propertyType: Type;
+        /**
+         * Gets the type of the object that registered the dependency property with the property system,
+         * or added itself as owner of the property.
+         */
+        ownerType: Type;
+        /**
+         * Gets an internally generated value that uniquely identifies the dependency property.
+         */
+        globalIndex: number;
+        /**
+         * Gets a value that indicates whether the dependency property identified by this DependencyProperty
+         * instance is a read-only dependency property.
+         */
+        readOnly: boolean;
+        /**
+         * Gets the default metadata of the dependency property.
+         */
+        defaultMetadata: PropertyMetadata;
+        /**
+         * Adds another type as an owner of a dependency property that has already been registered, providing
+         * dependency property metadata for the dependency property as it will exist on the  provided owner type.
+         * @param ownerType
+         * @param metadata
+         */
+        addOwner(ownerType: Type, metadata?: PropertyMetadata): DependencyProperty;
+        /**
+         * Returns the metadata for this dependency property as it exists on a specified type.
+         * @param owner
+         */
+        getMetadata(owner: IDependencyObject | DependencyObjectType): void;
+        /**
+         * Gets the value validation callback for the dependency property.
+         */
+        validateValueCallback: ValidateValueCallback;
     }
-    class InvalidParameterException extends Exception {
-        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        paramName: string;
-    }
-    class ParameterOutOfRangeException extends Exception implements InvalidParameterException {
-        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        paramName: string;
-    }
-    class InvalidParameterTypeException extends Exception implements InvalidParameterException {
-        constructor(paramName: string, expectedType: Validation.ExpectedTypeDecorator, messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        paramName: string;
-        expectedType: string | string[] | Function;
-    }
-    class ParameterMissingException extends Exception implements InvalidParameterException {
-        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]);
-        paramName: string;
-    }
-}
-declare namespace Core.Hash {
-    function generateHashCode(str: string): number;
-    function concatenateHashCodes(hashCodes: Iterable<number>): number;
 }
 declare namespace Core.ObjectManipulation {
     function cloneObject(obj: object): object;
 }
 declare namespace Core {
+    class StringScannerBranchList extends Collections.Generic.List<StringScannerBranch> {
+    }
+    class StringScannerBranch {
+        constructor(parentBranch: StringScannerBranch, startIndex: number);
+        /**Gets a string representing the current character.*/
+        readonly currentChar: string;
+        /**Returns the partial string from the start position up to, but not including, the current index,
+         * trimming the start and end by the specified amount.
+         * @param trimEnd The number of characters being removed from the start of the string. If negative, the string
+         * is extended instead.
+         * @param trimStart The number of characters being removed from the end of the string. If negative, the string
+         * is extended instead.*/
+        getPartialString(trimStart: number, trimEnd: number): string;
+        /**Gets the partial string from the start position up to, but not including, the current index.*/
+        readonly partialString: string;
+        /**Gets the content being scanned, by reflecting the content of the parent branch.*/
+        readonly content: string;
+        /**Creates a sub-branch from this branch. */
+        derive(): StringScannerBranch;
+        /**Writes the current index to the parent branch. */
+        update(): void;
+        /**Gets the current zero-based position inside the content.*/
+        readonly index: number;
+        /**Gets the relative recursion from the start index to the current index. */
+        readonly count: number;
+        /**Gets length of the content being scanned. */
+        readonly length: number;
+        /**Gets the current zero-based position inside the content.*/
+        readonly startIndex: number;
+        /**Gets the parent branch this commits to, or null if this is the main branch.*/
+        readonly parentBranch: StringScannerBranch;
+        /**Advances the current index by the specified amount.
+         * @param steps
+         */
+        advance(steps?: number): void;
+        /**
+         * Jumps the current index to the spcified index.
+         * @param index
+         */
+        jump(index: number): void;
+        /**Resets the current index to the start index. */
+        reset(): void;
+    }
+    class StringScanner extends StringScannerBranch {
+        /**Gets the content being scanned*/
+        readonly content: string;
+        /**
+         * Creates a new instance of the StringScanner class.
+         * @param content The content being scanned.
+         * @param startIndex The zero-based position at which to start scanning.
+         */
+        constructor(content: string, startIndex?: number);
+    }
     class SearchMatch {
         constructor(value: string, startIndex: number);
         value: string;
@@ -652,13 +682,17 @@ declare namespace Core {
         function splice(str: string, start: number, delCount: number, newSubStr: string): string;
         function format(text: string, ...params: any[]): string;
         function searchRegExp(str: string, regexp: RegExp): SearchMatchList;
-        function fromCharArray(arr: string[]): string;
-        function toCharArray(str: string): any;
         function getCharRange(startChar: string, endChar: string): string[];
+        /**
+         * Gets the char range denoted by a RegEx-like [] notation.
+         * @param representation
+         */
         function toCharRange(representation: string): string[];
         function indexOfAny(str: string, searchStrings: string[], position?: number): number;
         function lastIndexOfAny(str: string, searchStrings: string[], position?: number): number;
         function matchString(str: string, regex: RegExp): string;
+        function indexOfRegex(str: string, regex: RegExp, fromIndex: number): number;
+        function indexOfRegexOrDefault(str: string, regex: RegExp, fromIndex: number, defaultIndex: number): number;
     }
 }
 declare namespace Core {
@@ -686,51 +720,17 @@ declare namespace Core {
          */
         constructor(obj: Object | Function);
         private _typeConstructor;
+        /** Returns the name of this Type.*/
+        readonly name: string;
+        /** Returns the parent type of this Type.*/
+        readonly parentType: Type;
         /**
          * Returns a value indicating whether the specified source type is equivalent to the specified reference type.
          * @param tRef The reference type.
          */
         equals(tRef: Type): boolean;
-        /** Returns the name of this Type.*/
-        readonly name: string;
-        /** Returns the parent type of this Type.*/
-        readonly parentType: Type;
-    }
-}
-declare namespace Core {
-    const KEYFRAMES_FADEIN: {
-        filter: string[];
-    };
-    const KEYFRAMES_FADEOUT: {
-        filter: string[];
-    };
-    const KEYFRAMES_BOUNCE: {
-        transform: string[];
-    };
-    const KEYFRAMES_GROW: {
-        transform: string[];
-    };
-    const KEYFRAMES_SHRINK: {
-        transform: string[];
-    };
-    const KEYFRAMES_FLIP: {
-        transform: string[];
-    };
-}
-declare namespace Core.UserInterface {
-    class AttributePropertyAssociator {
-        constructor(target: Node);
-        private _associations;
-        protected target: Node;
-        private _getAssociatedPropertyName(attributeName);
-        private _getAssociatedAttributeName(propertyName);
-        private _onPropertyChanged(target, args);
-        propertyChangedEvent: Events.PropertyChangedEvent;
-        onPropertyChanged(propertyName: string, args: Events.PropertyChangedEventArgs): void;
-        private _onAttributeChanged(target, args);
-        attributeChangedEvent: Events.PropertyChangedEvent;
-        onAttributeChanged(propertyName: string, args: Events.PropertyChangedEventArgs): void;
-        associate(propertyName: string, attributeName?: string): void;
+        /**Returns a string representing the inheritance tree for this type. */
+        inheritanceToString(): string;
     }
 }
 declare namespace Core.UserInterface {
@@ -743,23 +743,10 @@ declare namespace Core.UserInterface {
         value: string;
         type: ContentType;
     }
-    enum FlexibleValueUnit {
-        Number = 0,
-        Percent = 1,
-    }
-    namespace FlexibleValueUnit {
-        function parse(unitStr: string): FlexibleValueUnit;
-        function toString(unit: FlexibleValueUnit): string;
-    }
-    class FlexibleValue {
-        static infer(value: FlexibleValueDecorator): FlexibleValue;
-        static parse(str: string): FlexibleValue;
-        constructor(value: number, unit: FlexibleValueUnit);
-        value: number;
-        unit: FlexibleValueUnit;
+    class Percentage extends Number {
+        static parse(str: string): number;
         toString(): string;
     }
-    type FlexibleValueDecorator = FlexibleValue | string | number;
     enum ColorType {
         RGB = 0,
         RGBA = 1,
@@ -767,59 +754,47 @@ declare namespace Core.UserInterface {
         HSL = 3,
         HSV = 4,
     }
-    namespace ColorType {
-        function parse(str: string): ColorType;
-        function toString(style: ColorType): string;
-    }
     abstract class Color {
-        private static _inferFromInt(value);
-        static infer(value: string | number | Color): Color;
+        static fromInt(value: number): ColorRGB;
         static parse(str: string): Color;
         constructor(type: ColorType);
         toString(): string;
         type: ColorType;
     }
     class ColorRGB extends Color {
-        constructor(r: FlexibleValueDecorator, g: FlexibleValueDecorator, b: FlexibleValueDecorator);
-        r: FlexibleValue;
-        g: FlexibleValue;
-        b: FlexibleValue;
+        constructor(r: string, g: string, b: string);
+        r: Number;
+        g: Number;
+        b: Number;
     }
     class ColorRGBA extends Color {
-        constructor(r: FlexibleValueDecorator, g: FlexibleValueDecorator, b: FlexibleValueDecorator, a: FlexibleValueDecorator);
-        r: FlexibleValue;
-        g: FlexibleValue;
-        b: FlexibleValue;
-        a: FlexibleValue;
+        static parse(str: string): any;
+        constructor(r: string, g: string, b: string, a: string);
+        r: Number;
+        g: Number;
+        b: Number;
+        a: Number;
     }
     class ColorCMYK extends Color {
-        constructor(c: FlexibleValueDecorator, m: FlexibleValueDecorator, y: FlexibleValueDecorator, k: FlexibleValueDecorator);
-        c: FlexibleValue;
-        m: FlexibleValue;
-        y: FlexibleValue;
-        k: FlexibleValue;
+        constructor(c: string, m: string, y: string, k: string);
+        c: Number;
+        m: Number;
+        y: Number;
+        k: Number;
     }
     class ColorHSL extends Color {
-        constructor(h: FlexibleValueDecorator, s: FlexibleValueDecorator, l: FlexibleValueDecorator);
-        h: FlexibleValue;
-        s: FlexibleValue;
-        l: FlexibleValue;
+        constructor(h: string, s: string, l: string);
+        h: Number;
+        s: Number;
+        l: Number;
     }
     class ColorHSV extends Color {
-        constructor(h: FlexibleValueDecorator, s: FlexibleValueDecorator, v: FlexibleValueDecorator);
-        h: FlexibleValue;
-        s: FlexibleValue;
-        v: FlexibleValue;
+        constructor(h: string, s: string, v: string);
+        h: Number;
+        s: Number;
+        v: Number;
     }
-    class BrushList extends Collections.GenericList<Brush> {
-        static parse(str: string): BrushList;
-        toString(): string;
-        add(item: Brush): void;
-        addMultiple(items: Brush[]): void;
-        insert(item: Brush): void;
-        insertMultiple(items: Brush[]): void;
-        replace(oldItem: Brush, newItem: Brush): void;
-        replaceAt(index: number, newItem: Brush): Brush;
+    class BrushList extends Collections.Generic.List<Brush> {
     }
     enum BrushType {
         Image = 0,
@@ -856,18 +831,12 @@ declare namespace Core.UserInterface {
     class ConicGradientBrush extends GradientBrush {
         constructor(stops?: GradientStop[]);
     }
-    class GradientStopList extends Collections.GenericList<GradientStop> {
-        add(item: GradientStop): void;
-        addMultiple(items: GradientStop[]): void;
-        insert(item: GradientStop): void;
-        insertMultiple(items: GradientStop[]): void;
-        replace(oldItem: GradientStop, newItem: GradientStop): void;
-        replaceAt(index: number, newItem: GradientStop): GradientStop;
+    class GradientStopList extends Collections.Generic.List<GradientStop> {
     }
     class GradientStop {
-        constructor(color: Color, offset: FlexibleValueDecorator);
+        constructor(color: Color, offset: string);
         color: Color;
-        offset: FlexibleValue;
+        offset: Number;
     }
     enum LengthUnit {
         Number = 0,
@@ -909,428 +878,6 @@ declare namespace Core.UserInterface {
         function parse(str: string): BorderStyle;
         function toString(style: BorderStyle): string;
     }
-}
-declare namespace Core.UserInterface.Primitives {
-    class ElementList extends Collections.GenericList<HTMLElement> {
-        constructor(parentContainer: ElementContainer, original: HTMLElement[]);
-        constructor(parentContainer: ElementContainer);
-        add(item: HTMLElement): void;
-        addMultiple(items: HTMLElement[]): void;
-        insert(item: HTMLElement): void;
-        insertMultiple(items: HTMLElement[]): void;
-        replace(oldItem: HTMLElement, newItem: HTMLElement): void;
-        replaceAt(index: number, newItem: HTMLElement): HTMLElement;
-        parentContainer: ElementContainer;
-    }
-    class ElementContainer extends HTMLElement {
-        constructor();
-        private _adoptElement(elem, index);
-        private _rejectElement(elem);
-        private _onElementAdded(target, args);
-        private _onElementChanged(target, args);
-        private _onElementRemoved(target, args);
-        elements: ElementList;
-    }
-    class ContentContainer extends HTMLElement {
-        constructor();
-        content: Content;
-        _content: Content;
-        private update();
-    }
-    class Label extends ContentContainer {
-        setText(text: string, ...params: any[]): void;
-    }
-    class LabelableContainer extends HTMLElement {
-        private createLabelElement();
-        constructor();
-        protected shadow: ShadowRoot;
-        labelElement: Label;
-        labelContent: Content;
-        setLabelText(text: string, ...params: any[]): void;
-    }
-}
-declare namespace Core.Events {
-    import ElementContainer = UserInterface.Primitives.ElementContainer;
-    type ElementContainerEventArgs = {
-        oldItem: HTMLElement;
-        newItem: HTMLElement;
-        oldIndex: number;
-        newIndex: number;
-    };
-    type ElementContainerEventListener = (target: ElementContainer, args: ElementContainerEventArgs) => void;
-    class ElementContainerEvent extends MethodGroup {
-        constructor(target: ElementContainer, defaultListener?: ElementContainerEventListener);
-        target: any;
-        attach(listener: ElementContainerEventListener | ElementContainerEvent): void;
-        detach(listener: ElementContainerEventListener | ElementContainerEvent): void;
-        invoke(args: ElementContainerEventArgs): void;
-    }
-}
-declare namespace Core.UserInterface.Icons {
-    class Icon {
-        constructor(name: string, x: number, y: number, width?: number, height?: number);
-        name: string;
-        x: number;
-        y: number;
-        parentList: any;
-        width: number;
-        private _width;
-        height: number;
-        private _height;
-        readonly spriteSrc: any;
-    }
-    class IconList extends Collections.GenericList<Icon> {
-        constructor(name: string, spriteSrc: string, width: number, height: number, icons?: Icon[]);
-        name: string;
-        spriteSrc: string;
-        width: number;
-        height: number;
-        private _rejectIcon(icon);
-        private _adoptIcon(icon);
-        private _onItemAdded(target, args);
-        private _onItemRemoved(target, args);
-        private _onItemChanged(target, args);
-        getIconByName(name: string): any;
-    }
-    class IconManager {
-        private static activeIconCollections;
-        static addList(iconList: IconList): void;
-        static removeList(iconList: IconList): void;
-        static getListByName(name: any): any;
-        static getIconByNames(collectionName: any, iconName: any): any;
-    }
-}
-declare namespace Core.UserInterface {
-    class IconElement extends HTMLElement {
-        constructor();
-        icon: Icons.Icon;
-        private _icon;
-        private shadow;
-        private spriteImageElement;
-        updateSpriteImage(): void;
-        private createSpriteImageElement();
-    }
-}
-declare namespace Core.UserInterface {
-    class Button extends HTMLButtonElement {
-        private createIconElement();
-        private createContentElement();
-        constructor();
-        attributePropertyAssociator: AttributePropertyAssociator;
-        value: string;
-        private _value;
-        isDefault: boolean;
-        private _isDefault;
-        icon: Icons.Icon;
-        private _icon;
-        content: Content;
-        protected shadow: ShadowRoot;
-        private iconElement;
-        private contentElement;
-    }
-    class CloseButton extends Button {
-        constructor();
-    }
-}
-declare namespace Core.UserInterface.Colors {
-    const Pink: Color;
-    const LightPink: Color;
-    const HotPink: Color;
-    const DeepPink: Color;
-    const PaleVioletRed: Color;
-    const MediumVioletRed: Color;
-    const LightSalmon: Color;
-    const Salmon: Color;
-    const DarkSalmon: Color;
-    const LightCoral: Color;
-    const IndianRed: Color;
-    const Crimson: Color;
-    const FireBrick: Color;
-    const DarkRed: Color;
-    const Red: Color;
-    const OrangeRed: Color;
-    const Tomato: Color;
-    const Coral: Color;
-    const DarkOrange: Color;
-    const Orange: Color;
-    const Yellow: Color;
-    const LightYellow: Color;
-    const LemonChiffon: Color;
-    const LightGoldenrodYellow: Color;
-    const PapayaWhip: Color;
-    const Moccasin: Color;
-    const PeachPuff: Color;
-    const PaleGoldenrod: Color;
-    const Khaki: Color;
-    const DarkKhaki: Color;
-    const Gold: Color;
-    const Cornsilk: Color;
-    const BlanchedAlmond: Color;
-    const Bisque: Color;
-    const NavajoWhite: Color;
-    const Wheat: Color;
-    const BurlyWood: Color;
-    const Tan: Color;
-    const RosyBrown: Color;
-    const SandyBrown: Color;
-    const Goldenrod: Color;
-    const DarkGoldenrod: Color;
-    const Peru: Color;
-    const Chocolate: Color;
-    const SaddleBrown: Color;
-    const Sienna: Color;
-    const Brown: Color;
-    const Maroon: Color;
-    const DarkOliveGreen: Color;
-    const Olive: Color;
-    const OliveDrab: Color;
-    const YellowGreen: Color;
-    const LimeGreen: Color;
-    const Lime: Color;
-    const LawnGreen: Color;
-    const Chartreuse: Color;
-    const GreenYellow: Color;
-    const SpringGreen: Color;
-    const MediumSpringGreen: Color;
-    const LightGreen: Color;
-    const PaleGreen: Color;
-    const DarkSeaGreen: Color;
-    const MediumAquamarine: Color;
-    const MediumSeaGreen: Color;
-    const SeaGreen: Color;
-    const ForestGreen: Color;
-    const Green: Color;
-    const DarkGreen: Color;
-    const Aqua: Color;
-    const Cyan: Color;
-    const LightCyan: Color;
-    const PaleTurquoise: Color;
-    const Aquamarine: Color;
-    const Turquoise: Color;
-    const MediumTurquoise: Color;
-    const DarkTurquoise: Color;
-    const LightSeaGreen: Color;
-    const CadetBlue: Color;
-    const DarkCyan: Color;
-    const Teal: Color;
-    const LightSteelBlue: Color;
-    const PowderBlue: Color;
-    const LightBlue: Color;
-    const SkyBlue: Color;
-    const LightSkyBlue: Color;
-    const DeepSkyBlue: Color;
-    const DodgerBlue: Color;
-    const CornflowerBlue: Color;
-    const SteelBlue: Color;
-    const RoyalBlue: Color;
-    const Blue: Color;
-    const MediumBlue: Color;
-    const DarkBlue: Color;
-    const Navy: Color;
-    const MidnightBlue: Color;
-    const Lavender: Color;
-    const Thistle: Color;
-    const Plum: Color;
-    const Violet: Color;
-    const Orchid: Color;
-    const Fuchsia: Color;
-    const Magenta: Color;
-    const MediumOrchid: Color;
-    const MediumPurple: Color;
-    const BlueViolet: Color;
-    const DarkViolet: Color;
-    const DarkOrchid: Color;
-    const DarkMagenta: Color;
-    const Purple: Color;
-    const Indigo: Color;
-    const DarkSlateBlue: Color;
-    const SlateBlue: Color;
-    const MediumSlateBlue: Color;
-    const White: Color;
-    const Snow: Color;
-    const Honeydew: Color;
-    const MintCream: Color;
-    const Azure: Color;
-    const AliceBlue: Color;
-    const GhostWhite: Color;
-    const WhiteSmoke: Color;
-    const Seashell: Color;
-    const Beige: Color;
-    const OldLace: Color;
-    const FloralWhite: Color;
-    const Ivory: Color;
-    const AntiqueWhite: Color;
-    const Linen: Color;
-    const LavenderBlush: Color;
-    const MistyRose: Color;
-    const Gainsboro: Color;
-    const LightGray: Color;
-    const Silver: Color;
-    const DarkGray: Color;
-    const Gray: Color;
-    const DimGray: Color;
-    const LightSlateGray: Color;
-    const SlateGray: Color;
-    const DarkSlateGray: Color;
-    const Black: Color;
-    const Transparent: ColorRGBA;
-    function fromName(name: string): any;
-}
-declare namespace Core.UserInterface {
-    class ControlVisualPropertyManager {
-    }
-    class ControlStylesheetManager {
-        constructor(target: Control);
-        private _stylesheets;
-        private _target;
-        prependStylesheet(href: any): HTMLLinkElement;
-        getStylesheetByHref(href: string): HTMLLinkElement;
-        removeStylesheet(stylesheet: HTMLLinkElement): void;
-    }
-    class Control extends HTMLElement implements XAML.IDependencyObject {
-        getValue(property: XAML.DependencyProperty): object;
-        setValue(property: XAML.DependencyProperty, value: object): void;
-        private _populateControl();
-        constructor();
-        protected _stylesheetManager: ControlStylesheetManager;
-        protected _outerBox: ControlOuterBox;
-        protected _innerBox: ControlInnerBox;
-        widthProperty: XAML.DependencyProperty;
-        width: Length;
-        minimumWidthProperty: XAML.DependencyProperty;
-        minimumWidth: Length;
-        maximumWidthProperty: XAML.DependencyProperty;
-        maximumWidth: Length;
-        heightProperty: XAML.DependencyProperty;
-        height: Length;
-        minimumHeightProperty: XAML.DependencyProperty;
-        minimumHeight: Length;
-        maximumHeightProperty: XAML.DependencyProperty;
-        maximumHeight: Length;
-        backgroundColorProperty: XAML.DependencyProperty;
-        backgroundColor: Color;
-        backgroundImageProperty: XAML.DependencyProperty;
-        backgroundImage: Brush;
-        borderColorProperty: XAML.DependencyProperty;
-        borderColor: Color;
-        borderWidthProperty: XAML.DependencyProperty;
-        borderWidth: Length;
-    }
-    class ControlOuterBox extends HTMLElement {
-    }
-    class ControlInnerBox extends HTMLElement {
-    }
-}
-declare namespace Core.UserInterface {
-    class DataGrid extends HTMLElement {
-        private createTableElement();
-        constructor();
-        protected shadow: ShadowRoot;
-        private tableElement;
-        readonly head: DataGridSection;
-        readonly body: DataGridSection;
-    }
-    class DataGridTable extends HTMLElement {
-        private createHeadElement();
-        private createBodyElement();
-        constructor();
-        head: DataGridSection;
-        body: DataGridSection;
-    }
-    class DataGridSection extends Primitives.ElementContainer {
-    }
-    class DataGridRow extends Primitives.ElementContainer {
-    }
-    class DataGridCell extends Primitives.ElementContainer {
-        constructor();
-        selected: boolean;
-    }
-}
-declare namespace Core.UserInterface.Dialogs {
-    class DialogTitle extends Primitives.ContentContainer {
-    }
-    class DialogTitleBar extends HTMLDialogElement {
-        constructor();
-        _titleElement: DialogTitle;
-        _closeButtonElement: CloseButton;
-        titleContent: Content;
-    }
-    class DialogContent extends Primitives.ElementContainer {
-    }
-    class DialogMessage extends Primitives.ContentContainer {
-    }
-    class Dialog extends HTMLDialogElement {
-        constructor();
-        dialogTitle: Content;
-        readonly messageElements: Primitives.ElementList;
-        readonly buttonBarElements: Primitives.ElementList;
-        _titleBarElement: DialogTitleBar;
-        _contentElement: DialogContent;
-        _buttonBarElement: Forms.ButtonBar;
-        returnValue: string;
-    }
-    class Dialogs {
-    }
-}
-declare namespace Core.UserInterface.Forms {
-    class FormItem extends Primitives.LabelableContainer {
-        element: HTMLElement;
-        private _element;
-    }
-    class ButtonOptions {
-        constructor(value?: string, content?: Content, icon?: Icons.Icon, title?: string, isDefault?: boolean);
-        value: string;
-        content: Content;
-        icon: Icons.Icon;
-        title: string;
-    }
-    class ButtonType {
-        constructor(defaultValue?: string, ...buttons: ButtonOptions[]);
-        buttons: ButtonOptions[];
-        defaultValue: string;
-    }
-    const BTN_OPTIONS_YES: ButtonOptions;
-    const BTN_OPTIONS_NO: ButtonOptions;
-    const BTN_OPTIONS_CANCEL: ButtonOptions;
-    const BTN_OPTIONS_OK: ButtonOptions;
-    const BTN_TYPE_YESNO: ButtonType;
-    const BTN_TYPE_YESNOCANCEL: ButtonType;
-    const BTN_TYPE_YESCANCEL: ButtonType;
-    const BTN_TYPE_NOCANCEL: ButtonType;
-    const BTN_TYPE_OK: ButtonType;
-    const BTN_TYPE_OKCANCEL: ButtonType;
-    class ButtonBar extends Primitives.ElementContainer {
-        private static _getButtonsFromType(type);
-        constructor(buttonType?: ButtonType);
-        defaultButton: HTMLButtonElement;
-    }
-}
-declare namespace Core.UserInterface {
-    class ProgressBar extends Control {
-        private _populate();
-        constructor();
-        private _stylesheetElement;
-        private _innerElement;
-        private _fillElement;
-        private _onProgress(target, args);
-        progressEvent: Events.ProgressEvent;
-        labelFormat: string;
-        private _labelFormat;
-        labelElement: Primitives.Label;
-        indeterminate: boolean;
-        private _indeterminate;
-        value: number;
-        private _value;
-        min: number;
-        _min: number;
-        max: number;
-        _max: number;
-        private _updateLabel(done, total, percent);
-        private _updateVisuals();
-    }
-}
-declare namespace Core.UserInterface.Utils {
-    function prependChild(elem: Node, child: Node): void;
 }
 declare namespace Core.Web {
     class AjaxRequestOptions {
@@ -1457,185 +1004,5 @@ declare namespace Core.Web {
     const STATUS_NETWORK_AUTH_REQUIRED = 511;
     class LoadException extends Exceptions.Exception {
         constructor(ajax: AjaxRequest, message?: string);
-    }
-}
-declare namespace Core.XAML {
-    interface IValueConverter {
-        convert(value: object): object;
-        convertBack(value: object): object;
-    }
-    interface IDependencyObject extends Object {
-        /**
-         * Gets the value of the specified dependency property.
-         * @param property The dependency property.
-         */
-        getValue(property: DependencyProperty): object;
-        /**
-         * Sets the value of the specified dependency property.
-         * @param property The dependency property.
-         * @param value The new value for the specified dependency property.
-         */
-        setValue(property: DependencyProperty, value: object): void;
-    }
-    namespace IDependencyObject {
-        function getValue(owner: IDependencyObject, property: DependencyProperty): object;
-        function setValue(owner: IDependencyObject, property: DependencyProperty, value: object): void;
-    }
-    class DependencyObject extends Object implements IDependencyObject {
-        /**
-         * Gets the value of the specified dependency property.
-         * @param property The dependency property.
-         */
-        getValue(property: DependencyProperty): object;
-        /**
-         * Sets the value of the specified dependency property.
-         * @param property The dependency property.
-         * @param value The new value for the specified dependency property.
-         */
-        setValue(property: DependencyProperty, value: object): void;
-    }
-    class DependencyObjectType {
-        private static _registeredTypes;
-        private static _getUniqueId(type);
-        static fromSystemType(type: Type): DependencyObjectType;
-        private constructor();
-        /**
-         * Gets the DependencyObjectType of the immediate base class of the current DependencyObjectType.
-         */
-        readonly baseType: DependencyObjectType;
-        /**
-         * Gets a zero-based unique identifier for constant-time array lookup operations.
-         */
-        id: number;
-        /**
-         * Gets the name of the represented common language runtime (CLR) system type.
-         */
-        name: string;
-        /**
-         * Gets the common language runtime (CLR) system type represented by this DependencyObjectType.
-         */
-        environmentType: Type;
-    }
-    type DependencyPropertyChangedEventArgs = {
-        property: DependencyProperty;
-        oldValue: object;
-        newValue: object;
-    };
-    type PropertyChangedCallback = (owner: IDependencyObject, args: DependencyPropertyChangedEventArgs) => void;
-    type CoerceValueCallback = (owner: IDependencyObject, baseValue: object) => object;
-    class PropertyMetadata {
-        /**
-         * Initializes a new instance of the PropertyMetadata class with the specified default value and callbacks.
-         * @param defaultValue The default value of the dependency property, usually provided as a value of some
-         * specific type.
-         * @param propertyChangedCallback Reference to a handler implementation that is to be called by the property
-         * system whenever the effective value of the property changes.
-         * @param coerceValueCallback Reference to a handler implementation that is to be called whenever the property
-         * system calls CoerceValue(DependencyProperty) against this property.
-         */
-        constructor(defaultValue?: object, propertyChangedCallback?: PropertyChangedCallback, coerceValueCallback?: CoerceValueCallback);
-        /**Gets or sets a reference to a CoerceValueCallback implementation specified in this metadata. */
-        coerceValueCallback: CoerceValueCallback;
-        /**Gets or sets the default value of the dependency property. */
-        defaultValue: object;
-        /**Gets a value that determines whether the metadata has been applied to a property in some way, resulting
-         * in the immutable state of that metadata instance. */
-        isSealed: boolean;
-        /**Gets or sets a reference to a PropertyChangedCallback implementation specified in this metadata. */
-        propertyChangedCallback: PropertyChangedCallback;
-        /**
-         * Called when this metadata has been applied to a property, which indicates that the metadata is being sealed.
-         * @param dp The dependency property to which the metadata has been applied.
-         * @param targetType The type associated with this metadata if this is type-specific metadata. If this
-         * is default metadata, this value is a null reference.
-         */
-        onApply(dp: DependencyProperty, targetType: Type): void;
-        /**
-         * Merges this metadata with the base metadata.
-         * @param baseMetadata The base metadata to merge with this instance's values.
-         * @param dp The dependency property to which this metadata is being applied.
-         */
-        merge(baseMetadata: PropertyMetadata, dp: DependencyProperty): void;
-    }
-    class DependencyPropertyRegistryEntry {
-        property: DependencyProperty;
-        metadata: PropertyMetadata;
-        constructor(property: DependencyProperty, metadata: PropertyMetadata);
-    }
-    type ValidateValueCallback = (value: object) => boolean;
-    class DependencyPropertyKey {
-        property: DependencyProperty;
-        /**
-         * Overrides the metadata of a read-only dependency property that is represented by this dependency
-         * property identifier.
-         * @param ownerType
-         * @param metadata
-         */
-        overrideMetadata(forType: Type, typeMetadata: PropertyMetadata): void;
-    }
-    class DependencyProperty {
-        private static _registerCommon(name, propertyType, ownerType, metadata, validateValueCallback);
-        /**
-         * Registers a dependency property with the specified property name, property type, owner type,
-         * property metadata, and a value validation callback for the property.
-         * @param name
-         * @param propertyType
-         * @param ownerType
-         * @param metadata
-         * @param validateValueCallback
-         */
-        static register(name: string, propertyType: Type, ownerType: Type, metadata?: PropertyMetadata, validateValueCallback?: ValidateValueCallback): DependencyProperty;
-        /**
-         * Registers an attached property with the specified property type, owner type, property metadata,
-         * and value validation callback for the property.
-         * @param name
-         * @param propertyType
-         * @param ownerType
-         * @param metadata
-         * @param validateValueCallback
-         */
-        static registerAttached(name: string, propertyType: Type, ownerType: Type, metadata?: PropertyMetadata, validateValueCallback?: ValidateValueCallback): DependencyProperty;
-        /**
-         * Gets the name of the dependency property.
-         */
-        name: string;
-        /**
-         * Gets the type that the dependency property uses for its value.
-         */
-        propertyType: Type;
-        /**
-         * Gets the type of the object that registered the dependency property with the property system,
-         * or added itself as owner of the property.
-         */
-        ownerType: Type;
-        /**
-         * Gets an internally generated value that uniquely identifies the dependency property.
-         */
-        globalIndex: number;
-        /**
-         * Gets a value that indicates whether the dependency property identified by this DependencyProperty
-         * instance is a read-only dependency property.
-         */
-        readOnly: boolean;
-        /**
-         * Gets the default metadata of the dependency property.
-         */
-        defaultMetadata: PropertyMetadata;
-        /**
-         * Adds another type as an owner of a dependency property that has already been registered, providing
-         * dependency property metadata for the dependency property as it will exist on the  provided owner type.
-         * @param ownerType
-         * @param metadata
-         */
-        addOwner(ownerType: Type, metadata?: PropertyMetadata): DependencyProperty;
-        /**
-         * Returns the metadata for this dependency property as it exists on a specified type.
-         * @param owner
-         */
-        getMetadata(owner: IDependencyObject | DependencyObjectType): void;
-        /**
-         * Gets the value validation callback for the dependency property.
-         */
-        validateValueCallback: ValidateValueCallback;
     }
 }

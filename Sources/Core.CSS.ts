@@ -1,0 +1,2 @@
+namespace Core.Css {
+}

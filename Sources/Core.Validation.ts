@@ -1,48 +1,20 @@
+///<reference path="Core.Exceptions.ts"/>
+
 namespace Core {
     export namespace Validation {
 
-        export type ExpectedTypeDecorator = string | Function | (string | Function)[];
-
-        export class Utils {
-            private static _expectedTypeNameAsMessageTags(expectedType: Validation.ExpectedTypeDecorator) {
-                if (expectedType instanceof Function)
-                    return Exceptions.Exception.getMessageTag("type", expectedType.name);
-                else if (typeof expectedType == STRING)
-                    return Exceptions.Exception.getMessageTag("type", <string>expectedType);
-
-                return null;
-            }
-
-            public static expectedTypeNameAsMessageTags(expectedType: ExpectedTypeDecorator) {
-                if (expectedType instanceof Array) {
-                    let resultArr = new Array<string>(0);
-
-                    for (var i = 0; i < expectedType.length; i++) {
-                        let type = expectedType[i];
-                        resultArr.push(this._expectedTypeNameAsMessageTags(type));
-                    }
-
-                    //Join array with connectives 
-                    return resultArr.join(" or ");
-                }
-                else
-                    return this._expectedTypeNameAsMessageTags(expectedType);
-            }
-        }
+        export type ExpectedType = Type | Type[];
 
         export class RuntimeValidator {
-            private static __parameterTypeIsValid(paramValue: any, paramExpectedType: ExpectedTypeDecorator) {
-                if (paramExpectedType instanceof Function)
-                    return (paramValue instanceof paramExpectedType);
-                else if (typeof paramExpectedType == STRING)
-                    return typeof paramValue == paramExpectedType;
-                else
-                    throw new Exceptions.InvalidParameterTypeException("paramExpectedType", "Cannot validate parameter." +
-                        " The specified expected type is invalid.");
-            }
-
-            private static _parameterTypeIsValid(paramValue: any, paramExpectedType: ExpectedTypeDecorator)
+            private static _parameterTypeIsValid(paramValue: any, paramExpectedType: ExpectedType)
                 : boolean {
+                function nonRecursive(paramValue: any, paramExpectedType: ExpectedType) {
+                    if (paramExpectedType instanceof Type)
+                        return new Type(paramValue).equals(paramExpectedType);
+                    else
+                        throw new Exceptions.ArgumentException("paramExpectedType", "The specified expected type is invalid.");
+                }
+
                 if (paramExpectedType instanceof Array) {
                     if (paramExpectedType.length == 0)
                         return true;
@@ -50,17 +22,17 @@ namespace Core {
                     for (var i = 0; i < paramExpectedType.length; i++) {
                         let type = paramExpectedType[i];
 
-                        if (this.__parameterTypeIsValid(paramValue, type))
+                        if (nonRecursive(paramValue, type))
                             return true;
                     }
-
-                    return false;
                 }
                 else
-                    return this.__parameterTypeIsValid(paramValue, paramExpectedType);
+                    return nonRecursive(paramValue, paramExpectedType);
+
+                return false;
             }
 
-            static validateParameter(paramName: string, paramValue: any, paramExpectedType: ExpectedTypeDecorator,
+            static validateParameter(paramName: string, paramValue: any, paramExpectedType: ExpectedType,
                 isRequired: boolean = false, isNullable: boolean = true) {
 
                 let isNull = paramValue === null,
@@ -68,22 +40,22 @@ namespace Core {
 
                 if (isNull) {
                     if (!isNullable)
-                        throw new Exceptions.InvalidParameterException(paramName, "Parameter {0} is a non-nullable parameter.");
+                        throw new Exceptions.ArgumentNullException(paramName);
                 }
                 else if (isUndefined) {
                     if (isRequired)
-                        throw new Exceptions.ParameterMissingException(paramName);
+                        throw new Exceptions.ArgumentMissingException(paramName);
                 }
                 else {
                     if (!this._parameterTypeIsValid(paramValue, paramExpectedType))
-                        throw new Exceptions.InvalidParameterTypeException(paramName, paramExpectedType);
+                        throw new Exceptions.ArgumentException(paramName);
                 }
             }
 
-            static validateArrayParameter(paramName: string, paramValue: any[], memberExpectedType: ExpectedTypeDecorator,
+            static validateArrayParameter(paramName: string, paramValue: any[], memberExpectedType: ExpectedType,
                 itemIsNullable: boolean = true, arrayIsRequired: boolean = true, arrayIsNullable: boolean = false) {
                 //Validate array
-                this.validateParameter(paramName, paramValue, Array, arrayIsRequired, arrayIsNullable);
+                this.validateParameter(paramName, paramValue, new Type(Array), arrayIsRequired, arrayIsNullable);
 
                 //Validate array items
                 for (let i = 0; i < paramValue.length; i++) {

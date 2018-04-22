@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2015",
     "declaration": true,
     "outFile": "Built/Core.js",
     "module": "system",
@@ -8,5 +8,9 @@
   },
   "include": [
     "Sources/*.ts"
+  ],
+  "exclude": [
+    /// REVISION: User interface temporarily excluded for ObjectiveXML support implementation!!!
+    "Sources/Core.UserInterface.*.ts"
   ]
 }

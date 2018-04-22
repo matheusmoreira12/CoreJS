@@ -1,133 +1,78 @@
+///<reference path="Core.Collections.Generic.ts"/>
+
 namespace Core.Exceptions {
 
-    export class Exception extends Error {
-
-        protected static getMessagePlainText(messageXml: string) {
-            //remove all xml tags from messageXml
-            return messageXml.replace(/<\w+>|<\/\w+>/g, "\"");
-        }
-
-        public static getMessageTag(tagName: string, content: string) { 
-            return StringUtils.format("<{0}>{1}</{0}>", tagName, content);
-        }
-
-        constructor(messageXml?: string, innerException?: Error, ...extraParams: any[]) {
-            //Runtime validation
-            if (messageXml && typeof messageXml !== STRING)
-                throw new InvalidParameterTypeException("messageXml", STRING)
-            if (innerException && !(innerException instanceof Error))
-                Validation.RuntimeValidator.validateParameter("innerException", innerException, Error);
-
-            //Message formatting
-            messageXml = StringUtils.format(messageXml, ...extraParams);
-
-            let messageText = Exception.getMessagePlainText(messageXml);
-
-            //Initialization
-            super(messageText);
-            this.messageXml = messageXml;
-            this.extraParams = extraParams;
-        }
-
-        messageXml: string;
-        innerException: Error;
-        extraParams: any[];
+    export class ExceptionData extends Collections.Generic.Dictionary<any, any> {
     }
 
-    export class InvalidOperationException extends Exception {
-        constructor(messageXml?: string, innerException?: Error, ...extraParams: any[]) {
+    namespace ExceptionSymbols {
+        export const data = Symbol.for("data");
+    }
 
-            //Initialization
-            super(messageXml, innerException, ...extraParams);
+    export class Exception {
+
+        constructor(message: string = "", innerException: Error = null) {
+            this[ExceptionSymbols.data] = new Collections.Generic.Dictionary<any, any>();
+
+            this.data["message"] = message;
+            this.data["innerException"] = innerException;
+        }
+
+        public get data(): ExceptionData {
+            return this[ExceptionSymbols.data];
+        }
+
+        public toString() {
+
         }
     }
 
-    export class InvalidTypeException extends Exception {
-        constructor(varName: string, expectedType: Validation.ExpectedTypeDecorator, messageXml?: string, innerException?: Error, ...extraParams: any[]) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("expectedType", expectedType, [STRING, Function, Array]);
+    /**The exception that is thrown when one of the arguments provided to a method is not valid. */
+    export class ArgumentException extends Exception {
+        constructor(argumentName: string, message: string = "", innerException: Error = null) {
+            super(message, innerException);
 
-            messageXml = messageXml || "Invalid type for variable {0}. A value of type {1} was expected.";
-
-            extraParams = [Validation.Utils.expectedTypeNameAsMessageTags(expectedType), ...extraParams];
-
-            //Initialization
-            super(messageXml, innerException, ...extraParams);
+            this.data["argumentName"] = argumentName;
         }
-
-        varName: string;
     }
 
-    export class InvalidParameterException extends Exception {
-        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("paramName", paramName, "string");
+    /**The exception that is thrown when no reference is passed to a method that requires an argument. */
+    export class ArgumentMissingException extends Exceptions.ArgumentException { }
 
-            messageXml = messageXml || "Invalid value for parameter {0}.";
+    /**The exception that is thrown when a null reference is passed to a method that does not accept it as a valid
+     * argument. */
+    export class ArgumentNullException extends ArgumentException {
 
-            extraParams = [Exception.getMessageTag("param", paramName), ...extraParams];
-
-            //Initialization
-            super(messageXml, innerException, ...extraParams);
-            this.paramName = paramName;
-        }
-
-        paramName: string;
     }
 
-    export class ParameterOutOfRangeException extends Exception implements InvalidParameterException {
-        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("paramName", paramName, STRING, true, false)
+    /**The exception that is thrown when the value of an argument is outside the allowable range of values as defined 
+     * by the invoked method. */
+    export class ArgumentOutOfRangeException extends ArgumentException {
 
-            //Message XML fallback value
-            messageXml = messageXml || "The parameter was outside of the matrix bounds."
-
-            //Add <paramName> to the list of params
-            extraParams = [Exception.getMessageTag("param", paramName), ...extraParams];
-
-            super(messageXml, innerException, extraParams);
-        }
-
-        paramName: string;
     }
 
-    export class InvalidParameterTypeException extends Exception implements InvalidParameterException {
+    /**The exception that is thrown when the format of an argument is invalid, or when a composite format string is 
+     * not well formed. */
+    export class FormatException extends Exception { }
 
-        constructor(paramName: string, expectedType: Validation.ExpectedTypeDecorator, messageXml?: string,
-            innerException?: Error, ...extraParams: any[]) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("paramName", paramName, STRING, true, false)
-            Validation.RuntimeValidator.validateParameter("expectedType", expectedType, [STRING, Function, Array], true, false);
+    /**The exception that is thrown when an attempt is made to access an element of an array or collection with an 
+     * index that is outside its bounds. */
+    export class IndexOutOfRangeException extends Exception { }
 
-            //Message XML fallback value
-            messageXml = messageXml || "Invalid value for parameter {0}. A value of type {1} was expected.";
+    /**A exceção que é gerada quando uma chamada de método é inválida para o estado atual do objeto. */
+    export class InvalidOperationException extends Exception { }
 
-            extraParams = [Exception.getMessageTag("param", paramName),
-                Validation.Utils.expectedTypeNameAsMessageTags(expectedType), ...extraParams];
+    /**The exception that is thrown when the key specified for accessing an element in a collection does not match 
+     * any key in the collection. */
+    export class KeyNotFoundException extends Exception { }
 
-            //Initialization
-            super(messageXml, innerException, ...extraParams);
-            this.paramName = paramName;
-        }
+    /**The exception that is thrown when an invoked method is not supported, or when there is an attempt to read, 
+     * seek, or write to a stream that does not support the invoked functionality. */
+    export class NotSupported extends Exception { }
 
-        paramName: string;
-        expectedType: string | string[] | Function;
-    }
+    /**The exception that is thrown when a requested method or operation is not implemented. */
+    export class NotImplemented extends Exception { }
 
-    export class ParameterMissingException extends Exception implements InvalidParameterException {
-        constructor(paramName: string, messageXml?: string, innerException?: Error, ...extraParams: any[]) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("paramName", paramName, "string");
-
-            messageXml = messageXml || "Parameter {0} is required and must be specified.";
-            extraParams.push(Exception.getMessageTag("param", paramName));
-
-            //Initialization
-            super(messageXml, innerException, ...extraParams);
-            this.paramName = paramName;
-        }
-
-        paramName: string;
-    }
+    /**The exception that is thrown when the time allotted for a process or operation has expired. */
+    export class TimeoutException extends Exception { }
 }

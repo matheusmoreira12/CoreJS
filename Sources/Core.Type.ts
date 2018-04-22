@@ -37,14 +37,6 @@ namespace Core {
 
         private _typeConstructor: Function;
 
-        /**
-         * Returns a value indicating whether the specified source type is equivalent to the specified reference type.
-         * @param tRef The reference type.
-         */
-        public equals(tRef: Type): boolean {
-            return Type.equals(this, tRef);
-        }
-
         /** Returns the name of this Type.*/
         public get name(): string {
             return this._typeConstructor.name;
@@ -53,6 +45,27 @@ namespace Core {
         /** Returns the parent type of this Type.*/
         public get parentType(): Type {
             return Type._getParentType(this._typeConstructor);
+        }
+
+        /**
+         * Returns a value indicating whether the specified source type is equivalent to the specified reference type.
+         * @param tRef The reference type.
+         */
+        public equals(tRef: Type): boolean {
+            return Type.equals(this, tRef);
+        }
+
+        /**Returns a string representing the inheritance tree for this type. */
+        public inheritanceToString(): string {
+            let parentTypeNameArr: string[] = [],
+                parentType: Type = this;
+
+            do {
+                parentTypeNameArr.push(parentType.name);
+            }
+            while (parentType = parentType.parentType);
+
+            return parentTypeNameArr.reverse().join("->");
         }
     }
 }

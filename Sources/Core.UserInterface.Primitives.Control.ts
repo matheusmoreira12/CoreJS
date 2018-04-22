@@ -1,14 +1,16 @@
-namespace Core.UserInterface {
+///<reference path="Core.UserInterface.Primitives.ts"/>
+
+namespace Core.UserInterface.Primitives {
     export class ControlVisualPropertyManager {
     }
 
     export class ControlStylesheetManager {
         constructor(target: Control) {
             this._target = target;
-            this._stylesheets = new Collections.GenericList<HTMLLinkElement>();
+            this._stylesheets = new Collections.Generic.List<HTMLLinkElement>();
         }
 
-        private _stylesheets: Collections.GenericList<HTMLLinkElement>;
+        private _stylesheets: Collections.Generic.List<HTMLLinkElement>;
         private _target: Control;
 
         public prependStylesheet(href): HTMLLinkElement {
@@ -17,7 +19,7 @@ namespace Core.UserInterface {
             stylesheet.type = "text/css";
             stylesheet.href = href;
 
-            if (this._stylesheets.length == 0)
+            if (this._stylesheets.count == 0)
                 Utils.prependChild(this._target.shadowRoot, stylesheet);
             else
                 this._stylesheets.getLast().insertAdjacentElement("afterend", stylesheet);
@@ -70,7 +72,7 @@ namespace Core.UserInterface {
         protected _outerBox: ControlOuterBox;
         protected _innerBox: ControlInnerBox;
 
-        //Control.width property
+        //Control.width dependency property
         public widthProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("width", new Type(Length),
             new Type(Control));
 
@@ -81,7 +83,7 @@ namespace Core.UserInterface {
             this.setValue(this.widthProperty, value);
         }
 
-        //Control.minimumWidth property
+        //Control.minimumWidth dependency property
         public minimumWidthProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("minimumWidth",
             new Type(Length), new Type(Control));
 
@@ -92,7 +94,7 @@ namespace Core.UserInterface {
             this.setValue(this.minimumWidthProperty, value);
         }
 
-        //Control.maximumWidth property
+        //Control.maximumWidth dependency property
         public maximumWidthProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("maximumWidth",
             new Type(Length), new Type(Control));
 
@@ -103,7 +105,7 @@ namespace Core.UserInterface {
             this.setValue(this.maximumWidthProperty, value);
         }
 
-        //Control.height property
+        //Control.height dependency property
         public heightProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("height", new Type(Length),
             new Type(Control));
 
@@ -114,7 +116,7 @@ namespace Core.UserInterface {
             this.setValue(this.heightProperty, value);
         }
 
-        //Control.minimumHeight property
+        //Control.minimumHeight dependency property
         public minimumHeightProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("minimumHeight",
             new Type(Length), new Type(Control));
 
@@ -125,7 +127,7 @@ namespace Core.UserInterface {
             this.setValue(this.minimumHeightProperty, value);
         }
 
-        //Control.maximumHeight property
+        //Control.maximumHeight dependency property
         public maximumHeightProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("maximumHeight",
             new Type(Length), new Type(Control));
 
@@ -136,7 +138,29 @@ namespace Core.UserInterface {
             this.setValue(this.maximumHeightProperty, value);
         }
 
-        //Control.backgroundColor property
+        //Control.foregroundColor dependency property
+        public foregroundColorProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("foregroundColor",
+            new Type(Color), new Type(Control));
+
+        public get foregroundColor(): Color {
+            return <Color>this.getValue(this.foregroundColorProperty);
+        }
+        public set foregroundColor(value: Color) {
+            this.setValue(this.foregroundColorProperty, value);
+        }
+
+        //Control.foregroundImage dependency property
+        public foregroundImageProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("foregroundImage",
+            new Type(Brush), new Type(Control));
+
+        public get foregroundImage(): Brush {
+            return <Brush>this.getValue(this.foregroundImageProperty);
+        }
+        public set foregroundImage(value: Brush) {
+            this.setValue(this.foregroundImageProperty, value);
+        }
+
+        //Control.backgroundColor dependency property
         public backgroundColorProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("backgroundColor",
             new Type(Color), new Type(Control));
 
@@ -147,7 +171,7 @@ namespace Core.UserInterface {
             this.setValue(this.backgroundColorProperty, value);
         }
 
-        //Control.backgroundImage property
+        //Control.backgroundImage dependency property
         public backgroundImageProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("backgroundImage",
             new Type(Brush), new Type(Control));
 
@@ -158,7 +182,7 @@ namespace Core.UserInterface {
             this.setValue(this.backgroundImageProperty, value);
         }
 
-        //Control.borderColor property
+        //Control.borderColor dependency property
         public borderColorProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("borderColor",
             new Type(Color), new Type(Control));
 
@@ -169,7 +193,7 @@ namespace Core.UserInterface {
             this.setValue(this.borderColorProperty, value);
         }
 
-        //Control.borderWidth property
+        //Control.borderWidth dependency property
         public borderWidthProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("borderWidth",
             new Type(Length), new Type(Control));
 
@@ -186,4 +210,7 @@ namespace Core.UserInterface {
 
     export class ControlInnerBox extends HTMLElement { }
     customElements.define("core-controlinnerbox", ControlInnerBox);
+
+    export class ContentPresenter extends ContentContainer { }
+    customElements.define('core-contentpresenter', ContentPresenter);
 }

@@ -63,7 +63,7 @@ namespace Core.UserInterface.Icons {
         }
     }
 
-    export class IconList extends Collections.GenericList<Icon> {
+    export class IconList extends Collections.Generic.List<Icon> {
         constructor(name: string, spriteSrc: string, width: number, height: number, icons?: Icon[]) {
             //Run time validation
             Validation.RuntimeValidator.validateParameter("name", name, STRING, true, false);
@@ -99,15 +99,15 @@ namespace Core.UserInterface.Icons {
                 icon.parentList = this;
         }
 
-        private _onItemAdded(target: IconList, args: Collections.ListEventArgs<Icon>) {
+        private _onItemAdded(target: IconList, args: Collections.Generic.ListEventArgs<Icon>) {
             this._adoptIcon(args.newItem);
         }
 
-        private _onItemRemoved(target: IconList, args: Collections.ListEventArgs<Icon>) {
+        private _onItemRemoved(target: IconList, args: Collections.Generic.ListEventArgs<Icon>) {
             this._rejectIcon(args.oldItem);
         }
 
-        private _onItemChanged(target: IconList, args: Collections.ListEventArgs<Icon>) {
+        private _onItemChanged(target: IconList, args: Collections.Generic.ListEventArgs<Icon>) {
             this._adoptIcon(args.newItem);
             this._rejectIcon(args.oldItem);
         }
@@ -121,8 +121,8 @@ namespace Core.UserInterface.Icons {
     }
 
     export class IconManager {
-        private static activeIconCollections: Collections.GenericList<IconList> =
-            new Collections.GenericList<IconList>();
+        private static activeIconCollections: Collections.Generic.List<IconList> =
+            new Collections.Generic.List<IconList>();
 
         static addList(iconList: IconList) {
             //Run time validation

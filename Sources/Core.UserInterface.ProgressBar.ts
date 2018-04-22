@@ -1,8 +1,6 @@
-///<reference path="Core.UserInterface.Control.ts"/>
-
 namespace Core.UserInterface {
     //CoreProgressBar
-    export class ProgressBar extends Control {
+    export class ProgressBar extends Primitives.Control {
 
         private _populate() {
             //Populate progress bar fill

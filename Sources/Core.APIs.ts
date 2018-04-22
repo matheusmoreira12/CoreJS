@@ -12,10 +12,6 @@ namespace Core.APIs {
 
     export class APILoader {
         constructor(apiName: string, apiURL: string) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("apiName", apiName, STRING, true, false);
-            Validation.RuntimeValidator.validateParameter("apiURL", apiURL, STRING, true, false);
-
             this._apiName = apiName;
             this._apiURL = apiURL;
 
@@ -61,25 +57,16 @@ namespace Core.Events {
 
     export class APILoaderEvent extends MethodGroup {
         constructor(target: APIs.APILoader, defaultListener?: APILoaderEventListener) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("target", target, [Function, APIs.APILoader], true);
-
             super(target);
         }
 
         target: APIs.APILoader;
 
         attach(listener: APILoaderEventListener | APILoaderEvent) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("listener", listener, [Function, APILoaderEvent]);
-
             super.attach(listener);
         }
 
         detach(listener: APILoaderEventListener | APILoaderEvent) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("listener", listener, [Function, APILoaderEvent]);
-
             super.detach(listener);
         }
 

@@ -1,4 +1,4 @@
-///<reference path="Core.Collections.ts"/>
+///<reference path="Core.Collections.Generic.ts"/>
 
 namespace Core.UserInterface {
 
@@ -10,12 +10,12 @@ namespace Core.UserInterface {
             this.target = target;
         }
 
-        private _associations = new Collections.GenericList<[string, string]>();
+        private _associations = new Collections.Generic.List<[string, string]>();
 
         protected target: Node;
 
         private _getAssociatedPropertyName(attributeName: string): string {
-            let matches = this._associations.filter((item) => item[1] == attributeName);
+            let matches = [...this._associations.filter((item) => item[1] == attributeName)];
 
             if (matches.length > 0)
                 return matches[0][0];
@@ -24,7 +24,7 @@ namespace Core.UserInterface {
         }
 
         private _getAssociatedAttributeName(propertyName: string): string {
-            let matches = this._associations.filter((item) => item[0] == propertyName);
+            let matches = [...this._associations.filter((item) => item[0] == propertyName)];
 
             if (matches.length > 0)
                 return matches[0][1];

@@ -12,10 +12,6 @@ namespace Core {
          * @param defaultListener The default listener for this <MethodGroup>.
          */
         constructor(target, defaultListener?) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("target", target, [], true);
-            Validation.RuntimeValidator.validateParameter("listener", defaultListener, [Function, MethodGroup]);
-
             //Initialization
             this.target = target;
             if (defaultListener)
@@ -70,9 +66,6 @@ namespace Core {
          * @param listener The method or <MethodGroup> to be attached.
          */
         attach(listener: MethodGroup | Method) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("listener", listener, [Function, MethodGroup], true);
-
             if (listener instanceof MethodGroup)
                 this.attachedHandlers.push(listener);
             else
@@ -94,9 +87,6 @@ namespace Core {
          * @param listener The method or <MethodGroup> to be detached.
          */
         detach(listener: MethodGroup | Method) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("listener", listener, [Function, MethodGroup], true);
-
             if (listener instanceof MethodGroup)
                 this._detachHandler(listener);
             else

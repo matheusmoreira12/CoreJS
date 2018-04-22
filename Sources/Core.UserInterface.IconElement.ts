@@ -5,39 +5,35 @@ namespace Core.UserInterface {
         constructor() {
             super();
 
-            this.shadow = this.attachShadow({ mode: "open" });         
-            this.createSpriteImageElement();
+            this.attachShadow({ mode: "open" });         
+        }
+
+        private _updateSpriteImage(icon: Icons.Icon) {
+            // Remove old sprite image
+            if (this._spriteImageElement instanceof Image)
+                this._spriteImageElement.remove();
+
+            // Create new sprite image
+            let spriteImageElement = new Image(icon.width, icon.height);
+            spriteImageElement.src = icon.spriteSrc;
+            this.shadowRoot.appendChild(spriteImageElement);
+
+            // Assign new sprite image
+            this._spriteImageElement = spriteImageElement;
         }
 
         //IconElement.icon property
         get icon() {
             return this._icon;
         }
-        set icon(value : Icons.Icon) {
-            this._icon = value;
+        set icon(value: Icons.Icon) {
+            this._updateSpriteImage(value);
 
-            this.updateSpriteImage();
+            this._icon = value;
         }
         private _icon : Icons.Icon;
 
-        private shadow;
-        private spriteImageElement : HTMLImageElement;
-
-        updateSpriteImage() {
-            this.spriteImageElement.width = this.icon.width;
-            this.spriteImageElement.height = this.icon.height;
-            this.spriteImageElement.src = this.icon.spriteSrc;
-            this.spriteImageElement.style.position = "absolute";
-            this.spriteImageElement.style.left = -this.icon.x + "px";
-            this.spriteImageElement.style.top = -this.icon.y + "px";
-        }
-
-        private createSpriteImageElement() {
-            let spriteImageElement = new Image(1, 1);
-            this.shadow.appendChild(spriteImageElement);
-            
-            this.spriteImageElement = spriteImageElement;
-        }
+        private _spriteImageElement : HTMLImageElement;
     }
     customElements.define("core-icon", IconElement);
 }

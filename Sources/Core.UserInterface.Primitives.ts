@@ -2,7 +2,7 @@
 
 namespace Core.UserInterface.Primitives {
 
-    export class ElementList extends Collections.GenericList<HTMLElement> {
+    export class ElementList extends Collections.Generic.List<HTMLElement> {
         public constructor(parentContainer: ElementContainer, original: HTMLElement[]);
         public constructor(parentContainer: ElementContainer);
         public constructor(parentContainer: ElementContainer, original?: HTMLElement[]) {
@@ -71,16 +71,16 @@ namespace Core.UserInterface.Primitives {
             this.shadowRoot.removeChild(elem);
         }
 
-        private _onElementAdded(target: ElementList, args: Collections.ListEventArgs<HTMLElement>) {
+        private _onElementAdded(target: ElementList, args: Collections.Generic.ListEventArgs<HTMLElement>) {
             target.parentContainer._adoptElement(args.newItem, args.newIndex);
         }
 
-        private _onElementChanged(target: ElementList, args: Collections.ListEventArgs<HTMLElement>) {
+        private _onElementChanged(target: ElementList, args: Collections.Generic.ListEventArgs<HTMLElement>) {
             target.parentContainer._rejectElement(args.oldItem);
             target.parentContainer._adoptElement(args.newItem, args.newIndex);
         }
 
-        private _onElementRemoved(target: ElementList, args: Collections.ListEventArgs<HTMLElement>) {
+        private _onElementRemoved(target: ElementList, args: Collections.Generic.ListEventArgs<HTMLElement>) {
             target.parentContainer._rejectElement(args.oldItem);
         }
 
@@ -110,15 +110,7 @@ namespace Core.UserInterface.Primitives {
                 this.innerHTML = this.content.value;
         }
     }
-    customElements.define('core-content', Content);
-    export class Label extends ContentContainer {
-        //Sets the label text content with a format
-        setText(text: string, ...params: any[]) {
-            //Set text, passing the parameters through to StringUtils
-            this.content = new Content(StringUtils.format(text, ...params));
-        }
-    }
-    customElements.define('core-label', Label);
+
     //CoreLabelableContainer
     export class LabelableContainer extends HTMLElement {
         private createLabelElement() {
@@ -146,12 +138,8 @@ namespace Core.UserInterface.Primitives {
         }
     }
     customElements.define('core-labelablecontainer', LabelableContainer);
-}
 
-namespace Core.Events {
     //List Item event
-    import ElementContainer = UserInterface.Primitives.ElementContainer;
-
     export type ElementContainerEventArgs = {
         oldItem: HTMLElement,
         newItem: HTMLElement,

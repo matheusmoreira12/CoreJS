@@ -1,4 +1,4 @@
-namespace Core.XAML {
+namespace Core.ObjectiveXml {
     export interface IValueConverter {
         convert(value: object): object;
         convertBack(value: object): object;
@@ -49,12 +49,12 @@ namespace Core.XAML {
 
     export class DependencyObjectType {
 
-        private static _registeredTypes: Collections.GenericList<DependencyObjectType> =
-            new Collections.GenericList<DependencyObjectType>();
+        private static _registeredTypes: Collections.Generic.List<DependencyObjectType> =
+            new Collections.Generic.List<DependencyObjectType>();
 
         private static _getUniqueId(type: Type): number {
             let depObjType = this._registeredTypes.first((item) => Object.is(item.environmentType, type)),
-                newId = this._registeredTypes.length;
+                newId = this._registeredTypes.count;
 
             if (depObjType !== null)
                 return depObjType.id;
@@ -166,11 +166,11 @@ namespace Core.XAML {
     }
 
     namespace DependencyPropertyRegistry {
-        let registryEntries: Collections.GenericList<DependencyPropertyRegistryEntry>;
+        let registryEntries: Collections.Generic.List<DependencyPropertyRegistryEntry>;
 
         export function register(property: DependencyProperty, metadata: PropertyMetadata): number {
             let entry = new DependencyPropertyRegistryEntry(property, metadata),
-                globalIndex = registryEntries.length;
+                globalIndex = registryEntries.count;
 
             registryEntries.add(entry);
 
@@ -194,8 +194,15 @@ namespace Core.XAML {
     }
 
     export class DependencyProperty {
+
+        private static _propertyFromName: Collections.Generic.Dictionary<number, DependencyProperty> =
+            new Collections.Generic.Dictionary<number, DependencyProperty>();
+
         private static _registerCommon(name: string, propertyType: Type, ownerType: Type,
             metadata: PropertyMetadata, validateValueCallback: ValidateValueCallback): DependencyProperty {
+
+            let keyStr = `${ownerType.inheritanceToString()}#${name}`,
+                key = HashCode.fromString(keyStr);
 
             return null;
         }

@@ -74,9 +74,6 @@ namespace Core.Web {
 
     export class LoadException extends Exceptions.Exception {
         constructor(ajax: AjaxRequest, message?: string) {
-            Validation.RuntimeValidator.validateParameter("ajax", ajax, AjaxRequest, true, false);
-            Validation.RuntimeValidator.validateParameter("messaage", message, STRING, false);
-
             let xhr = ajax.baseRequest;
 
             let messageXml = StringUtils.format("{0}{1} request to {2} failed with status code {3}({4}).",

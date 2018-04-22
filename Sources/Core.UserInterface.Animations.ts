@@ -1,4 +1,4 @@
-///<reference path="Core.Collections.ts"/>
+///<reference path="Core.Collections.Generic.ts"/>
 
 namespace Core {
     enum TimeStampUnit { Milliseconds, Seconds, Minutes, Hours, Percent }
@@ -56,17 +56,17 @@ namespace Core {
         time: TimeStamp;
     }
 
-    class AnimationSceneList extends Collections.GenericList<AnimationScene> {
+    class AnimationSceneList extends Collections.Generic.List<AnimationScene> {
         add(scene: AnimationScene) {
             Validation.RuntimeValidator.validateParameter("scene", scene, AnimationScene, true, false);
 
             super.add(scene);
         }
-        insert(scene: AnimationScene, index: number) {
+        insert(index: number, scene: AnimationScene) {
             Validation.RuntimeValidator.validateParameter("scene", scene, AnimationScene, true, false);
             Validation.RuntimeValidator.validateParameter("index", index, NUMBER, true, false);
 
-            super.insert(scene, index);
+            super.insert(index, scene);
         }
         removeAt(index: number): AnimationScene {
             Validation.RuntimeValidator.validateParameter("index", index, NUMBER, true, false);

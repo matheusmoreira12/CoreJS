@@ -1,5 +1,5 @@
-namespace Core.Hash {
-    export function generateHashCode(str: string): number {
+namespace Core.HashCode {
+    export function fromString(str: string): number {
         let outHashCode = 0;
 
         if (str.length === 0)
@@ -14,7 +14,7 @@ namespace Core.Hash {
         return outHashCode;
     }
 
-    export function concatenateHashCodes(hashCodes: Iterable<number>): number {
+    export function concatenate(hashCodes: Iterable<number>): number {
         let outHashCode = 17;
 
         for (let hashCode of hashCodes)

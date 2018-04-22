@@ -1,3 +1,4 @@
+///<reference path="Core.UserInterface.Primitives.Control.ts"/>
 ///<reference path="Core.UserInterface.Primitives.ts"/>
 ///<reference path="Core.UserInterface.Icons.ts"/>
 ///<reference path="Core.UserInterface.IconElement.ts"/>
@@ -5,26 +6,24 @@
 namespace Core.UserInterface {
 
     //Button
-    export class Button extends HTMLButtonElement {
+    export class Button extends Primitives.Control {
 
         private createIconElement() {
-            let iconElement = new IconElement();
-            this.shadowRoot.appendChild(iconElement);
+            let iconElement = <IconElement>document.createElement("core-icon");
+            this._innerBox.appendChild(iconElement);
 
             this.iconElement = iconElement;
         }
 
         private createContentElement() {
-            let contentElement = new Primitives.ContentContainer();
-            this.shadowRoot.appendChild(contentElement);
+            let contentElement = <Primitives.ContentPresenter>document.createElement("core-contentpresenter");
+            this._innerBox.appendChild(contentElement);
 
             this.contentElement = contentElement;
         }
 
         constructor() {
             super();
-
-            this.attachShadow({ mode: "open" });
 
             this.createIconElement();
             this.createContentElement();
@@ -63,9 +62,6 @@ namespace Core.UserInterface {
             return this._icon;
         }
         set icon(value: Icons.Icon) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("value", value, Icons.Icon);
-
             this.iconElement.icon = value;
 
             this._icon = value;
@@ -77,9 +73,6 @@ namespace Core.UserInterface {
             return this.contentElement.content;
         }
         set content(value: Content) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("value", value, Content);
-
             this.contentElement.content = value;
         }
 

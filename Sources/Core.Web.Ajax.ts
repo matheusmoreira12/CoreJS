@@ -2,11 +2,6 @@ namespace Core.Web {
 
         export class AjaxRequestOptions {
             constructor(async: boolean = true, data: any = "", user: string = "", password: string = "") {
-                //Runtime validation
-                Validation.RuntimeValidator.validateParameter("async", async, BOOL);
-                Validation.RuntimeValidator.validateParameter("user", user, STRING);
-                Validation.RuntimeValidator.validateParameter("password", password, STRING);
-
                 this.asynchronous = async;
                 this.user = user;
                 this.password = password;
@@ -21,11 +16,6 @@ namespace Core.Web {
 
         export class AjaxRequestInfo {
             constructor(method: string, url: string, options: AjaxRequestOptions = new AjaxRequestOptions()) {
-                //Runtime validation
-                Validation.RuntimeValidator.validateParameter("method", method, STRING, true, false);
-                Validation.RuntimeValidator.validateParameter("url", url, STRING, true, false);
-                Validation.RuntimeValidator.validateParameter("options", options, AjaxRequestOptions);
-
                 this.method = method;
                 this.url = url;
                 this.options = options;
@@ -145,25 +135,16 @@ namespace Core.Events {
 
     export class AjaxEvent extends MethodGroup {
         constructor(target: Web.AjaxRequest, defaultListener?: AjaxEventListener) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("target", target, [Function, Web.AjaxRequest], true);
-
             super(target);
         }
 
         target: Web.AjaxRequest;
 
         attach(listener: AjaxEventListener | AjaxEvent) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("listener", listener, [Function, AjaxEvent]);
-
             super.attach(listener);
         }
 
         detach(listener: AjaxEventListener | AjaxEvent) {
-            //Runtime validation
-            Validation.RuntimeValidator.validateParameter("listener", listener, [Function, AjaxEvent]);
-
             super.detach(listener);
         }
 
