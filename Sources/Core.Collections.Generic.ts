@@ -10,9 +10,7 @@ namespace Core.Collections.Generic {
     export interface IList<T> extends Iterable<T> {
     }
 
-    function propertyKeyIsIndex(propertyKey: PropertyKey) {
-        return (typeof propertyKey === NUMBER) || (typeof propertyKey === STRING && !isNaN(Number(propertyKey)));
-    }
+    let propertyKeyIsIndex = k => (typeof k === NUMBER) || (typeof k === STRING && !isNaN(Number(k)));
 
     class ListProxyHandler<T> implements ProxyHandler<List<T>> {
         public set(target: List<T>, propertyKey: PropertyKey, value: T, receiver: any): boolean {

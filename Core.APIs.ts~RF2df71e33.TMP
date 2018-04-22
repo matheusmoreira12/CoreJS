@@ -1,4 +1,4 @@
-namespace Core.APIs {
+export namespace Core.APIs {
     export class APIPermissions {
         constructor(grantWindowAccess: boolean = false, grantDOMAccess: boolean = false) {
             //Runtime validation
