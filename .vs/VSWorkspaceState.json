@@ -2,8 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\Built",
-    "\\Sources"
+    "\\ModuleSystemCompiler",
+    "\\ModuleSystemCompiler\\Sources",
+    "\\ObjectiveXMLCompiler",
+    "\\ObjectiveXMLCompiler\\Built",
+    "\\ObjectiveXMLCompiler\\Sources",
+    "\\ObjectiveXMLCompiler\\Sources\\node_modules",
+    "\\ObjectiveXMLCompiler\\Sources\\node_modules\\@types",
+    "\\Trashcan"
   ],
-  "SelectedNode": "\\Sources\\Core.ObjectiveXML.ts",
+  "SelectedNode": "\\ObjectiveXMLCompiler\\Sources\\node_modules\\@types",
   "PreviewInSolutionExplorer": false
 }
