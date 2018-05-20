@@ -1,4 +1,7 @@
+///<reference path="Core.UserInterface.Colors.ts"/>
+
 namespace Core.UserInterface {
+
     export enum ContentType { Text, HTML }
     export class Content {
         public constructor(value: string, type: ContentType = ContentType.Text) {
@@ -39,7 +42,7 @@ namespace Core.UserInterface {
     export abstract class Color {
         public static fromInt(value: number) {
             if (!Number.isInteger(value))
-                throw new Exceptions.ArgumentException("value", "Parameter is not valid integer value.");
+                throw new Exceptions.ArgumentException("value", "Parameter is not a valid integer value.");
             if (value < 0 || value > COLOR_RGB_MAX_INT_VALUE)
                 throw new Exceptions.ArgumentOutOfRangeException("value");
 
@@ -51,36 +54,33 @@ namespace Core.UserInterface {
         }
 
         public static parse(str: string): Color {
-            let rgbInt: number = Number.parseInt(str),
-                colorFromName: Color = Colors.fromName(str);
+            let colorFromName = null
 
-            if (!isNaN(rgbInt))
-                return this.fromInt(rgbInt);
-            else if (colorFromName)
-                return colorFromName;
-            else
-                return ColorRGB.parse(str) || ColorRGBA.parse(str) || ColorCMYK.parse(str) || ColorHSL.parse(str) ||
-                    ColorHSV.parse(str) || null;
+            if (str.startsWith("#")) {
+                let hexCode = str.substring(-6);
+                return this.fromInt(Number(hexCode));
+            }
+
+            return Colors.fromName(str) || ColorRGB.parse(str) || ColorRGBA.parse(str) || ColorCMYK.parse(str) ||
+                ColorHSL.parse(str) || ColorHSV.parse(str) || null;
         }
 
         public constructor(type: ColorType) {
             this.type = type;
         }
 
-        public toString(): string {
-            return null;
-        }
+        public abstract toString(): string;
 
         public type: ColorType;
     }
 
     export class ColorRGB extends Color {
-        public constructor(r: string, g: string, b: string) {
+        public constructor(r: string | number, g: string | number, b: string | number) {
             super(ColorType.RGB);
 
-            this.r = Percentage.parse(r) || Number.parseFloat(r);
-            this.g = Percentage.parse(g) || Number.parseFloat(g);
-            this.b = Percentage.parse(b) || Number.parseFloat(b);
+            this.r = Percentage.parse(<string>r) || Number(r);
+            this.g = Percentage.parse(<string>g) || Number(g);
+            this.b = Percentage.parse(<string>b) || Number(b);
 
             return Object.freeze(this);
         }
@@ -88,6 +88,10 @@ namespace Core.UserInterface {
         public r: Number;
         public g: Number;
         public b: Number;
+
+        public toString(): string {
+            return null;
+        }
     }
 
     export class ColorRGBA extends Color {
@@ -95,13 +99,13 @@ namespace Core.UserInterface {
             return null;
         }
 
-        public constructor(r: string, g: string, b: string, a: string) {
+        public constructor(r: string | number, g: string | number, b: string | number, a: string | number) {
             super(ColorType.RGBA);
 
-            this.r = Percentage.parse(r) || Number.parseFloat(r);
-            this.g = Percentage.parse(g) || Number.parseFloat(g);
-            this.b = Percentage.parse(b) || Number.parseFloat(b);
-            this.a = Percentage.parse(a) || Number.parseFloat(a);
+            this.r = Percentage.parse(<string>r) || Number(r);
+            this.g = Percentage.parse(<string>g) || Number(g);
+            this.b = Percentage.parse(<string>b) || Number(b);
+            this.a = Percentage.parse(<string>a) || Number(a);
 
             return Object.freeze(this);
         }
@@ -110,17 +114,20 @@ namespace Core.UserInterface {
         public g: Number;
         public b: Number;
         public a: Number;
+
+        public toString(): string {
+            return null;
+        }
     }
 
     export class ColorCMYK extends Color {
-        public constructor(c: string, m: string, y: string,
-            k: string) {
+        public constructor(c: string | number, m: string | number, y: string | number, k: string | number) {
             super(ColorType.CMYK);
 
-            this.c = Percentage.parse(c) || Number.parseFloat(c);
-            this.m = Percentage.parse(m) || Number.parseFloat(m);
-            this.y = Percentage.parse(y) || Number.parseFloat(y);
-            this.k = Percentage.parse(k) || Number.parseFloat(k);
+            this.c = Percentage.parse(<string>c) || Number(c);
+            this.m = Percentage.parse(<string>m) || Number(m);
+            this.y = Percentage.parse(<string>y) || Number(y);
+            this.k = Percentage.parse(<string>k) || Number(k);
 
             return Object.freeze(this);
         }
@@ -129,15 +136,19 @@ namespace Core.UserInterface {
         public m: Number;
         public y: Number;
         public k: Number;
+
+        public toString(): string {
+            return null;
+        }
     }
 
     export class ColorHSL extends Color {
-        public constructor(h: string, s: string, l: string) {
+        public constructor(h: string | number, s: string | number, l: string | number) {
             super(ColorType.HSL);
 
-            this.h = Percentage.parse(h) || Number.parseFloat(h);
-            this.s = Percentage.parse(s) || Number.parseFloat(s);
-            this.l = Percentage.parse(l) || Number.parseFloat(l);
+            this.h = Percentage.parse(<string>h) || Number(h);
+            this.s = Percentage.parse(<string>s) || Number(s);
+            this.l = Percentage.parse(<string>l) || Number(l);
 
             return Object.freeze(this);
         }
@@ -145,15 +156,19 @@ namespace Core.UserInterface {
         public h: Number;
         public s: Number;
         public l: Number;
+
+        public toString(): string {
+            return null;
+        }
     }
 
     export class ColorHSV extends Color {
-        public constructor(h: string, s: string, v: string) {
+        public constructor(h: string | number, s: string | number, v: string | number) {
             super(ColorType.HSV);
 
-            this.h = Percentage.parse(h) || Number.parseFloat(h);
-            this.s = Percentage.parse(s) || Number.parseFloat(s);
-            this.v = Percentage.parse(v) || Number.parseFloat(v);
+            this.h = Percentage.parse(<string>h) || Number(h);
+            this.s = Percentage.parse(<string>s) || Number(s);
+            this.v = Percentage.parse(<string>v) || Number(v);
 
             return Object.freeze(this);
         }
@@ -161,6 +176,10 @@ namespace Core.UserInterface {
         public h: Number;
         public s: Number;
         public v: Number;
+
+        public toString(): string {
+            return null;
+        }
     }
 
     export class BrushList extends Collections.Generic.List<Brush> {

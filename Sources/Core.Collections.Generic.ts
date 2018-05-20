@@ -1,3 +1,4 @@
+///<reference path="Core.ts"/>
 ///<reference path="Core.MethodGroup.ts"/>
 ///<reference path="Core.Validation.ts"/>
 
@@ -107,25 +108,11 @@ namespace Core.Collections.Generic {
             return (this[ListSymbols.rawArray] as T[]).slice();
         }
         /**
-         * Gets invoked every time a new item gets added to this list.
-         */
-        public itemAddedEvent: ListEvent<T> = new ListEvent(this);
-        protected invokeOnItemAdded(args: ListEventArgs<T>): void {
-            this.itemAddedEvent.invoke(args);
-        }
-        /**
-         * Gets invoked every time an item gets removed from this list.
-         */
-        public itemRemovedEvent: ListEvent<T> = new ListEvent(this);
-        protected invokeOnItemRemoved(args: ListEventArgs<T>): void {
-            this.itemRemovedEvent.invoke(args);
-        }
-        /**
          * Gets invoked every time an item gets replaced by a new one in this list.
          */
-        public itemChangedEvent: ListEvent<T> = new ListEvent(this);
-        protected invokeOnItemChanged(args: ListEventArgs<T>): void {
-            this.itemChangedEvent.invoke(args);
+        public listChangedEvent: ListChangedEvent<T> = new ListChangedEvent(this);
+        protected invokeOnListChanged(args: ListChangedEventArgs<T>): void {
+            this.listChangedEvent.invoke(args);
         }
         /**
          * Gets the first item in this list.
@@ -204,12 +191,20 @@ namespace Core.Collections.Generic {
          * bounds.
          */
         public move(oldIndex: number, newIndex: number): void {
-            let item: T = this.removeAt(oldIndex);
+            this.moveRange(oldIndex, newIndex, 1);
+        }
+        /**
+         * Moves an item in this list from a zero-based position to another.
+         * @param oldIndex The position the item is at.
+         * @param newIndex The position the item is being moved to.
+         * @param itemCount The number of items being moved.
+         * @throws <Exceptions.ArgumentOutOfRangeException> if the specified position is out of the list's
+         * bounds.
+         */
+        public moveRange(oldIndex: number, newIndex: number, itemCount: number = 1): void {
+            let array = (this[ListSymbols.rawArray] as T[]);
 
-            if (oldIndex < newIndex)
-                newIndex--;
-
-            this.insert(newIndex, item);
+            array.splice(newIndex, 0, ...array.splice(oldIndex, itemCount));
         }
         /**
          * Swaps two items at two different zero-based positions.
@@ -459,25 +454,34 @@ namespace Core.Collections.Generic {
     }
 
     //List Item event
-    export type ListEventArgs<T> = { oldItem: T, newItem: T, oldIndex: number, newIndex: number };
-    export type ListEventListener<T> = (target: List<T>, args: ListEventArgs<T>) => void;
+    export enum ListChangedEventMode { Add, Remove, Move, Replace }
 
-    export class ListEvent<T> extends MethodGroup {
-        constructor(target: List<T>, defaultListener?: ListEventListener<T>) {
+    export type ListChangedEventArgs<T> = {
+        mode: ListChangedEventMode;
+        oldItem: T;
+        newItem: T;
+        oldIndex: number;
+        newIndex: number;
+    }
+
+    export type ListChangedEventListener<T> = (target: List<T>, args: ListChangedEventArgs<T>) => void;
+
+    export class ListChangedEvent<T> extends MethodGroup {
+        constructor(target: List<T>, defaultListener?: ListChangedEventListener<T>) {
             super(target);
         }
 
         target: List<T>;
 
-        attach(listener: ListEventListener<T> | ListEvent<T>) {
+        attach(listener: ListChangedEventListener<T> | ListChangedEvent<T>) {
             super.attach(listener);
         }
 
-        detach(listener: ListEventListener<T> | ListEvent<T>) {
+        detach(listener: ListChangedEventListener<T> | ListChangedEvent<T>) {
             super.detach(listener);
         }
 
-        invoke(args: ListEventArgs<T>) {
+        invoke(args: ListChangedEventArgs<T>) {
             super.invoke(args);
         }
     }

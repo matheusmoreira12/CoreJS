@@ -7,10 +7,9 @@
     "\\ObjectiveXMLCompiler",
     "\\ObjectiveXMLCompiler\\Built",
     "\\ObjectiveXMLCompiler\\Sources",
-    "\\ObjectiveXMLCompiler\\Sources\\node_modules",
-    "\\ObjectiveXMLCompiler\\Sources\\node_modules\\@types",
+    "\\Sources",
     "\\Trashcan"
   ],
-  "SelectedNode": "\\ObjectiveXMLCompiler\\Sources\\node_modules\\@types",
+  "SelectedNode": "\\Built\\Core.UserInterface.js",
   "PreviewInSolutionExplorer": false
 }

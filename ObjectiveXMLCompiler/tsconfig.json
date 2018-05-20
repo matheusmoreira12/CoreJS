@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "es2015",
     "declaration": true,
-    "outFile": "Built/ObjectiveXMLCompiler.js",
+    "outDir": "Built/",
     "module": "commonjs",
     "sourceMap": true
   },

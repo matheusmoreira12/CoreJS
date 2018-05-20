@@ -1,3 +1,7 @@
+///<reference path="Core.Type.ts"/>
+///<reference path="Core.ObjectiveXML.ts"/>
+///<reference path="Core.Collections.Generic.ts"/>
+///<reference path="Core.UserInterface.Utils.ts"/>
 ///<reference path="Core.UserInterface.Primitives.ts"/>
 
 namespace Core.UserInterface.Primitives {
@@ -39,12 +43,12 @@ namespace Core.UserInterface.Primitives {
         }
     }
 
-    export class Control extends HTMLElement implements XAML.IDependencyObject {
-        getValue(property: XAML.DependencyProperty): object {
-            return XAML.IDependencyObject.getValue(this, property);
+    export class Control extends HTMLElement implements ObjectiveXML.IDependencyObject {
+        getValue(property: ObjectiveXML.DependencyProperty): object {
+            return ObjectiveXML.IDependencyObject.getValue(this, property);
         }
-        setValue(property: XAML.DependencyProperty, value: object): void {
-            XAML.IDependencyObject.setValue(this, property, value);
+        setValue(property: ObjectiveXML.DependencyProperty, value: object): void {
+            ObjectiveXML.IDependencyObject.setValue(this, property, value);
         }
 
         private _populateControl() {
@@ -73,7 +77,7 @@ namespace Core.UserInterface.Primitives {
         protected _innerBox: ControlInnerBox;
 
         //Control.width dependency property
-        public widthProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("width", new Type(Length),
+        public widthProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("width", new Type(Length),
             new Type(Control));
 
         public get width(): Length {
@@ -84,7 +88,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.minimumWidth dependency property
-        public minimumWidthProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("minimumWidth",
+        public minimumWidthProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("minimumWidth",
             new Type(Length), new Type(Control));
 
         public get minimumWidth(): Length {
@@ -95,7 +99,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.maximumWidth dependency property
-        public maximumWidthProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("maximumWidth",
+        public maximumWidthProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("maximumWidth",
             new Type(Length), new Type(Control));
 
         public get maximumWidth(): Length {
@@ -106,7 +110,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.height dependency property
-        public heightProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("height", new Type(Length),
+        public heightProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("height", new Type(Length),
             new Type(Control));
 
         public get height(): Length {
@@ -117,7 +121,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.minimumHeight dependency property
-        public minimumHeightProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("minimumHeight",
+        public minimumHeightProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("minimumHeight",
             new Type(Length), new Type(Control));
 
         public get minimumHeight(): Length {
@@ -128,7 +132,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.maximumHeight dependency property
-        public maximumHeightProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("maximumHeight",
+        public maximumHeightProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("maximumHeight",
             new Type(Length), new Type(Control));
 
         public get maximumHeight(): Length {
@@ -139,7 +143,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.foregroundColor dependency property
-        public foregroundColorProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("foregroundColor",
+        public foregroundColorProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("foregroundColor",
             new Type(Color), new Type(Control));
 
         public get foregroundColor(): Color {
@@ -150,7 +154,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.foregroundImage dependency property
-        public foregroundImageProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("foregroundImage",
+        public foregroundImageProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("foregroundImage",
             new Type(Brush), new Type(Control));
 
         public get foregroundImage(): Brush {
@@ -161,7 +165,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.backgroundColor dependency property
-        public backgroundColorProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("backgroundColor",
+        public backgroundColorProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("backgroundColor",
             new Type(Color), new Type(Control));
 
         public get backgroundColor(): Color {
@@ -172,7 +176,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.backgroundImage dependency property
-        public backgroundImageProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("backgroundImage",
+        public backgroundImageProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("backgroundImage",
             new Type(Brush), new Type(Control));
 
         public get backgroundImage(): Brush {
@@ -183,7 +187,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.borderColor dependency property
-        public borderColorProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("borderColor",
+        public borderColorProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("borderColor",
             new Type(Color), new Type(Control));
 
         public get borderColor(): Color {
@@ -194,7 +198,7 @@ namespace Core.UserInterface.Primitives {
         }
 
         //Control.borderWidth dependency property
-        public borderWidthProperty: XAML.DependencyProperty = XAML.DependencyProperty.register("borderWidth",
+        public borderWidthProperty: ObjectiveXML.DependencyProperty = ObjectiveXML.DependencyProperty.register("borderWidth",
             new Type(Length), new Type(Control));
 
         public get borderWidth(): Length {
