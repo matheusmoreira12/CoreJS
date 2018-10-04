@@ -1,4 +1,3 @@
-/// <reference path="Core.Exceptions.d.ts" />
 declare namespace Core {
     namespace Validation {
         type ExpectedType = Type | Type[];

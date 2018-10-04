@@ -1,5 +1,3 @@
-///<reference path="Core.Validation.ts"/>
-///<reference path="Core.Events.ts"/>
 var Core;
 (function (Core) {
     var APIs;

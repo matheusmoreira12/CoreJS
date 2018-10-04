@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<info>
+  <resource sourceURL="../trailer_1080p.ogg"/>
+  <resource sourceURL="../Themes/base.theme.css"/>
+  <resource sourceURL="../landscape_river-8K.jpg"/>
+  <resource sourceURL="../landscape_river-8K.jpg"/>
+	<resource sourceURL="../Built/Core.DependencySystem.js"/>
+	<resource sourceURL="../Built/Core.Animations.js"/>
+	<resource sourceURL="../Built/Core.APIs.js"/>
+	<resource sourceURL="../Built/Core.ArrayUtils.js"/>
+	<resource sourceURL="../Built/Core.Collections.Generic.js"/>
+	<resource sourceURL="../Built/Core.CSS.js"/>
+	<resource sourceURL="../Built/Core.Decorators.js"/>
+	<resource sourceURL="../Built/Core.Events.js"/>
+	<resource sourceURL="../Built/Core.Exceptions.js"/>
+	<resource sourceURL="../Built/Core.HashCode.js"/>
+	<resource sourceURL="../Built/Core.MethodGroup.js"/>
+	<resource sourceURL="../Built/Core.ObjectiveXML.js"/>
+	<resource sourceURL="../Built/Core.ObjectManipulation.js"/>
+	<resource sourceURL="../Built/Core.StringUtils.js"/>
+	<resource sourceURL="../Built/Core.Type.js"/>
+	<resource sourceURL="../Built/Core.UserInterface.js"/>
+	<resource sourceURL="../Built/Core.Validation.js"/>
+	<resource sourceURL="../Built/Core.Web.Ajax.js"/>
+	<resource sourceURL="../Built/Core.Web.js"/>
+</info>

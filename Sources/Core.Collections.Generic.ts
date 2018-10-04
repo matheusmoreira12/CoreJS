@@ -1,7 +1,3 @@
-///<reference path="Core.ts"/>
-///<reference path="Core.MethodGroup.ts"/>
-///<reference path="Core.Validation.ts"/>
-
 namespace Core.Collections.Generic {
 
     export type TestFunction<T> = (item: T, index: number, list: IList<T>) => boolean;
@@ -22,7 +18,7 @@ namespace Core.Collections.Generic {
             else
                 return Reflect.set(target, propertyKey, value, receiver);
         }
-        public get(target: List<T>, propertyKey: PropertyKey, receiver: any): any {
+        public get(target: List<T>, propertyKey: PropertyKey, receiver: any): T {
             if (propertyKeyIsIndex(propertyKey))
                 return target.getItemAt(<number>propertyKey);
             else
@@ -30,9 +26,7 @@ namespace Core.Collections.Generic {
         }
     }
 
-    namespace ListSymbols {
-        export const rawArray = Symbol.for("rawArray");
-    }
+    const rawArrayKey = Symbol.for("rawArray");
 
     export class List<T> implements IList<T> {
 
@@ -52,7 +46,7 @@ namespace Core.Collections.Generic {
          */
         public constructor();
         public constructor(arg?: Iterable<T> | number) {
-            this[ListSymbols.rawArray] = new Array<T>();
+            this[rawArrayKey] = new Array<T>();
 
             if (arg) {
                 if (typeof arg === NUMBER)
@@ -67,7 +61,7 @@ namespace Core.Collections.Generic {
          * Returns an iterator for this list.
          */
         public [Symbol.iterator](): Iterator<T> {
-            return (this[ListSymbols.rawArray] as T[]).values();
+            return (this[rawArrayKey] as T[]).values();
         }
         /**
          * Gets an item at the specified zero-based position.
@@ -79,7 +73,7 @@ namespace Core.Collections.Generic {
             if (index < 0 || index > this.count - 1)
                 throw new Exceptions.ArgumentOutOfRangeException("index");
 
-            return (this[ListSymbols.rawArray] as T[])[index];
+            return (this[rawArrayKey] as T[])[index];
         }
         /**
          * Gets an item at the specified zero-based position.
@@ -91,27 +85,27 @@ namespace Core.Collections.Generic {
             if (index < 0 || index > this.count - 1)
                 throw new Exceptions.ArgumentOutOfRangeException("index");
 
-            (this[ListSymbols.rawArray] as T[])[index] = item;
+            (this[rawArrayKey] as T[])[index] = item;
         }
         /**
          * Gets the number of elements inside this list.
          * @returns The number of elements in this list.
          */
         public get count(): number {
-            return (this[ListSymbols.rawArray] as T[]).length;
+            return (this[rawArrayKey] as T[]).length;
         }
         /**
          * Converts this list to an array.
          * @returns The resulting array.
          */
         public toArray(): T[] {
-            return (this[ListSymbols.rawArray] as T[]).slice();
+            return (this[rawArrayKey] as T[]).slice();
         }
         /**
          * Gets invoked every time an item gets replaced by a new one in this list.
          */
-        public listChangedEvent: ListChangedEvent<T> = new ListChangedEvent(this);
-        protected invokeOnListChanged(args: ListChangedEventArgs<T>): void {
+        public listChangedEvent: Events.ListChangedEvent<T> = new Events.ListChangedEvent(this);
+        protected invokeOnListChanged(args: Events.ListChangedEventArgs<T>): void {
             this.listChangedEvent.invoke(args);
         }
         /**
@@ -119,14 +113,14 @@ namespace Core.Collections.Generic {
          * @returns The first item in this list.
          */
         public getFirst(): T {
-            return (this[ListSymbols.rawArray] as T[]).slice(0, 1)[0];
+            return (this[rawArrayKey] as T[]).slice(0, 1)[0];
         }
         /**
          * Gets the last item in this list.
          * @returns The last item in this list.
          */
         public getLast(): T {
-            return (this[ListSymbols.rawArray] as T[]).slice(-1)[0];
+            return (this[rawArrayKey] as T[]).slice(-1)[0];
         }
         /**
          * Returns the zero-based position of the specified item in this list, or -1 if no match is found.
@@ -135,7 +129,7 @@ namespace Core.Collections.Generic {
          * @returns The index of the matching item.
          */
         public indexOf(item: T, startIndex?: number): number {
-            return (this[ListSymbols.rawArray] as T[]).indexOf(item, startIndex);
+            return (this[rawArrayKey] as T[]).indexOf(item, startIndex);
         }
         /**
          * Returns the last zero-based position of the specified item in this list, or -1 if no match is
@@ -145,21 +139,21 @@ namespace Core.Collections.Generic {
          * @returns The index of the last matching item.
          */
         public lastIndexOf(item: T, endIndex?: number): number {
-            return (this[ListSymbols.rawArray] as T[]).lastIndexOf(item, endIndex);
+            return (this[rawArrayKey] as T[]).lastIndexOf(item, endIndex);
         }
         /**
          * Adds multiple items to this list.
          * @param items The items being added.
          */
         public addRange(items: Iterable<T>): void {
-            (this[ListSymbols.rawArray] as T[]).push(...items);
+            (this[rawArrayKey] as T[]).push(...items);
         }
         /**
          * Adds an item to this list.
          * @param item The item being added.
          */
         public add(item: T): void {
-            (this[ListSymbols.rawArray] as T[]).push(item);
+            (this[rawArrayKey] as T[]).push(item);
         }
         /**
          * Inserts multiple items into this list, starting at the specified zero-based position.
@@ -170,7 +164,7 @@ namespace Core.Collections.Generic {
          * bounds.
          */
         public insertRange(index: number, items: Iterable<T>): void {
-            (this[ListSymbols.rawArray] as T[]).splice(index, 0, ...items);
+            (this[rawArrayKey] as T[]).splice(index, 0, ...items);
         }
         /**
          * Inserts an item into this list at the specified zero-based position.
@@ -181,7 +175,7 @@ namespace Core.Collections.Generic {
          * bounds.
          */
         public insert(index: number, item: T): void {
-            (this[ListSymbols.rawArray] as T[]).splice(index, 0, item);
+            (this[rawArrayKey] as T[]).splice(index, 0, item);
         }
         /**
          * Moves an item in this list from a zero-based position to another.
@@ -202,7 +196,7 @@ namespace Core.Collections.Generic {
          * bounds.
          */
         public moveRange(oldIndex: number, newIndex: number, itemCount: number = 1): void {
-            let array = (this[ListSymbols.rawArray] as T[]);
+            let array = (this[rawArrayKey] as T[]);
 
             array.splice(newIndex, 0, ...array.splice(oldIndex, itemCount));
         }
@@ -228,7 +222,7 @@ namespace Core.Collections.Generic {
          * bounds.
          */
         public removeAt(index: number): T {
-            return (this[ListSymbols.rawArray] as T[]).splice(index, 1)[0];
+            return (this[rawArrayKey] as T[]).splice(index, 1)[0];
         }
         /**
          * Removes an specific item from this generic collection.
@@ -249,7 +243,7 @@ namespace Core.Collections.Generic {
          * bounds.
          */
         public removeRange(startIndex: number, removeCount: number): T[] {
-            return (this[ListSymbols.rawArray] as T[]).splice(startIndex, removeCount);
+            return (this[rawArrayKey] as T[]).splice(startIndex, removeCount);
         }
         /**
          * Replaces the item at the specified zero-based position by another, and returns it.
@@ -258,7 +252,7 @@ namespace Core.Collections.Generic {
          * @returns The item being replaced.
          */
         public replaceAt(index: number, newItem: T): T {
-            return (this[ListSymbols.rawArray] as T[]).splice(index, 1, newItem)[0];
+            return (this[rawArrayKey] as T[]).splice(index, 1, newItem)[0];
         }
         /**
          * Replaces an specific item from this generic collection by another.
@@ -360,7 +354,7 @@ namespace Core.Collections.Generic {
             while (this.count < count + startIndex)
                 this.add(value);
 
-            let rawArray = this[ListSymbols.rawArray] as T[];
+            let rawArray = this[rawArrayKey] as T[];
             rawArray.fill(value, startIndex, count);
         }
     }
@@ -376,26 +370,19 @@ namespace Core.Collections.Generic {
     }
 
     class DictionaryProxyHandler<Tkey, Tvalue> implements ProxyHandler<Dictionary<Tkey, Tvalue>> {
-        public get(target: Dictionary<Tkey, Tvalue>, propertyKey: any, receiver: any): any {
-            if (propertyKeyIsIndex)
-                return target.getItemAt(<number>propertyKey);
-            else if (!(target[propertyKey] instanceof Function))
-                return target.getByKey(<Tkey>propertyKey);
-            else
-                return Reflect.get(target, propertyKey, receiver);
-        }
-
-        public set(target: Dictionary<Tkey, Tvalue>, propertyKey: any, value: any, receiver: any): boolean {
-            if (propertyKeyIsIndex) {
-                target.setItemAt(<number>propertyKey, <KeyValuePair<Tkey, Tvalue>>value);
-                return true;
-            }
-            else if (!(target[propertyKey] instanceof Function)) {
-                target.setByKey(<Tkey>propertyKey, <Tvalue>value);
+        public set(target: Dictionary<Tkey, Tvalue>, propertyKey: PropertyKey, value: KeyValuePair<Tkey, Tvalue>, receiver: any): boolean {
+            if (propertyKeyIsIndex(propertyKey)) {
+                target.setItemAt(<number>propertyKey, value);
                 return true;
             }
             else
                 return Reflect.set(target, propertyKey, value, receiver);
+        }
+        public get(target: Dictionary<Tkey, Tvalue>, propertyKey: PropertyKey, receiver: any): KeyValuePair<Tkey, Tvalue> {
+            if (propertyKeyIsIndex(propertyKey))
+                return target.getItemAt(<number>propertyKey);
+            else
+                return Reflect.get(target, propertyKey, receiver);
         }
     }
 
@@ -453,36 +440,39 @@ namespace Core.Collections.Generic {
         parent: GenericTreeItem<T>;
     }
 
-    //List Item event
-    export enum ListChangedEventMode { Add, Remove, Move, Replace }
+    export namespace Events {
 
-    export type ListChangedEventArgs<T> = {
-        mode: ListChangedEventMode;
-        oldItem: T;
-        newItem: T;
-        oldIndex: number;
-        newIndex: number;
-    }
+        //List Item event
+        export enum ListChangedEventMode { Add, Remove, Move, Replace }
 
-    export type ListChangedEventListener<T> = (target: List<T>, args: ListChangedEventArgs<T>) => void;
-
-    export class ListChangedEvent<T> extends MethodGroup {
-        constructor(target: List<T>, defaultListener?: ListChangedEventListener<T>) {
-            super(target);
+        export type ListChangedEventArgs<T> = {
+            mode: ListChangedEventMode;
+            oldItem: T;
+            newItem: T;
+            oldIndex: number;
+            newIndex: number;
         }
 
-        target: List<T>;
+        export type ListChangedEventListener<T> = (target: List<T>, args: ListChangedEventArgs<T>) => void;
 
-        attach(listener: ListChangedEventListener<T> | ListChangedEvent<T>) {
-            super.attach(listener);
-        }
+        export class ListChangedEvent<T> extends MethodGroup {
+            constructor(target: List<T>, defaultListener?: ListChangedEventListener<T>) {
+                super(target);
+            }
 
-        detach(listener: ListChangedEventListener<T> | ListChangedEvent<T>) {
-            super.detach(listener);
-        }
+            target: List<T>;
 
-        invoke(args: ListChangedEventArgs<T>) {
-            super.invoke(args);
+            attach(listener: ListChangedEventListener<T> | ListChangedEvent<T>) {
+                super.attach(listener);
+            }
+
+            detach(listener: ListChangedEventListener<T> | ListChangedEvent<T>) {
+                super.detach(listener);
+            }
+
+            invoke(args: ListChangedEventArgs<T>) {
+                super.invoke(args);
+            }
         }
     }
 }

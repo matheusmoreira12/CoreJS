@@ -1,12 +1,8 @@
-///<reference path="Core.MethodGroup.ts"/>
 var Core;
 (function (Core) {
     var Events;
     (function (Events) {
         class ProgressEvent extends Core.MethodGroup {
-            stopPropagation() {
-                super.stopPropagation();
-            }
             invoke(args) {
                 super.invoke(args);
             }
@@ -19,9 +15,6 @@ var Core;
         }
         Events.ProgressEvent = ProgressEvent;
         class PropertyChangedEvent extends Core.MethodGroup {
-            stopPropagation() {
-                super.stopPropagation();
-            }
             invoke(args) {
                 super.invoke(args);
             }

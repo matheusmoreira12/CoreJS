@@ -1,5 +1,3 @@
-///<reference path="Core.UserInterface.Primitives.ts"/>
-
 namespace Core.UserInterface {
 
     //CoreDataGrid

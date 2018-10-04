@@ -1,9 +1,3 @@
-///<reference path="Core.Type.ts"/>
-///<reference path="Core.ObjectiveXML.ts"/>
-///<reference path="Core.Collections.Generic.ts"/>
-///<reference path="Core.UserInterface.Utils.ts"/>
-///<reference path="Core.UserInterface.Primitives.ts"/>
-
 namespace Core.UserInterface.Primitives {
     export class ControlVisualPropertyManager {
     }

@@ -1,0 +1,14 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "esnext",
+    "outFile": "Built/index.js",
+    "sourceMap": true,
+    "declaration": true,
+    "module": "amd"
+  },
+  "include": [
+    "Sources/*.ts",
+    "../../Base/Sources/*.ts"
+  ]
+}

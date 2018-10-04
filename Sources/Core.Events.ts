@@ -1,5 +1,3 @@
-///<reference path="Core.MethodGroup.ts"/>
-
 namespace Core.Events {
     //Progress event
     export type ProgressEventListener = (target: any, args: ProgressEventArgs) => void;
@@ -8,9 +6,6 @@ namespace Core.Events {
 
     export class ProgressEvent extends MethodGroup {
         protected target: any;
-        stopPropagation(): void {
-            super.stopPropagation();
-        }
         invoke(args: ProgressEventArgs): void {
             super.invoke(args);
         }
@@ -29,9 +24,6 @@ namespace Core.Events {
 
     export class PropertyChangedEvent extends MethodGroup {
         protected target: any;
-        stopPropagation(): void {
-            super.stopPropagation();
-        }
         invoke(args: PropertyChangedEventArgs): void {
             super.invoke(args);
         }

@@ -8,10 +8,10 @@ namespace Core.Web {
                 this.data = data;
             }
 
-            asynchronous: boolean;
-            user: string;
-            password: string;
-            data: any;
+            public asynchronous: boolean;
+            public user: string;
+            public password: string;
+            public data: any;
         }
 
         export class AjaxRequestInfo {
@@ -21,21 +21,21 @@ namespace Core.Web {
                 this.options = options;
             }
 
-            method: string;
-            url: string;
-            options: AjaxRequestOptions;
+            public method: string;
+            public url: string;
+            public options: AjaxRequestOptions;
         }
 
         export class AjaxRequest {
 
-            doneEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
-            loadedEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
-            errorEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
-            headersReceivedEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
-            loadingEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
-            openedEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
-            unsentEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
-            progressEvent: Events.ProgressEvent = new Events.ProgressEvent(this);
+            public doneEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
+            public loadedEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
+            public errorEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
+            public headersReceivedEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
+            public loadingEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
+            public openedEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
+            public unsentEvent: Events.AjaxEvent = new Events.AjaxEvent(this);
+            public progressEvent: Events.ProgressEvent = new Events.ProgressEvent(this);
 
             private _requestReadyStateChanged() {
                 let xhr = this.baseRequest;
@@ -89,37 +89,37 @@ namespace Core.Web {
                 this._createAndOpenRequest(method, url, options);
             }
 
-            baseRequest: XMLHttpRequest;
-            info: AjaxRequestInfo;
+            public baseRequest: XMLHttpRequest;
+            public info: AjaxRequestInfo;
         }
 
         export class Ajax {
 
-            static get(url: string, options?: AjaxRequestOptions) {
+            static get(url: string, options?: AjaxRequestOptions): AjaxRequest {
                 return new AjaxRequest(METHOD_GET, url, options);
             }
-            static head(url: string, options?: AjaxRequestOptions) {
+            static head(url: string, options?: AjaxRequestOptions): AjaxRequest {
                 return new AjaxRequest(METHOD_HEAD, url, options);
             }
-            static post(url: string, options?: AjaxRequestOptions) {
+            static post(url: string, options?: AjaxRequestOptions): AjaxRequest {
                 return new AjaxRequest(METHOD_POST, url, options);
             }
-            static put(url: string, options?: AjaxRequestOptions) {
+            static put(url: string, options?: AjaxRequestOptions): AjaxRequest {
                 return new AjaxRequest(METHOD_PUT, url, options);
             }
-            static delete(url: string, options?: AjaxRequestOptions) {
+            static delete(url: string, options?: AjaxRequestOptions): AjaxRequest {
                 return new AjaxRequest(METHOD_DELETE, url, options);
             }
-            static connect(url: string, options?: AjaxRequestOptions) {
+            static connect(url: string, options?: AjaxRequestOptions): AjaxRequest {
                 return new AjaxRequest(METHOD_CONNECT, url, options);
             }
-            static options(url: string, options?: AjaxRequestOptions) {
+            static options(url: string, options?: AjaxRequestOptions): AjaxRequest {
                 return new AjaxRequest(METHOD_OPTIONS, url, options);
             }
-            static trace(url: string, options?: AjaxRequestOptions) {
+            static trace(url: string, options?: AjaxRequestOptions): AjaxRequest {
                 return new AjaxRequest(METHOD_TRACE, url, options);
             }
-            static patch(url: string, options?: AjaxRequestOptions) {
+            static patch(url: string, options?: AjaxRequestOptions): AjaxRequest {
                 return new AjaxRequest(METHOD_PATCH, url, options);
             }
         }

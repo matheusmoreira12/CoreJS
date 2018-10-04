@@ -1,5 +1,3 @@
-/// <reference path="Core.Validation.d.ts" />
-/// <reference path="Core.Events.d.ts" />
 declare namespace Core.APIs {
     enum APILoaderPendingStatus {
         Pending = 0,

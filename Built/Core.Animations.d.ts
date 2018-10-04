@@ -1,4 +1,3 @@
-/// <reference path="Core.Collections.Generic.d.ts" />
 declare namespace Core.Animations {
     const KEYFRAMES_FADEIN: {
         filter: string[];

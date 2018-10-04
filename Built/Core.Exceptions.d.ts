@@ -1,4 +1,3 @@
-/// <reference path="Core.Collections.Generic.d.ts" />
 declare namespace Core.Exceptions {
     class ExceptionData extends Collections.Generic.Dictionary<any, any> {
     }

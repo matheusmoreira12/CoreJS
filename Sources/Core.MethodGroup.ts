@@ -1,5 +1,3 @@
-///<reference path="Core.Validation.ts"/>
-
 namespace Core {
 
     export type Method = (target: any, args: Object) => void;

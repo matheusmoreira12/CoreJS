@@ -1,5 +1,3 @@
-///<reference path="Core.Exceptions.ts"/>
-
 namespace Core {
     export namespace Validation {
 

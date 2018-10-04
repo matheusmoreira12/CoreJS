@@ -1,5 +1,3 @@
-///<reference path="Core.Collections.Generic.ts"/>
-
 namespace Core.Animations {
     enum TimeStampUnit { Milliseconds, Seconds, Minutes, Hours, Percent }
 

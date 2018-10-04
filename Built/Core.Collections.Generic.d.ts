@@ -1,6 +1,3 @@
-/// <reference path="Core.d.ts" />
-/// <reference path="Core.MethodGroup.d.ts" />
-/// <reference path="Core.Validation.d.ts" />
 declare namespace Core.Collections.Generic {
     type TestFunction<T> = (item: T, index: number, list: IList<T>) => boolean;
     type SelectFunction<T, U> = (item: T, index: number, list: IList<T>) => U;
@@ -54,8 +51,8 @@ declare namespace Core.Collections.Generic {
         /**
          * Gets invoked every time an item gets replaced by a new one in this list.
          */
-        listChangedEvent: ListChangedEvent<T>;
-        protected invokeOnListChanged(args: ListChangedEventArgs<T>): void;
+        listChangedEvent: Events.ListChangedEvent<T>;
+        protected invokeOnListChanged(args: Events.ListChangedEventArgs<T>): void;
         /**
          * Gets the first item in this list.
          * @returns The first item in this list.
@@ -234,25 +231,27 @@ declare namespace Core.Collections.Generic {
         value: T;
         parent: GenericTreeItem<T>;
     }
-    enum ListChangedEventMode {
-        Add = 0,
-        Remove = 1,
-        Move = 2,
-        Replace = 3,
-    }
-    type ListChangedEventArgs<T> = {
-        mode: ListChangedEventMode;
-        oldItem: T;
-        newItem: T;
-        oldIndex: number;
-        newIndex: number;
-    };
-    type ListChangedEventListener<T> = (target: List<T>, args: ListChangedEventArgs<T>) => void;
-    class ListChangedEvent<T> extends MethodGroup {
-        constructor(target: List<T>, defaultListener?: ListChangedEventListener<T>);
-        target: List<T>;
-        attach(listener: ListChangedEventListener<T> | ListChangedEvent<T>): void;
-        detach(listener: ListChangedEventListener<T> | ListChangedEvent<T>): void;
-        invoke(args: ListChangedEventArgs<T>): void;
+    namespace Events {
+        enum ListChangedEventMode {
+            Add = 0,
+            Remove = 1,
+            Move = 2,
+            Replace = 3,
+        }
+        type ListChangedEventArgs<T> = {
+            mode: ListChangedEventMode;
+            oldItem: T;
+            newItem: T;
+            oldIndex: number;
+            newIndex: number;
+        };
+        type ListChangedEventListener<T> = (target: List<T>, args: ListChangedEventArgs<T>) => void;
+        class ListChangedEvent<T> extends MethodGroup {
+            constructor(target: List<T>, defaultListener?: ListChangedEventListener<T>);
+            target: List<T>;
+            attach(listener: ListChangedEventListener<T> | ListChangedEvent<T>): void;
+            detach(listener: ListChangedEventListener<T> | ListChangedEvent<T>): void;
+            invoke(args: ListChangedEventArgs<T>): void;
+        }
     }
 }

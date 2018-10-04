@@ -1,8 +1,3 @@
-///<reference path="Core.UserInterface.Primitives.Control.ts"/>
-///<reference path="Core.UserInterface.Primitives.ts"/>
-///<reference path="Core.UserInterface.Icons.ts"/>
-///<reference path="Core.UserInterface.IconElement.ts"/>
-
 namespace Core.UserInterface {
 
     //Button

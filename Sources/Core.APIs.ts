@@ -1,6 +1,3 @@
-///<reference path="Core.Validation.ts"/>
-///<reference path="Core.Events.ts"/>
-
 namespace Core.APIs {
 
     const API_SCRIPT_PATTERN = "^\"use strict\";\nclass {0}API extends Core.APIs.API {\\.*}$";

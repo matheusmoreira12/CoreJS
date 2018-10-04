@@ -1,4 +1,3 @@
-///<reference path="Core.UserInterface.Colors.ts"/>
 var Core;
 (function (Core) {
     var UserInterface;
@@ -20,10 +19,10 @@ var Core;
         class Percentage extends Number {
             static parse(str) {
                 const PERCENTAGE_REGEX = /^(?<number>\d+?)%/;
-                if (PERCENTAGE_REGEX.test(str))
+                if (!PERCENTAGE_REGEX.test(str))
                     return null;
                 let exec = PERCENTAGE_REGEX.exec(str), numberStr = exec["groups"]["number"];
-                return super.parseFloat(numberStr);
+                return new Percentage(numberStr);
             }
             toString() {
                 return `${super.toString.call(this)}%`;
@@ -52,14 +51,21 @@ var Core;
                 let r = (value >>> 16) & COLOR_RGB_INT_FIELD_MASK, g = (value >>> 8) & COLOR_RGB_INT_FIELD_MASK, b = value & COLOR_RGB_INT_FIELD_MASK;
                 return new ColorRGB(r.toString(), g.toString(), b.toString());
             }
-            static parse(str) {
-                let colorFromName = null;
-                if (str.startsWith("#")) {
-                    let hexCode = str.substring(-6);
-                    return this.fromInt(Number(hexCode));
+            static fromHexCode(value) {
+                if (value.startsWith("#")) {
+                    value = value.slice(1);
+                    let intValue = Number("0x" + value);
+                    if (value.length == 3)
+                        return Color.fromInt(intValue * 0x1001);
+                    else if (value.length == 6)
+                        return Color.fromInt(intValue);
                 }
-                return UserInterface.Colors.fromName(str) || ColorRGB.parse(str) || ColorRGBA.parse(str) || ColorCMYK.parse(str) ||
-                    ColorHSL.parse(str) || ColorHSV.parse(str) || null;
+                throw new Core.Exceptions.ArgumentException("value", "Parameter is not a valid hexadecimal color value.");
+            }
+            static parse(str) {
+                let colorFromName = null, outColor = null;
+                return Colors.fromName(str) || ColorRGB.parse(str) || ColorRGBA.parse(str) || ColorCMYK.parse(str) ||
+                    ColorHSL.parse(str) || ColorHSV.parse(str);
             }
         }
         UserInterface.Color = Color;

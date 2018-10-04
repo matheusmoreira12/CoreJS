@@ -1,4 +1,3 @@
-/// <reference path="Core.Validation.d.ts" />
 declare namespace Core {
     type Method = (target: any, args: Object) => void;
     class MethodGroup {

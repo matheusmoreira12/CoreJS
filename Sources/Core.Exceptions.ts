@@ -1,5 +1,3 @@
-///<reference path="Core.Collections.Generic.ts"/>
-
 namespace Core.Exceptions {
 
     export class ExceptionData extends Collections.Generic.Dictionary<any, any> {

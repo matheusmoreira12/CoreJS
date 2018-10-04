@@ -1,5 +1,3 @@
-///<reference path="Core.UserInterface.ts"/>
-
 namespace Core.UserInterface.Primitives {
 
     export class ElementList extends Collections.Generic.List<HTMLElement> {

@@ -1,15 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Built",
-    "\\ModuleSystemCompiler",
-    "\\ModuleSystemCompiler\\Sources",
-    "\\ObjectiveXMLCompiler",
-    "\\ObjectiveXMLCompiler\\Built",
-    "\\ObjectiveXMLCompiler\\Sources",
-    "\\Sources",
-    "\\Trashcan"
+    "\\ModuleSystem",
+    "\\ModuleSystem\\Built",
+    "\\ModuleSystem\\Sources",
+    "\\Test"
   ],
-  "SelectedNode": "\\Built\\Core.UserInterface.js",
+  "SelectedNode": "\\ModuleSystem\\Sources\\Events.ts",
   "PreviewInSolutionExplorer": false
 }

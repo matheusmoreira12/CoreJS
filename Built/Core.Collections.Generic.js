@@ -1,6 +1,3 @@
-///<reference path="Core.ts"/>
-///<reference path="Core.MethodGroup.ts"/>
-///<reference path="Core.Validation.ts"/>
 var Core;
 (function (Core) {
     var Collections;
@@ -24,17 +21,14 @@ var Core;
                         return Reflect.get(target, propertyKey, receiver);
                 }
             }
-            let ListSymbols;
-            (function (ListSymbols) {
-                ListSymbols.rawArray = Symbol.for("rawArray");
-            })(ListSymbols || (ListSymbols = {}));
+            const rawArrayKey = Symbol.for("rawArray");
             class List {
                 constructor(arg) {
                     /**
                      * Gets invoked every time an item gets replaced by a new one in this list.
                      */
-                    this.listChangedEvent = new ListChangedEvent(this);
-                    this[ListSymbols.rawArray] = new Array();
+                    this.listChangedEvent = new Events.ListChangedEvent(this);
+                    this[rawArrayKey] = new Array();
                     if (arg) {
                         if (typeof arg === Core.NUMBER)
                             this.fill(undefined, 0, arg);
@@ -47,7 +41,7 @@ var Core;
                  * Returns an iterator for this list.
                  */
                 [Symbol.iterator]() {
-                    return this[ListSymbols.rawArray].values();
+                    return this[rawArrayKey].values();
                 }
                 /**
                  * Gets an item at the specified zero-based position.
@@ -58,7 +52,7 @@ var Core;
                 getItemAt(index) {
                     if (index < 0 || index > this.count - 1)
                         throw new Core.Exceptions.ArgumentOutOfRangeException("index");
-                    return this[ListSymbols.rawArray][index];
+                    return this[rawArrayKey][index];
                 }
                 /**
                  * Gets an item at the specified zero-based position.
@@ -69,21 +63,21 @@ var Core;
                 setItemAt(index, item) {
                     if (index < 0 || index > this.count - 1)
                         throw new Core.Exceptions.ArgumentOutOfRangeException("index");
-                    this[ListSymbols.rawArray][index] = item;
+                    this[rawArrayKey][index] = item;
                 }
                 /**
                  * Gets the number of elements inside this list.
                  * @returns The number of elements in this list.
                  */
                 get count() {
-                    return this[ListSymbols.rawArray].length;
+                    return this[rawArrayKey].length;
                 }
                 /**
                  * Converts this list to an array.
                  * @returns The resulting array.
                  */
                 toArray() {
-                    return this[ListSymbols.rawArray].slice();
+                    return this[rawArrayKey].slice();
                 }
                 invokeOnListChanged(args) {
                     this.listChangedEvent.invoke(args);
@@ -93,14 +87,14 @@ var Core;
                  * @returns The first item in this list.
                  */
                 getFirst() {
-                    return this[ListSymbols.rawArray].slice(0, 1)[0];
+                    return this[rawArrayKey].slice(0, 1)[0];
                 }
                 /**
                  * Gets the last item in this list.
                  * @returns The last item in this list.
                  */
                 getLast() {
-                    return this[ListSymbols.rawArray].slice(-1)[0];
+                    return this[rawArrayKey].slice(-1)[0];
                 }
                 /**
                  * Returns the zero-based position of the specified item in this list, or -1 if no match is found.
@@ -109,7 +103,7 @@ var Core;
                  * @returns The index of the matching item.
                  */
                 indexOf(item, startIndex) {
-                    return this[ListSymbols.rawArray].indexOf(item, startIndex);
+                    return this[rawArrayKey].indexOf(item, startIndex);
                 }
                 /**
                  * Returns the last zero-based position of the specified item in this list, or -1 if no match is
@@ -119,21 +113,21 @@ var Core;
                  * @returns The index of the last matching item.
                  */
                 lastIndexOf(item, endIndex) {
-                    return this[ListSymbols.rawArray].lastIndexOf(item, endIndex);
+                    return this[rawArrayKey].lastIndexOf(item, endIndex);
                 }
                 /**
                  * Adds multiple items to this list.
                  * @param items The items being added.
                  */
                 addRange(items) {
-                    this[ListSymbols.rawArray].push(...items);
+                    this[rawArrayKey].push(...items);
                 }
                 /**
                  * Adds an item to this list.
                  * @param item The item being added.
                  */
                 add(item) {
-                    this[ListSymbols.rawArray].push(item);
+                    this[rawArrayKey].push(item);
                 }
                 /**
                  * Inserts multiple items into this list, starting at the specified zero-based position.
@@ -144,7 +138,7 @@ var Core;
                  * bounds.
                  */
                 insertRange(index, items) {
-                    this[ListSymbols.rawArray].splice(index, 0, ...items);
+                    this[rawArrayKey].splice(index, 0, ...items);
                 }
                 /**
                  * Inserts an item into this list at the specified zero-based position.
@@ -155,7 +149,7 @@ var Core;
                  * bounds.
                  */
                 insert(index, item) {
-                    this[ListSymbols.rawArray].splice(index, 0, item);
+                    this[rawArrayKey].splice(index, 0, item);
                 }
                 /**
                  * Moves an item in this list from a zero-based position to another.
@@ -176,7 +170,7 @@ var Core;
                  * bounds.
                  */
                 moveRange(oldIndex, newIndex, itemCount = 1) {
-                    let array = this[ListSymbols.rawArray];
+                    let array = this[rawArrayKey];
                     array.splice(newIndex, 0, ...array.splice(oldIndex, itemCount));
                 }
                 /**
@@ -199,7 +193,7 @@ var Core;
                  * bounds.
                  */
                 removeAt(index) {
-                    return this[ListSymbols.rawArray].splice(index, 1)[0];
+                    return this[rawArrayKey].splice(index, 1)[0];
                 }
                 /**
                  * Removes an specific item from this generic collection.
@@ -219,7 +213,7 @@ var Core;
                  * bounds.
                  */
                 removeRange(startIndex, removeCount) {
-                    return this[ListSymbols.rawArray].splice(startIndex, removeCount);
+                    return this[rawArrayKey].splice(startIndex, removeCount);
                 }
                 /**
                  * Replaces the item at the specified zero-based position by another, and returns it.
@@ -228,7 +222,7 @@ var Core;
                  * @returns The item being replaced.
                  */
                 replaceAt(index, newItem) {
-                    return this[ListSymbols.rawArray].splice(index, 1, newItem)[0];
+                    return this[rawArrayKey].splice(index, 1, newItem)[0];
                 }
                 /**
                  * Replaces an specific item from this generic collection by another.
@@ -318,7 +312,7 @@ var Core;
                 fill(value, startIndex, count) {
                     while (this.count < count + startIndex)
                         this.add(value);
-                    let rawArray = this[ListSymbols.rawArray];
+                    let rawArray = this[rawArrayKey];
                     rawArray.fill(value, startIndex, count);
                 }
             }
@@ -331,25 +325,19 @@ var Core;
             }
             Generic.KeyValuePair = KeyValuePair;
             class DictionaryProxyHandler {
-                get(target, propertyKey, receiver) {
-                    if (propertyKeyIsIndex)
-                        return target.getItemAt(propertyKey);
-                    else if (!(target[propertyKey] instanceof Function))
-                        return target.getByKey(propertyKey);
-                    else
-                        return Reflect.get(target, propertyKey, receiver);
-                }
                 set(target, propertyKey, value, receiver) {
-                    if (propertyKeyIsIndex) {
+                    if (propertyKeyIsIndex(propertyKey)) {
                         target.setItemAt(propertyKey, value);
-                        return true;
-                    }
-                    else if (!(target[propertyKey] instanceof Function)) {
-                        target.setByKey(propertyKey, value);
                         return true;
                     }
                     else
                         return Reflect.set(target, propertyKey, value, receiver);
+                }
+                get(target, propertyKey, receiver) {
+                    if (propertyKeyIsIndex(propertyKey))
+                        return target.getItemAt(propertyKey);
+                    else
+                        return Reflect.get(target, propertyKey, receiver);
                 }
             }
             class Dictionary extends List {
@@ -384,29 +372,32 @@ var Core;
             class GenericTreeItem extends List {
             }
             Generic.GenericTreeItem = GenericTreeItem;
-            //List Item event
-            let ListChangedEventMode;
-            (function (ListChangedEventMode) {
-                ListChangedEventMode[ListChangedEventMode["Add"] = 0] = "Add";
-                ListChangedEventMode[ListChangedEventMode["Remove"] = 1] = "Remove";
-                ListChangedEventMode[ListChangedEventMode["Move"] = 2] = "Move";
-                ListChangedEventMode[ListChangedEventMode["Replace"] = 3] = "Replace";
-            })(ListChangedEventMode = Generic.ListChangedEventMode || (Generic.ListChangedEventMode = {}));
-            class ListChangedEvent extends Core.MethodGroup {
-                constructor(target, defaultListener) {
-                    super(target);
+            let Events;
+            (function (Events) {
+                //List Item event
+                let ListChangedEventMode;
+                (function (ListChangedEventMode) {
+                    ListChangedEventMode[ListChangedEventMode["Add"] = 0] = "Add";
+                    ListChangedEventMode[ListChangedEventMode["Remove"] = 1] = "Remove";
+                    ListChangedEventMode[ListChangedEventMode["Move"] = 2] = "Move";
+                    ListChangedEventMode[ListChangedEventMode["Replace"] = 3] = "Replace";
+                })(ListChangedEventMode = Events.ListChangedEventMode || (Events.ListChangedEventMode = {}));
+                class ListChangedEvent extends Core.MethodGroup {
+                    constructor(target, defaultListener) {
+                        super(target);
+                    }
+                    attach(listener) {
+                        super.attach(listener);
+                    }
+                    detach(listener) {
+                        super.detach(listener);
+                    }
+                    invoke(args) {
+                        super.invoke(args);
+                    }
                 }
-                attach(listener) {
-                    super.attach(listener);
-                }
-                detach(listener) {
-                    super.detach(listener);
-                }
-                invoke(args) {
-                    super.invoke(args);
-                }
-            }
-            Generic.ListChangedEvent = ListChangedEvent;
+                Events.ListChangedEvent = ListChangedEvent;
+            })(Events = Generic.Events || (Generic.Events = {}));
         })(Generic = Collections.Generic || (Collections.Generic = {}));
     })(Collections = Core.Collections || (Core.Collections = {}));
 })(Core || (Core = {}));

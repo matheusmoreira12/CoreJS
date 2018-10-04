@@ -1,4 +1,3 @@
-///<reference path="Core.Exceptions.ts"/>
 var Core;
 (function (Core) {
     let Validation;

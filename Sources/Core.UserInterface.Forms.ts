@@ -1,5 +1,3 @@
-///<reference path="Core.UserInterface.ts"/>
-
 namespace Core.UserInterface.Forms {
 
     export class FormItem extends Primitives.LabelableContainer {

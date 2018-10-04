@@ -1,5 +1,3 @@
-///<reference path="Core.Collections.Generic.ts"/>
-
 namespace Core.UserInterface {
 
     export class AttributePropertyAssociator {

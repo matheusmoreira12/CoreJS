@@ -1,4 +1,3 @@
-/// <reference path="Core.UserInterface.Colors.d.ts" />
 declare namespace Core.UserInterface {
     enum ContentType {
         Text = 0,
@@ -10,7 +9,7 @@ declare namespace Core.UserInterface {
         type: ContentType;
     }
     class Percentage extends Number {
-        static parse(str: string): number;
+        static parse(str: string): Percentage;
         toString(): string;
     }
     enum ColorType {
@@ -22,6 +21,7 @@ declare namespace Core.UserInterface {
     }
     abstract class Color {
         static fromInt(value: number): ColorRGB;
+        private static fromHexCode(value);
         static parse(str: string): Color;
         constructor(type: ColorType);
         abstract toString(): string;
